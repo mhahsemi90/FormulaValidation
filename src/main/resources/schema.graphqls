@@ -1,0 +1,35 @@
+type Person {
+  id: ID!
+  code: String!
+  firstName: String!
+  lastName: String!
+}
+type Param {
+  id: ID!
+  code: String!
+  title: String!
+}
+type PersonParamValue {
+  id: ID!
+  isValid: Boolean!
+  value: Float!
+  param: Param!
+}
+type PersonTransaction {
+  id: ID!
+  type: String!
+  person: Person!
+  personParamValueList: [PersonParamValue]!
+}
+type CalculationTransaction {
+  id: ID!
+  year: String!
+  month: String!
+  personTransactionList: [PersonTransaction]!
+}
+type Query {
+  allCalculation(id: ID): [CalculationTransaction]
+}
+schema {
+  query: Query
+}
