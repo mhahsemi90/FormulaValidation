@@ -5,13 +5,13 @@ import com.coxautodev.graphql.tools.GraphQLRootResolver;
 import java.util.List;
 
 public class Query implements GraphQLRootResolver {
-    private final LinkRepository linkRepository;
+    private final CalculationTransactionRepository calculationTransactionRepository;
 
-    public Query(LinkRepository linkRepository) {
-        this.linkRepository = linkRepository;
+    public Query(CalculationTransactionRepository calculationTransactionRepository) {
+        this.calculationTransactionRepository = calculationTransactionRepository;
     }
 
-    public List<Link> allLinks() {
-        return linkRepository.getAllLinks();
+    public List<CalculationTransaction> allCalculation() {
+        return calculationTransactionRepository.getCalculationTransactions();
     }
 }
