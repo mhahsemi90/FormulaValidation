@@ -12,7 +12,7 @@ public class Param {
     }
 
     public Param(String code, String title) {
-        this(null,code,title);
+        this(null, code, title);
     }
 
     public String getId() {

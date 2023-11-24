@@ -7,7 +7,7 @@ public class PersonParamValue {
     private final String paramId;
     private final String personTransactionId;
 
-    public PersonParamValue(String id, Boolean isValid, Double value,String paramId,String personTransactionId) {
+    public PersonParamValue(String id, Boolean isValid, Double value, String paramId, String personTransactionId) {
         this.id = id;
         this.isValid = isValid;
         this.value = value;
@@ -15,8 +15,8 @@ public class PersonParamValue {
         this.personTransactionId = personTransactionId;
     }
 
-    public PersonParamValue(Boolean isValid, Double value,String paramId,String personTransactionId) {
-        this(null,isValid,value,paramId,personTransactionId);
+    public PersonParamValue(Boolean isValid, Double value, String paramId, String personTransactionId) {
+        this(null, isValid, value, paramId, personTransactionId);
     }
 
     public String getId() {

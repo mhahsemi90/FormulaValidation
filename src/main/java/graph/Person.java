@@ -14,7 +14,7 @@ public class Person {
     }
 
     public Person(String code, String firstName, String lastName) {
-        this(null,code,firstName,lastName);
+        this(null, code, firstName, lastName);
     }
 
     public String getId() {
