@@ -29,7 +29,7 @@ public class PersonTransactionRepository {
         return personTransactionList;
     }
 
-    public void savePersonParamValue(PersonTransaction personTransaction) {
+    public void savePersonTransaction(PersonTransaction personTransaction) {
         Document doc = new Document();
         doc.append("type", personTransaction.getType());
         doc.append("personId", personTransaction.getPersonId());

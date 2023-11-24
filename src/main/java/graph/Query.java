@@ -11,7 +11,7 @@ public class Query implements GraphQLRootResolver {
         this.calculationTransactionRepository = calculationTransactionRepository;
     }
 
-    public List<CalculationTransaction> allCalculation() {
+    public List<CalculationTransaction> allCalculation(String id) {
         return calculationTransactionRepository.getCalculationTransactions();
     }
 }

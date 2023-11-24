@@ -34,9 +34,10 @@ type Mutation {
     createPerson(code: String!, firstName: String!, lastName: String!): Person
     createParam(code: String!, title: String!): Param
     createPersonParamValue(isValid: Boolean!, value: Float!, paramId: ID!, personTransactionId: ID!): PersonParamValue
-    createPersonTransaction(type: String!, person: Person!, personParamValueIdList: [ID]!): PersonTransaction
-    createCalculationTransaction(year: String!  month: String!  personTransactionIdList: [ID]!): CalculationTransaction
+    createPersonTransaction(type: String!, personId: ID!, calculationTransactionId: ID!): PersonTransaction
+    createCalculationTransaction(year: String!, month: String!): CalculationTransaction
 }
 schema {
   query: Query
+  mutation: Mutation
 }

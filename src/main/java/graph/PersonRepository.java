@@ -23,6 +23,7 @@ public class PersonRepository {
         doc.append("code", person.getCode());
         doc.append("firstName", person.getFirstName());
         doc.append("lastName", person.getLastName());
+        System.out.println(doc.toString());
         persons.insertOne(doc);
     }
 
