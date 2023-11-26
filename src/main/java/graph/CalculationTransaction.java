@@ -26,4 +26,13 @@ public class CalculationTransaction {
     public String getMonth() {
         return month;
     }
+
+    @Override
+    public String toString() {
+        return "CalculationTransaction{" +
+                "id='" + id + '\'' +
+                ", year='" + year + '\'' +
+                ", month='" + month + '\'' +
+                '}';
+    }
 }

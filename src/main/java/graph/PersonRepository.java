@@ -18,13 +18,13 @@ public class PersonRepository {
         return person(doc);
     }
 
-    public void savePerson(Person person) {
+    public String savePerson(Person person) {
         Document doc = new Document();
         doc.append("code", person.getCode());
         doc.append("firstName", person.getFirstName());
         doc.append("lastName", person.getLastName());
-        System.out.println(doc.toString());
         persons.insertOne(doc);
+        return doc.get("_id").toString();
     }
 
     private Person person(Document doc) {

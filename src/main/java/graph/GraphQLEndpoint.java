@@ -37,11 +37,11 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
         return SchemaParser.newParser()
                 .file("schema.graphqls")
                 .resolvers(
-                        new Query(calculationTransactionRepository)
-                        , new Mutation(personRepository,paramRepository,personParamValueRepository,personTransactionRepository,calculationTransactionRepository)
-                        ,new PersonParamValueResolver(paramRepository)
-                        ,new PersonTransactionResolver(personRepository,personParamValueRepository)
-                        ,new CalculationTransactionResolver(personTransactionRepository)
+                        new Query(calculationTransactionRepository, personRepository)
+                        , new Mutation(personRepository, paramRepository, personParamValueRepository, personTransactionRepository, calculationTransactionRepository)
+                        , new PersonParamValueResolver(paramRepository)
+                        , new PersonTransactionResolver(personRepository, personParamValueRepository)
+                        , new CalculationTransactionResolver(personTransactionRepository)
                 )
                 .build()
                 .makeExecutableSchema();

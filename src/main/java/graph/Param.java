@@ -26,4 +26,13 @@ public class Param {
     public String getTitle() {
         return title;
     }
+
+    @Override
+    public String toString() {
+        return "Param{" +
+                "id='" + id + '\'' +
+                ", code='" + code + '\'' +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

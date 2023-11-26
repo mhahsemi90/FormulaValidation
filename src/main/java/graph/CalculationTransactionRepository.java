@@ -21,11 +21,12 @@ public class CalculationTransactionRepository {
         return calculationTransaction(doc);
     }
 
-    public void saveCalculationTransaction(CalculationTransaction calculationTransaction) {
+    public String saveCalculationTransaction(CalculationTransaction calculationTransaction) {
         Document doc = new Document();
         doc.append("year", calculationTransaction.getYear());
         doc.append("month", calculationTransaction.getMonth());
         calculationTransactions.insertOne(doc);
+        return doc.get("_id").toString();
     }
 
     private CalculationTransaction calculationTransaction(Document doc) {

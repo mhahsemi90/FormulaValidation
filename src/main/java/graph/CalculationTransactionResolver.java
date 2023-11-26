@@ -15,6 +15,8 @@ public class CalculationTransactionResolver implements GraphQLResolver<Calculati
     public List<PersonTransaction> personTransactionList(CalculationTransaction calculationTransaction) {
         if (calculationTransaction.getId() == null)
             return new ArrayList<>();
+        System.out.println(calculationTransaction.getId());
+        System.out.println(personTransactionRepository.findByCalculationTransactionId(calculationTransaction.getId()));
         return personTransactionRepository.findByCalculationTransactionId(calculationTransaction.getId());
     }
 }

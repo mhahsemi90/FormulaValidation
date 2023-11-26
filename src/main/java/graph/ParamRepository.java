@@ -18,11 +18,12 @@ public class ParamRepository {
         return param(doc);
     }
 
-    public void savePerson(Param param) {
+    public String saveParam(Param param) {
         Document doc = new Document();
         doc.append("code", param.getCode());
         doc.append("title", param.getTitle());
         params.insertOne(doc);
+        return doc.get("_id").toString();
     }
 
     private Param param(Document doc) {

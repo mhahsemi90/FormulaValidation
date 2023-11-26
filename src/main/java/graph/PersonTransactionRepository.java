@@ -24,17 +24,20 @@ public class PersonTransactionRepository {
 
     public List<PersonTransaction> findByCalculationTransactionId(String calculationTransactionId) {
         List<PersonTransaction> personTransactionList = new ArrayList<>();
-        personTransactions.find(eq("calculationTransactionId", new ObjectId(calculationTransactionId)))
-                .forEach((Consumer<? super Document>) doc -> personTransactionList.add(personTransaction(doc)));
+        personTransactions.find(eq("calculationTransactionId", calculationTransactionId))
+                .forEach((Consumer<? super Document>) doc -> {
+                    personTransactionList.add(personTransaction(doc));
+                });
         return personTransactionList;
     }
 
-    public void savePersonTransaction(PersonTransaction personTransaction) {
+    public String savePersonTransaction(PersonTransaction personTransaction) {
         Document doc = new Document();
         doc.append("type", personTransaction.getType());
         doc.append("personId", personTransaction.getPersonId());
         doc.append("calculationTransactionId", personTransaction.getCalculationTransactionId());
         personTransactions.insertOne(doc);
+        return doc.get("_id").toString();
     }
 
     private PersonTransaction personTransaction(Document doc) {

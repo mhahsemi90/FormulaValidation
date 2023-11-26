@@ -24,18 +24,19 @@ public class PersonParamValueRepository {
 
     public List<PersonParamValue> findByPersonTransactionId(String personTransactionId) {
         List<PersonParamValue> personParamValueList = new ArrayList<>();
-        personParamValues.find(eq("personTransactionId", new ObjectId(personTransactionId)))
+        personParamValues.find(eq("personTransactionId", personTransactionId))
                 .forEach((Consumer<? super Document>) doc -> personParamValueList.add(personParamValue(doc)));
         return personParamValueList;
     }
 
-    public void savePersonParamValue(PersonParamValue personParamValue) {
+    public String savePersonParamValue(PersonParamValue personParamValue) {
         Document doc = new Document();
         doc.append("isValid", personParamValue.getIsValid());
         doc.append("value", personParamValue.getValue());
         doc.append("paramId", personParamValue.getParamId());
         doc.append("personTransactionId", personParamValue.getPersonTransactionId());
         personParamValues.insertOne(doc);
+        return doc.get("_id").toString();
     }
 
     private PersonParamValue personParamValue(Document doc) {
