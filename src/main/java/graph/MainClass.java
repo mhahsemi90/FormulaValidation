@@ -29,14 +29,16 @@ public class MainClass {
 
         try {
 
-            String query = "query{allCalculation{personTransactionList{person{firstName,lastName},personParamValueList{param{title},value}}}}";
+            String query = "{wildAnimal: findAnimal(isWild: true){...comparisonFields}domesticAnimal: findAnimal(isWild: false){...comparisonFields}}";
+            query = query + ",variables: { \"myId\": 7}";
 
-            Map<String, Object> variables = new HashMap<>();
+            Map<String, Object> variables1 = new HashMap<>();
 
-            variables.put("query", query);
+            variables1.put("query", query);
+            //variables1.put("variables", variables);
 
             JSONObject jsonobj;
-            jsonobj = new JSONObject(variables);
+            jsonobj = new JSONObject(variables1);
 
 
             StringEntity entity = new StringEntity(jsonobj.toString());

@@ -13,7 +13,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../PCN-DEV/PCN/src/main/java/com/fanap/fanrp/pcn/business/service/implemented/inputserviceimpl/ProductServiceImpl.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../PCN-DEV/PCN/src/main/java/com/fanap/fanrp/pcn/business/service/interfaces/PersonalExcParamBusinessService.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../PCN-DEV/PCN/src/main/java/com/fanap/fanrp/pcn/business/validator/FormTemplateDtoValidatorImpl.java">
           <value>
             <set />
           </value>
@@ -24,6 +34,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../PCN-DEV/PCN/src/main/java/com/fanap/fanrp/pcn/controller/validator/PersonalExcParamVmValidatorImpl.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../PCN-DEV/PCN/src/main/resources/pcn/lang/process.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../PCN-DEV/PCN/src/main/resources/pcn/lang/process_fa_IR.properties">
           <value>
             <set />
           </value>
