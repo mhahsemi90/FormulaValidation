@@ -5,8 +5,9 @@ import java.util.List;
 
 public class ObjectExpression extends Expression {
     private List<Expression> propertyList;
+
     public ObjectExpression() {
-        setType(ExpressionType.OBJECT_EXPRESSION);
+        super(ExpressionType.OBJECT_EXPRESSION);
         this.propertyList = new ArrayList<>();
     }
 

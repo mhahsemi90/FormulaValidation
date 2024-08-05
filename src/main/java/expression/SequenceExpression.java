@@ -7,7 +7,7 @@ public class SequenceExpression extends Expression {
     List<Expression> expressions;
 
     public SequenceExpression() {
-        setType(ExpressionType.SEQUENCE_EXPRESSION);
+        super(ExpressionType.SEQUENCE_EXPRESSION);
         setExpressions(new ArrayList<>());
     }
 

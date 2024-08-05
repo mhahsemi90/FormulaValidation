@@ -1,5 +1,6 @@
 package statement;
 
+
 import expression.VariableDeclaratorExpression;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class VariableDeclarationStatement extends Statement {
     private List<VariableDeclaratorExpression> declaratorExpressionList;
 
     public VariableDeclarationStatement() {
-        setType(StatementType.VARIABLE_DECLARATION);
+        super(StatementType.VARIABLE_DECLARATION);
         setDeclaratorExpressionList(new ArrayList<>());
     }
 

@@ -5,7 +5,7 @@ public class MemberExpression extends Expression {
     Expression property;
 
     public MemberExpression() {
-        setType(ExpressionType.MEMBER_EXPRESSION);
+        super(ExpressionType.MEMBER_EXPRESSION);
     }
 
     public Expression getObject() {

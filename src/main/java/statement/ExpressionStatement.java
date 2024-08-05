@@ -6,7 +6,7 @@ public class ExpressionStatement extends Statement {
     private Expression expression;
 
     public ExpressionStatement() {
-        setType(StatementType.EXPRESSION);
+        super(StatementType.EXPRESSION);
     }
 
     public Expression getExpression() {

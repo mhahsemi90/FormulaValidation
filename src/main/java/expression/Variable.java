@@ -4,7 +4,7 @@ public class Variable extends Expression {
     private String idName;
 
     public Variable(String idName) {
-        setType(ExpressionType.VARIABLE_EXPRESSION);
+        super(ExpressionType.VARIABLE_EXPRESSION);
         this.idName = idName;
     }
 

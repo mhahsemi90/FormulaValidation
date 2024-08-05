@@ -1,16 +1,18 @@
 package statamentgenerator;
 
+import interfaces.StatementGenerator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import statement.Statement;
 import token.Token;
+import token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static token.TokenType.*;
-
 public class MainStatementGeneratorImpl implements StatementGenerator {
+
+    @Override
     public List<Statement> parsing(String script) {
         List<Character> characterList = new ArrayList<>();
         for (char c : script.toCharArray()) {
@@ -127,16 +129,16 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
         }
         List<Token> tokenList = new ArrayList<>();
         List<String> allSeparatorTokenStringList = getAllOperatorAndNotOperatorSeparator();
-        Integer lineNumber = 1;
+        int lineNumber = 1;
         int level = 0;
         for (String s1 : stringTokenList) {
             Token token = new Token();
             if (getAllKeyword().contains(s1)) {
-                token.setTokenType(KEYWORD);
+                token.setTokenType(TokenType.KEYWORD);
                 token.setValue(s1);
                 token.setLevel(level);
             } else if (allSeparatorTokenStringList.contains(s1)) {
-                token.setTokenType(PUNCTUATOR);
+                token.setTokenType(TokenType.PUNCTUATOR);
                 if (s1.equals("]") || s1.equals(")") || s1.equals("}"))
                     level--;
                 token.setLevel(level);
@@ -144,7 +146,7 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
                     level++;
                 if (s1.equals("\n")) {
                     token.setValue(String.valueOf(lineNumber++));
-                    token.setTokenType(NEW_LINE);
+                    token.setTokenType(TokenType.NEW_LINE);
                 } else {
                     token.setValue(s1);
                 }
@@ -153,11 +155,11 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
                             s1.startsWith("\"") ||
                             StringUtils.isNumeric(s1) ||
                             getAllLiteralKeyword().contains(s1)) {
-                token.setTokenType(LITERAL);
+                token.setTokenType(TokenType.LITERAL);
                 token.setValue(s1);
                 token.setLevel(level);
             } else if (StringUtils.isNotBlank(s1)) {
-                token.setTokenType(VARIABLE);
+                token.setTokenType(TokenType.VARIABLE);
                 token.setValue(s1);
                 token.setLevel(level);
             }
@@ -165,9 +167,18 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
                 tokenList.add(token);
         }
         if (CollectionUtils.isNotEmpty(tokenList)
-                && tokenList.get(tokenList.size() - 1).getTokenType() != NEW_LINE)
-            tokenList.add(new Token(NEW_LINE, lineNumber.toString(), 0));
-        return getAllStatementFromTokenList(tokenList);
+                && tokenList.get(tokenList.size() - 1).getTokenType() != TokenType.NEW_LINE)
+            tokenList.add(new Token(TokenType.NEW_LINE, String.valueOf(lineNumber), 0));
+        List<Statement> statementList = getAllStatementFromTokenList(tokenList);
+        if (CollectionUtils.isNotEmpty(statementList) &&
+                statementList.get(statementList.size() - 1) == null)
+            statementList.remove(statementList.size() - 1);
+        return statementList;
+    }
+
+    @Override
+    public List<Statement> getAllStatementFromTokenList(List<Token> tokenList) {
+        return StatementGenerator.super.getAllStatementFromTokenList(tokenList);
     }
 
     @Override
@@ -183,7 +194,6 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
             if (CollectionUtils.isNotEmpty(selectedTokenList) &&
                     selectedTokenList.get(0).getValue().equals("if")) {
                 statementGenerator = new IfStatementGeneratorImpl();
-                break mainBlock;
             }
         }
         return statementGenerator.generate(selectedTokenList, tokenList);

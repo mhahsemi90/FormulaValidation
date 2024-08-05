@@ -1,17 +1,17 @@
 package statamentgenerator;
 
+import exception.HandledError;
 import expression.TwoHandOperatorExpression;
 import expression.VariableDeclaratorExpression;
+import interfaces.StatementGenerator;
 import statement.ExpressionStatement;
-import statement.HandledError;
 import statement.Statement;
 import statement.VariableDeclarationStatement;
 import token.Token;
+import token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static token.TokenType.KEYWORD;
 
 public class VariableDeclarationStatementGeneratorImpl implements StatementGenerator {
     @Override
@@ -19,7 +19,7 @@ public class VariableDeclarationStatementGeneratorImpl implements StatementGener
         Token token = getFirstTokenThatNotNewLine(selectedTokenList);
         VariableDeclarationStatement result = new VariableDeclarationStatement();
         StatementGenerator generator = new ExpressionStatementGeneratorImpl();
-        if (token.getTokenType() == KEYWORD && isVariableKeyword(token.getValue())) {
+        if (token.getTokenType() == TokenType.KEYWORD && isVariableKeyword(token.getValue())) {
             result.setKind(token.getValue());
         } else {
             throw new HandledError(

@@ -1,14 +1,14 @@
 package statamentgenerator;
 
 import expression.Variable;
+import interfaces.StatementGenerator;
 import org.apache.commons.collections4.CollectionUtils;
 import statement.LabeledStatement;
 import statement.Statement;
 import token.Token;
+import token.TokenType;
 
 import java.util.List;
-
-import static token.TokenType.VARIABLE;
 
 public class LabeledStatementGeneratorImpl implements StatementGenerator {
     @Override
@@ -16,7 +16,7 @@ public class LabeledStatementGeneratorImpl implements StatementGenerator {
         LabeledStatement labeledStatement = new LabeledStatement();
         if (CollectionUtils.isNotEmpty(selectedTokenList) &&
                 selectedTokenList.size() > 2 &&
-                selectedTokenList.get(0).getTokenType() == VARIABLE &&
+                selectedTokenList.get(0).getTokenType() == TokenType.VARIABLE &&
                 selectedTokenList.get(1).getValue().equals(":")) {
             Variable variable = getVariableExpression(selectedTokenList, selectedTokenList.get(0).getValue());
             selectedTokenList.remove(0);

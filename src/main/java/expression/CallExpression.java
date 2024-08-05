@@ -8,7 +8,7 @@ public class CallExpression extends Expression {
     private List<Expression> argumentList;
 
     public CallExpression() {
-        setType(ExpressionType.CALL_EXPRESSION);
+        super(ExpressionType.CALL_EXPRESSION);
         setArgumentList(new ArrayList<>());
     }
 

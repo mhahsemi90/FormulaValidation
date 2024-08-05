@@ -7,7 +7,7 @@ public class ArrayExpression extends Expression {
     private List<Expression> elementList;
 
     public ArrayExpression() {
-        setType(ExpressionType.ARRAY_EXPRESSION);
+        super(ExpressionType.ARRAY_EXPRESSION);
         setElementList(new ArrayList<>());
     }
 

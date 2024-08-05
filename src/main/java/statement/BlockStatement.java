@@ -7,12 +7,12 @@ public class BlockStatement extends Statement {
     private List<Statement> body;
 
     public BlockStatement() {
-        setType(StatementType.BLOCK);
+        super(StatementType.BLOCK);
         setBody(new ArrayList<>());
     }
 
     public BlockStatement(List<Statement> body) {
-        setType(StatementType.BLOCK);
+        super(StatementType.BLOCK);
         setBody(body);
     }
 

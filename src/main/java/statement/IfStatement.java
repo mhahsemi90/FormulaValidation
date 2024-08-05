@@ -2,15 +2,15 @@ package statement;
 
 import expression.Expression;
 
-import java.util.ArrayList;
-
 public class IfStatement extends Statement {
     private Expression test;
     private Statement consequent;
     private Statement alternate;
+
     public IfStatement() {
-        setType(StatementType.IF);
+        super(StatementType.IF);
     }
+
     public Expression getTest() {
         return test;
     }

@@ -1,7 +1,6 @@
 package expression;
 
 public class OperatorExpression extends Expression {
-
     private String operator;
 
     public String getOperator() {

@@ -3,8 +3,9 @@ package expression;
 public class PropertyExpression extends Expression {
     private Variable key;
     private Expression value;
+
     public PropertyExpression() {
-        setType(ExpressionType.PROPERTY_EXPRESSION);
+        super(ExpressionType.PROPERTY_EXPRESSION);
     }
 
     public Variable getKey() {

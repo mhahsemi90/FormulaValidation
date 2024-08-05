@@ -1,13 +1,13 @@
 package statamentgenerator;
 
+import interfaces.StatementGenerator;
 import org.apache.commons.collections4.CollectionUtils;
 import statement.BlockStatement;
 import statement.Statement;
+import statement.StatementType;
 import token.Token;
 
 import java.util.List;
-
-import static statement.StatementType.HANDLED_ERROR;
 
 public class BlockStatementGeneratorImpl implements StatementGenerator {
     @Override
@@ -20,7 +20,7 @@ public class BlockStatementGeneratorImpl implements StatementGenerator {
             List<Statement> statementList = generator.getAllStatementFromTokenList(
                     selectedTokenList.subList(1, selectedTokenList.size() - 1)
             );
-            if (CollectionUtils.isNotEmpty(statementList) && statementList.get(0).getType() == HANDLED_ERROR)
+            if (CollectionUtils.isNotEmpty(statementList) && statementList.get(0).getType() == StatementType.HANDLED_ERROR)
                 result = statementList.get(1);
             else
                 result = new BlockStatement(statementList);

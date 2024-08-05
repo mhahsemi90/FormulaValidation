@@ -6,7 +6,7 @@ public class ConditionalExpression extends Expression {
     private Expression alternate;
 
     public ConditionalExpression() {
-        setType(ExpressionType.CONDITIONAL_EXPRESSION);
+        super(ExpressionType.CONDITIONAL_EXPRESSION);
     }
 
     public Expression getTest() {

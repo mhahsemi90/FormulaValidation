@@ -4,7 +4,7 @@ public class Literal extends Expression {
     private String value;
 
     public Literal() {
-        setType(ExpressionType.LITERAL_EXPRESSION);
+        super(ExpressionType.LITERAL_EXPRESSION);
     }
 
     public String getValue() {

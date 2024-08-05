@@ -5,11 +5,11 @@ public class VariableDeclaratorExpression extends Expression {
     private Expression initiateValue;
 
     public VariableDeclaratorExpression() {
-        setType(ExpressionType.VARIABLE_DECLARATOR_EXPRESSION);
+        super(ExpressionType.VARIABLE_DECLARATOR_EXPRESSION);
     }
 
     public VariableDeclaratorExpression(Expression variableName, Expression initiateValue) {
-        setType(ExpressionType.VARIABLE_DECLARATOR_EXPRESSION);
+        super(ExpressionType.VARIABLE_DECLARATOR_EXPRESSION);
         this.variableName = variableName;
         this.initiateValue = initiateValue;
     }
