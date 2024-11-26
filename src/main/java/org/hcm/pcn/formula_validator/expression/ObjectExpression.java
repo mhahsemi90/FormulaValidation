@@ -8,7 +8,7 @@ public class ObjectExpression extends Expression {
 
     public ObjectExpression() {
         super(ExpressionType.OBJECT_EXPRESSION);
-        this.propertyList = new ArrayList<>();
+        setPropertyList(new ArrayList<>());
     }
 
     public List<Expression> getPropertyList() {

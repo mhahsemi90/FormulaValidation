@@ -4,23 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockStatement extends Statement {
-    private List<Statement> body;
+    private List<Statement> bodyList;
 
     public BlockStatement() {
         super(StatementType.BLOCK);
-        setBody(new ArrayList<>());
+        setBodyList(new ArrayList<>());
     }
 
-    public BlockStatement(List<Statement> body) {
+    public BlockStatement(List<Statement> bodyList) {
         super(StatementType.BLOCK);
-        setBody(body);
+        setBodyList(bodyList);
     }
 
-    public List<Statement> getBody() {
-        return body;
+    public List<Statement> getBodyList() {
+        return bodyList;
     }
 
-    public void setBody(List<Statement> body) {
-        this.body = body;
+    public void setBodyList(List<Statement> bodyList) {
+        this.bodyList = bodyList;
     }
 }

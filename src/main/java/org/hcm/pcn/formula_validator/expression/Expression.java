@@ -8,7 +8,6 @@ public class Expression {
     private Expression parent;
 
     public Expression() {
-
     }
 
     public Expression(ExpressionType type) {

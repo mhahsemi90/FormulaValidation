@@ -1,0 +1,92 @@
+enum ExpressionType {
+    VARIABLE_EXPRESSION,
+    LITERAL_EXPRESSION,
+    CALL_EXPRESSION,
+    ARRAY_EXPRESSION,
+    ARRAY_PATTERN_EXPRESSION,
+    UNARY_EXPRESSION,
+    BINARY_EXPRESSION,
+    CONDITIONAL_EXPRESSION,
+    UPDATE_EXPRESSION,
+    ASSIGNMENT_EXPRESSION,
+    LOGICAL_EXPRESSION,
+    VARIABLE_DECLARATOR_EXPRESSION,
+    PARENTHESIS_EXPRESSION,
+    SEQUENCE_EXPRESSION,
+    MEMBER_EXPRESSION,
+    OBJECT_EXPRESSION,
+    PROPERTY_EXPRESSION,
+}
+interface Expression{
+    type: ExpressionType
+    parent: Expression
+}
+type ArrayExpression implements Expression{
+    type: ExpressionType
+    parent: Expression
+    elementList: [Expression]
+}
+type CallExpression implements Expression{
+    type: ExpressionType
+    parent: Expression
+    callVariableName: Expression
+    argumentList: [Expression]
+}
+type ConditionalExpression implements Expression{
+    type: ExpressionType
+    parent: Expression
+    test: Expression
+    consequent: Expression
+    alternate: Expression
+}
+type Literal implements Expression{
+    type: ExpressionType
+    parent: Expression
+    value: String
+}
+type MemberExpression implements Expression{
+    type: ExpressionType
+    parent: Expression
+    object: Expression
+    property: Expression
+}
+type ObjectExpression implements Expression{
+    type: ExpressionType
+    parent: Expression
+    propertyList: [Expression]
+}
+type OneHandOperatorExpression implements Expression{
+    type: ExpressionType
+    parent: Expression
+    operator: String
+    argument: Expression
+}
+type TwoHandOperatorExpression implements Expression{
+    type: ExpressionType
+    parent: Expression
+    operator: String
+    leftChild: Expression
+    rightChild: Expression
+}
+type PropertyExpression implements Expression{
+    type: ExpressionType
+    parent: Expression
+    key: Expression
+    value: Expression
+}
+type SequenceExpression implements Expression{
+    type: ExpressionType
+    parent: Expression
+    expressionList: [Expression]
+}
+type Variable implements Expression{
+    type: ExpressionType
+    parent: Expression
+    idName: String
+}
+type VariableDeclaratorExpression implements Expression{
+    type: ExpressionType
+    parent: Expression
+    variableName: Expression
+    initiateValue: Expression
+}

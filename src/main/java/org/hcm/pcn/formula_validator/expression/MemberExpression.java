@@ -1,8 +1,8 @@
 package org.hcm.pcn.formula_validator.expression;
 
 public class MemberExpression extends Expression {
-    Expression object;
-    Expression property;
+    private Expression object;
+    private Expression property;
 
     public MemberExpression() {
         super(ExpressionType.MEMBER_EXPRESSION);

@@ -1,0 +1,35 @@
+enum StatementType {
+    EXPRESSION,
+    BLOCK,
+    VARIABLE_DECLARATION,
+    IF,
+    LABEL,
+    HANDLED_ERROR,
+}
+interface Statement{
+    type: StatementType
+}
+type BlockStatement implements Statement{
+    type: StatementType
+    bodyList: [Statement]
+}
+type ExpressionStatement implements Statement{
+    type: StatementType
+    expression: Expression
+}
+type IfStatement implements Statement{
+    type: StatementType
+    test: Expression
+    consequent: Statement
+    alternate: Statement
+}
+type LabeledStatement implements Statement{
+    type: StatementType
+    label: Expression
+    body: Statement
+}
+type VariableDeclarationStatement implements Statement{
+    type: StatementType
+    kind: String
+    declaratorExpressionList: [Expression]
+}

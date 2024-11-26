@@ -1,8 +1,8 @@
 package org.hcm.pcn.formula_validator.statamentgenerator;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.hcm.pcn.formula_validator.exception.HandledError;
 import org.hcm.pcn.formula_validator.interfaces.StatementGenerator;
+import org.hcm.pcn.formula_validator.statement.EmptyStatement;
 import org.hcm.pcn.formula_validator.statement.ExpressionStatement;
 import org.hcm.pcn.formula_validator.statement.IfStatement;
 import org.hcm.pcn.formula_validator.statement.Statement;
@@ -10,6 +10,7 @@ import org.hcm.pcn.formula_validator.token.Token;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class IfStatementGeneratorImpl implements StatementGenerator {
     @Override
@@ -17,53 +18,79 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
         IfStatement result = new IfStatement();
         StatementGenerator blockStatementGenerator = new BlockStatementGeneratorImpl();
         StatementGenerator expressionStatementGenerator = new ExpressionStatementGeneratorImpl();
-        if (selectedTokenList.size() > 1 &&
-                selectedTokenList.remove(0).getValue().equals("if")) {
+        List<Token> tempTokenList = tokenList
+                .stream()
+                .map(Token::clone)
+                .collect(Collectors.toList());
+        Token token = removeFirstTokenThatNotNewLine(selectedTokenList);
+        if (CollectionUtils.isNotEmpty(selectedTokenList) &&
+                token.getValue().equals("if")) {
             List<Token> testTokenList = getSameLevelTokenListBetweenTwoParenthesis(
-                    selectedTokenList.get(0).getLevel(),
+                    token.getLevel(),
                     selectedTokenList);
             result.setTest(
                     ((ExpressionStatement) expressionStatementGenerator.generate(testTokenList, new ArrayList<>()))
                             .getExpression()
             );
-            tokenList.addAll(0, selectedTokenList);
-            if (CollectionUtils.isNotEmpty(selectedTokenList)
-                    && selectedTokenList.get(0).getValue().equals("{")) {
-                List<Token> conquestTokenList = getSameLevelTokenListBetweenTwoBrace(
-                        tokenList.get(0).getLevel(),
-                        tokenList);
-                result.setConsequent(
-                        blockStatementGenerator.generate(
-                                conquestTokenList, new ArrayList<>()
-                        )
-                );
-            } else {
-                result.setConsequent(
-                        getFirstStatementFromTokenList(tokenList)
-                );
-            }
-            if (CollectionUtils.isNotEmpty(tokenList)
-                    && tokenList.get(0).getValue().equals("else")) {
-                tokenList.remove(0);
-                if (CollectionUtils.isNotEmpty(selectedTokenList)
-                        && selectedTokenList.get(0).getValue().equals("{")) {
-                    List<Token> alternateTokenList = getSameLevelTokenListBetweenTwoBrace(
-                            tokenList.get(0).getLevel(),
-                            tokenList);
-                    result.setAlternate(
+            tempTokenList.addAll(0, selectedTokenList);
+            token = removeFirstTokenThatNotNewLine(tempTokenList);
+            if (CollectionUtils.isNotEmpty(tempTokenList)) {
+                if (token.getValue().equals("{")) {
+                    tempTokenList.add(0, token);
+                    List<Token> conquestTokenList = getSameLevelTokenListBetweenTwoBrace(
+                            token.getLevel(),
+                            tempTokenList);
+                    result.setConsequent(
                             blockStatementGenerator.generate(
-                                    alternateTokenList, new ArrayList<>()
+                                    conquestTokenList, new ArrayList<>()
                             )
                     );
-                } else {
-                    result.setAlternate(
-                            getFirstStatementFromTokenList(tokenList)
+                } else if (token.getValue().equals(";")) {
+                    result.setConsequent(
+                            new EmptyStatement()
                     );
+                } else {
+                    tempTokenList.add(0, token);
+                    result.setConsequent(
+                            getFirstStatementFromTokenList(tempTokenList)
+                    );
+                }
+            }
+            token = removeFirstTokenThatNotNewLine(tempTokenList);
+            if (CollectionUtils.isNotEmpty(tempTokenList)
+                    && token.getValue().equals("else")) {
+                token = removeFirstTokenThatNotNewLine(tempTokenList);
+                if (CollectionUtils.isNotEmpty(tempTokenList)) {
+                    if (token.getValue().equals("{")) {
+                        tempTokenList.add(0, token);
+                        List<Token> alternateTokenList = getSameLevelTokenListBetweenTwoBrace(
+                                token.getLevel(),
+                                tempTokenList);
+                        result.setAlternate(
+                                blockStatementGenerator.generate(
+                                        alternateTokenList, new ArrayList<>()
+                                )
+                        );
+                    } else if (token.getValue().equals(";")) {
+                        result.setAlternate(
+                                new EmptyStatement()
+                        );
+                    } else {
+                        tempTokenList.add(0, token);
+                        result.setAlternate(
+                                getFirstStatementFromTokenList(tempTokenList)
+                        );
+                    }
+                } else {
+                    throwUnexpectedEnd(tempTokenList);
                 }
             }
         }
         if (result.getTest() == null || result.getConsequent() == null)
-            throw new HandledError("Unexpected end of input line:" + getLineNumber(tokenList));
+            throwUnexpectedEnd(tempTokenList);
+        tokenList.clear();
+        tokenList.addAll(tempTokenList);
         return result;
     }
+
 }

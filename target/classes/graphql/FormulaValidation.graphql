@@ -1,0 +1,6 @@
+type Query {
+    formulaValidation(formula: String): String
+}
+schema {
+    query: Query
+}

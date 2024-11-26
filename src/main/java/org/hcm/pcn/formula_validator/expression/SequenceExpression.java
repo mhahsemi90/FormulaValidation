@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SequenceExpression extends Expression {
-    List<Expression> expressions;
+    List<Expression> expressionList;
 
     public SequenceExpression() {
         super(ExpressionType.SEQUENCE_EXPRESSION);
-        setExpressions(new ArrayList<>());
+        setExpressionList(new ArrayList<>());
     }
 
-    public List<Expression> getExpressions() {
-        return expressions;
+    public List<Expression> getExpressionList() {
+        return expressionList;
     }
 
-    public void setExpressions(List<Expression> expressions) {
-        this.expressions = expressions;
+    public void setExpressionList(List<Expression> expressionList) {
+        this.expressionList = expressionList;
     }
 }

@@ -10,12 +10,14 @@ import org.hcm.pcn.formula_validator.expression.Variable;
 import org.hcm.pcn.formula_validator.statamentgenerator.MainStatementGeneratorImpl;
 import org.hcm.pcn.formula_validator.statement.Statement;
 import org.hcm.pcn.formula_validator.token.Token;
-import org.hcm.pcn.formula_validator.token.TokenType;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
+
+import static org.hcm.pcn.formula_validator.token.TokenType.NEW_LINE;
 
 public interface StatementGenerator {
     Statement generate(List<Token> selectedTokenList, List<Token> tokenList);
@@ -26,28 +28,37 @@ public interface StatementGenerator {
 
     default List<Statement> getAllStatementFromTokenList(List<Token> tokenList) {
         List<Statement> allStatementList = new ArrayList<>();
-        StatementGenerator generator = new MainStatementGeneratorImpl();
         tokenList = validateAllParenthesisAndBrace(tokenList);
         while (CollectionUtils.isNotEmpty(tokenList)) {
-            Statement result;
-            List<Token> selectedTokenList = selectFirstTokenListToSemicolon(tokenList);
-            List<Token> tempTokenList = selectedTokenList
-                    .stream()
-                    .map(Token::clone)
-                    .collect(Collectors.toList());
-            try {
-                result = generator.generate(selectedTokenList, tokenList);
-            } catch (Exception e) {
-                selectedTokenList = selectFirstTokenListToLastNewLine(tempTokenList, tokenList);
-                if (CollectionUtils.isNotEmpty(selectedTokenList)) {
-                    result = generator.generate(selectedTokenList, tokenList);
-                } else {
-                    throw e;
-                }
-            }
-            allStatementList.add(result);
+            allStatementList.add(getStatement(tokenList, new MainStatementGeneratorImpl()));
         }
         return allStatementList;
+    }
+
+    default Statement getFirstStatementFromTokenList(List<Token> tokenList) {
+        Statement result;
+        result = getStatement(tokenList, new MainStatementGeneratorImpl());
+        return result;
+    }
+
+    private Statement getStatement(List<Token> tokenList, StatementGenerator generator) {
+        Statement result;
+        List<Token> selectedTokenList = selectTokenListToFirstSemicolon(tokenList);
+        List<Token> tempTokenList = selectedTokenList
+                .stream()
+                .map(Token::clone)
+                .collect(Collectors.toList());
+        try {
+            result = generator.generate(selectedTokenList, tokenList);
+        } catch (Exception e) {
+            selectedTokenList = selectTokenListToFirstNewLine(tempTokenList, tokenList);
+            if (CollectionUtils.isNotEmpty(selectedTokenList)) {
+                result = generator.generate(selectedTokenList, tokenList);
+            } else {
+                throw e;
+            }
+        }
+        return result;
     }
 
     default List<Token> validateAllParenthesisAndBrace(List<Token> tokenList) {
@@ -68,57 +79,42 @@ public interface StatementGenerator {
                 parenthesisStack.push("(");
             if (token.getValue().equals("}")) {
                 if (advancedBraceStack.isEmpty()) {
-                    throwHandledError(tokenList, token.getValue());
+                    throwTokenNotValid(tokenList, token.getValue());
                 }
                 advancedBraceStack.pop();
             }
             if (token.getValue().equals("]")) {
                 if (braceStack.isEmpty()) {
-                    throwHandledError(tokenList, token.getValue());
+                    throwTokenNotValid(tokenList, token.getValue());
                 }
                 braceStack.pop();
             }
             if (token.getValue().equals(")")) {
                 if (parenthesisStack.isEmpty()) {
-                    throwHandledError(tokenList, token.getValue());
+                    throwTokenNotValid(tokenList, token.getValue());
                 }
                 parenthesisStack.pop();
             }
         }
         if (!advancedBraceStack.isEmpty())
-            throwHandledError(tokenList, "{");
+            throwTokenNotValid(tokenList, "{");
         if (!braceStack.isEmpty())
-            throwHandledError(tokenList, "[");
+            throwTokenNotValid(tokenList, "[");
         if (!parenthesisStack.isEmpty())
-            throwHandledError(tokenList, "(");
+            throwTokenNotValid(tokenList, "(");
         return tempTokenList;
     }
 
-    default Statement getFirstStatementFromTokenList(List<Token> tokenList) {
-        List<Token> selectedTokenList = selectFirstTokenListToSemicolon(tokenList);
-        List<Token> tempTokenList = selectedTokenList
-                .stream()
-                .map(Token::clone)
-                .collect(Collectors.toList());
-        List<Statement> allStatementList = getAllStatementFromTokenList(selectedTokenList);
-        if (CollectionUtils.isNotEmpty(allStatementList)
-                && allStatementList.size() == 1) {
-            return allStatementList.get(0);
-        } else {
-            selectedTokenList = selectFirstTokenListToLastNewLine(tempTokenList, tokenList);
-            return getFirstStatementFromTokenList(selectedTokenList);
-        }
-    }
 
     default Integer getLineNumber(List<Token> selectedTokenList) {
         for (Token token : selectedTokenList) {
-            if (token.getTokenType() == TokenType.NEW_LINE)
+            if (token.getTokenType() == NEW_LINE)
                 return Integer.valueOf(token.getValue());
         }
         return 1;
     }
 
-    default List<Token> selectFirstTokenListToSemicolon(List<Token> tokenList) {
+    default List<Token> selectTokenListToFirstSemicolon(List<Token> tokenList) {
         List<Token> selectedTokenList = new ArrayList<>();
         int size = tokenList.size();
         for (int i = 0; i < size; i++) {
@@ -131,31 +127,66 @@ public interface StatementGenerator {
         return selectedTokenList;
     }
 
-    default List<Token> selectFirstTokenListToLastNewLine(List<Token> tempTokenList, List<Token> tokenList) {
-        if (CollectionUtils.isNotEmpty(tempTokenList)) {
-            if (tempTokenList.get(tempTokenList.size() - 1).getTokenType() == TokenType.NEW_LINE
-                    || tempTokenList.get(tempTokenList.size() - 1).getValue().equals("}"))
-                tokenList.add(0, tempTokenList.remove(tempTokenList.size() - 1));
-            for (int i = tempTokenList.size() - 1; i >= 0; i--) {
-                if (tempTokenList.get(i).getTokenType() == TokenType.NEW_LINE
-                        || tempTokenList.get(i).getValue().equals("}"))
+    default List<Token> selectTokenListToFirstNewLine(List<Token> selectedTokenList, List<Token> tokenList) {
+        if (CollectionUtils.isNotEmpty(selectedTokenList)) {
+            List<Token> newSelectedTokenList = new ArrayList<>();
+            Iterator<Token> tokenIterator = selectedTokenList.listIterator();
+            while (tokenIterator.hasNext()) {
+                Token token = tokenIterator.next();
+                tokenIterator.remove();
+                newSelectedTokenList.add(token);
+                if (token.getTokenType() == NEW_LINE
+                        || token.getValue().equals("{"))
                     break;
-                else
-                    tokenList.add(0, tempTokenList.remove(i));
+            }
+            tokenList.addAll(0, selectedTokenList);
+            selectedTokenList = newSelectedTokenList;
+        }
+        return selectedTokenList;
+    }
+
+    default Token removeFirstTokenThatNotNewLine(List<Token> selectedTokenList) {
+        Token token = null;
+        Token newLineToken = null;
+        while (CollectionUtils.isNotEmpty(selectedTokenList)) {
+            if (selectedTokenList.get(0).getTokenType() != NEW_LINE) {
+                token = selectedTokenList.remove(0);
+                break;
+            } else {
+                newLineToken = selectedTokenList.remove(0);
             }
         }
-        return tempTokenList;
+        if (token == null) {
+            return newLineToken;
+        }
+        return token;
     }
 
     default Token getFirstTokenThatNotNewLine(List<Token> selectedTokenList) {
         Token token = null;
         Token newLineToken = null;
         while (CollectionUtils.isNotEmpty(selectedTokenList)) {
-            if (selectedTokenList.get(0).getTokenType() != TokenType.NEW_LINE) {
-                token = selectedTokenList.remove(0);
+            if (selectedTokenList.get(0).getTokenType() != NEW_LINE) {
+                token = selectedTokenList.get(0);
                 break;
             } else {
                 newLineToken = selectedTokenList.remove(0);
+            }
+        }
+        if (token == null) {
+            return newLineToken;
+        }
+        return token;
+    }
+    default Token removeLastTokenThatNotNewLine(List<Token> selectedTokenList) {
+        Token token = null;
+        Token newLineToken = null;
+        while (CollectionUtils.isNotEmpty(selectedTokenList)) {
+            if (selectedTokenList.get(selectedTokenList.size() - 1).getTokenType() != NEW_LINE) {
+                token = selectedTokenList.remove(selectedTokenList.size() - 1);
+                break;
+            } else {
+                newLineToken = selectedTokenList.remove(selectedTokenList.size() - 1);
             }
         }
         if (token == null) {
@@ -315,9 +346,12 @@ public interface StatementGenerator {
         return operatorExpression;
     }
 
-    default void throwHandledError(List<Token> tokenList, String value) {
-        Integer lineNumber = getLineNumber(tokenList);
-        throw new HandledError("Token not valid " + value + " line:" + lineNumber);
+    default void throwTokenNotValid(List<Token> tokenList, String value) {
+        throw new HandledError("Token not valid '" + value + "' line:" + getLineNumber(tokenList));
+    }
+
+    default void throwUnexpectedEnd(List<Token> tokenList) {
+        throw new HandledError("Unexpected end of input line:" + getLineNumber(tokenList));
     }
 
     default Variable getVariableExpression(List<Token> selectedTokenList, String value) {
@@ -326,7 +360,7 @@ public interface StatementGenerator {
             result = value.matches("^[a-zA-Z_$]\\S*")
                     && value.matches("([a-zA-Z_$0-9])\\w*");
         if (!result)
-            this.throwHandledError(selectedTokenList, value);
+            this.throwTokenNotValid(selectedTokenList, value);
         return new Variable(value);
     }
 

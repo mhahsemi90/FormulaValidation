@@ -1,14 +1,14 @@
 package org.hcm.pcn.formula_validator.statement;
 
 
-import org.hcm.pcn.formula_validator.expression.VariableDeclaratorExpression;
+import org.hcm.pcn.formula_validator.expression.Expression;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class VariableDeclarationStatement extends Statement {
     private String kind;
-    private List<VariableDeclaratorExpression> declaratorExpressionList;
+    private List<Expression> declaratorExpressionList;
 
     public VariableDeclarationStatement() {
         super(StatementType.VARIABLE_DECLARATION);
@@ -23,11 +23,11 @@ public class VariableDeclarationStatement extends Statement {
         this.kind = kind;
     }
 
-    public List<VariableDeclaratorExpression> getDeclaratorExpressionList() {
+    public List<Expression> getDeclaratorExpressionList() {
         return declaratorExpressionList;
     }
 
-    public void setDeclaratorExpressionList(List<VariableDeclaratorExpression> declaratorExpressionList) {
+    public void setDeclaratorExpressionList(List<Expression> declaratorExpressionList) {
         this.declaratorExpressionList = declaratorExpressionList;
     }
 }

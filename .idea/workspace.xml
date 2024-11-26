@@ -4,117 +4,62 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4841a8c5-54e3-4281-8148-1ba79bde6401" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/FormulaValidatorApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/exception/HandledError.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/ArrayExpression.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/CallExpression.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/ConditionalExpression.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/Expression.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/ExpressionType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/Literal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/MemberExpression.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/ObjectExpression.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/OneHandOperatorExpression.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/OperatorExpression.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/PropertyExpression.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/SequenceExpression.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/TwoHandOperatorExpression.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/Variable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/VariableDeclaratorExpression.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/interfaces/ParsingScriptService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/interfaces/StatementGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/BlockStatementGeneratorImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/ExpressionStatementGeneratorImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/IfStatementGeneratorImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/LabeledStatementGeneratorImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/MainStatementGeneratorImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/ParsingScriptServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/VariableDeclarationStatementGeneratorImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/BlockStatement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/ExpressionStatement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/IfStatement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/LabeledStatement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/Statement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/StatementType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/VariableDeclarationStatement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/token/Token.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/token/TokenType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/org/hcm/pcn/formula_validator/FormulaValidatorApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarIssues.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/2/02ac2020d9d3de5a9f05a09f4901ec746a3b696f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/1/3/1337d72a3b1928dba82aa5210f5cdc0e88ce895b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/e/3ec43a22b83cd09003e6d3207ec38c3edd724d85" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/4/442292b8a7efeabbe4cc176709b833b1792140ec" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/c/5c7095f0d896552cec237e73cfdfe517ff35a85c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/7/1/71dc4c32ea245ec5f3c185ecd5d38fc9d312ecb8" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/7/2/72bfe0891889d1c7ab3955e0d712c5624a2be608" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/1/b15a1760b941ad92343169871b53dea142f805a3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/0/f034fde9ab5c6226f69b4e25b1f8967d8f0e627f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+    <list default="true" id="4841a8c5-54e3-4281-8148-1ba79bde6401" name="Changes" comment="refactor">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_micrometer_micrometer_core_1_13_6.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_micrometer_micrometer_jakarta9_1_13_6.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hdrhistogram_HdrHistogram_2_2_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_latencyutils_LatencyUtils_2_0_3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_actuator_3_3_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_actuator_autoconfigure_3_3_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_actuator_3_3_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/controller/FormulaValidationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/EmptyStatement.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/graphql/Expression.graphql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/graphql/FormulaValidation.graphql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/graphql/Statement.graphql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/formula-validator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/formula-validator.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/exception/HandledError.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/ArrayExpression.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/CallExpression.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/ConditionalExpression.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/Expression.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/ExpressionType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/Literal.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/MemberExpression.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/ObjectExpression.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/OneHandOperatorExpression.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/OperatorExpression.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/PropertyExpression.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/SequenceExpression.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/TwoHandOperatorExpression.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/Variable.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/expression/VariableDeclaratorExpression.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/CalculationTransaction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/CalculationTransactionRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/CalculationTransactionResolver.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/GraphQLEndpoint.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/MainClass.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/Mutation.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/Param.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/ParamRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/Person.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/PersonParamValue.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/PersonParamValueRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/PersonParamValueResolver.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/PersonRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/PersonTransaction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/PersonTransactionRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/PersonTransactionResolver.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/Query.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/interfaces/ParsingScriptService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/interfaces/StatementGenerator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statamentgenerator/BlockStatementGeneratorImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statamentgenerator/ExpressionStatementGeneratorImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statamentgenerator/IfStatementGeneratorImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statamentgenerator/LabeledStatementGeneratorImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statamentgenerator/MainStatementGeneratorImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statamentgenerator/ParsingScriptServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statamentgenerator/VariableDeclarationStatementGeneratorImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statement/BlockStatement.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statement/ExpressionStatement.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statement/IfStatement.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statement/LabeledStatement.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statement/Statement.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statement/StatementType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/statement/VariableDeclarationStatement.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/token/Token.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/token/TokenType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/schema.graphqls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/Expression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/Expression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/Literal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/Literal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/MemberExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/MemberExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/ObjectExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/ObjectExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/PropertyExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/PropertyExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/SequenceExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/expression/SequenceExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/interfaces/StatementGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/interfaces/StatementGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/BlockStatementGeneratorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/BlockStatementGeneratorImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/ExpressionStatementGeneratorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/ExpressionStatementGeneratorImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/IfStatementGeneratorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/IfStatementGeneratorImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/LabeledStatementGeneratorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/LabeledStatementGeneratorImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/MainStatementGeneratorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/MainStatementGeneratorImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/VariableDeclarationStatementGeneratorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statamentgenerator/VariableDeclarationStatementGeneratorImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/BlockStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/BlockStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/StatementType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/StatementType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/VariableDeclarationStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/hcm/pcn/formula_validator/statement/VariableDeclarationStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/expression/Expression.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/expression/Expression.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/expression/Literal.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/expression/Literal.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/expression/MemberExpression.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/expression/MemberExpression.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/expression/ObjectExpression.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/expression/ObjectExpression.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/expression/PropertyExpression.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/expression/PropertyExpression.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/expression/SequenceExpression.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/expression/SequenceExpression.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/interfaces/StatementGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/interfaces/StatementGenerator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statamentgenerator/ExpressionStatementGeneratorImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statamentgenerator/ExpressionStatementGeneratorImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statamentgenerator/IfStatementGeneratorImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statamentgenerator/IfStatementGeneratorImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statamentgenerator/MainStatementGeneratorImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statamentgenerator/MainStatementGeneratorImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statamentgenerator/VariableDeclarationStatementGeneratorImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statamentgenerator/VariableDeclarationStatementGeneratorImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statement/BlockStatement.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statement/BlockStatement.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statement/StatementType.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statement/StatementType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statement/VariableDeclarationStatement.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/hcm/pcn/formula_validator/statement/VariableDeclarationStatement.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/formula-validator-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/formula-validator-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/formula-validator-0.0.1-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/formula-validator-0.0.1-SNAPSHOT.jar.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2024-11-20T16-39-19_730.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-org.hcm.pcn.formula_validator.FormulaValidatorApplicationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-org.hcm.pcn.formula_validator.FormulaValidatorApplicationTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/org.hcm.pcn.formula_validator.FormulaValidatorApplicationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/org.hcm.pcn.formula_validator.FormulaValidatorApplicationTests.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,16 +98,35 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;public&quot;,
+    &quot;last_opened_file_path&quot;: &quot;G:/AlphaProject/FormulaValidation&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.17382812&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.26863906&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;0c0e34a2306ed00a31428428bd24736e&quot;
   }
 }</component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.hcm.pcn.formula_validator.statement" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+  </component>
   <component name="RunManager" selected="Spring Boot.FormulaValidatorApplication">
     <configuration name="MainClass" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="graph.MainClass" />
@@ -218,8 +182,20 @@
       <updated>1732097814953</updated>
       <workItem from="1732097816210" duration="952000" />
       <workItem from="1732099838831" duration="7597000" />
-      <workItem from="1732107645011" duration="473000" />
+      <workItem from="1732107645011" duration="954000" />
+      <workItem from="1732343272088" duration="17134000" />
+      <workItem from="1732430281721" duration="14683000" />
+      <workItem from="1732511477660" duration="14850000" />
+      <workItem from="1732597581544" duration="2935000" />
     </task>
+    <task id="LOCAL-00001" summary="change to spring graphql">
+      <created>1732108229058</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1732108229058</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -238,5 +214,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="change to spring graphql" />
+    <MESSAGE value="refactor" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor" />
   </component>
 </project>

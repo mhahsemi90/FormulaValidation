@@ -5,8 +5,8 @@ org\hcm\pcn\formula_validator\expression\ObjectExpression.class
 org\hcm\pcn\formula_validator\statamentgenerator\MainStatementGeneratorImpl.class
 org\hcm\pcn\formula_validator\expression\VariableDeclaratorExpression.class
 org\hcm\pcn\formula_validator\expression\ConditionalExpression.class
-org\hcm\pcn\formula_validator\expression\OperatorExpression.class
 org\hcm\pcn\formula_validator\interfaces\StatementGenerator.class
+org\hcm\pcn\formula_validator\expression\OperatorExpression.class
 org\hcm\pcn\formula_validator\FormulaValidatorApplication.class
 org\hcm\pcn\formula_validator\expression\ExpressionType.class
 org\hcm\pcn\formula_validator\expression\ArrayExpression.class
@@ -14,8 +14,8 @@ org\hcm\pcn\formula_validator\token\Token.class
 org\hcm\pcn\formula_validator\statamentgenerator\ExpressionStatementGeneratorImpl$1.class
 org\hcm\pcn\formula_validator\exception\HandledError.class
 org\hcm\pcn\formula_validator\statement\VariableDeclarationStatement.class
-org\hcm\pcn\formula_validator\expression\Expression.class
 org\hcm\pcn\formula_validator\token\TokenType.class
+org\hcm\pcn\formula_validator\expression\Expression.class
 org\hcm\pcn\formula_validator\statement\BlockStatement.class
 org\hcm\pcn\formula_validator\statamentgenerator\BlockStatementGeneratorImpl.class
 org\hcm\pcn\formula_validator\expression\PropertyExpression.class
@@ -29,6 +29,7 @@ org\hcm\pcn\formula_validator\expression\TwoHandOperatorExpression.class
 org\hcm\pcn\formula_validator\expression\MemberExpression.class
 org\hcm\pcn\formula_validator\expression\SequenceExpression.class
 org\hcm\pcn\formula_validator\statamentgenerator\VariableDeclarationStatementGeneratorImpl.class
+org\hcm\pcn\formula_validator\controller\FormulaValidationController.class
 org\hcm\pcn\formula_validator\statement\IfStatement.class
 org\hcm\pcn\formula_validator\expression\OneHandOperatorExpression.class
 org\hcm\pcn\formula_validator\statement\ExpressionStatement.class

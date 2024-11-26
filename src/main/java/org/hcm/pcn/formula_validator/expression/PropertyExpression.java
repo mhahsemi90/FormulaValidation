@@ -1,18 +1,18 @@
 package org.hcm.pcn.formula_validator.expression;
 
 public class PropertyExpression extends Expression {
-    private Variable key;
+    private Expression key;
     private Expression value;
 
     public PropertyExpression() {
         super(ExpressionType.PROPERTY_EXPRESSION);
     }
 
-    public Variable getKey() {
+    public Expression getKey() {
         return key;
     }
 
-    public void setKey(Variable key) {
+    public void setKey(Expression key) {
         this.key = key;
     }
 

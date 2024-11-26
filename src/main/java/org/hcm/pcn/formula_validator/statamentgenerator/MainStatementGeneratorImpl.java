@@ -6,10 +6,14 @@ import org.hcm.pcn.formula_validator.interfaces.StatementGenerator;
 import org.hcm.pcn.formula_validator.statement.Statement;
 import org.hcm.pcn.formula_validator.token.Token;
 import org.hcm.pcn.formula_validator.token.TokenType;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
+@Primary
 public class MainStatementGeneratorImpl implements StatementGenerator {
 
     @Override
