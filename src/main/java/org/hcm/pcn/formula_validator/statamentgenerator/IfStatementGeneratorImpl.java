@@ -10,11 +10,12 @@ import org.hcm.pcn.formula_validator.token.Token;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class IfStatementGeneratorImpl implements StatementGenerator {
     @Override
-    public Statement generate(List<Token> selectedTokenList, List<Token> tokenList) {
+    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList) {
         IfStatement result = new IfStatement();
         StatementGenerator blockStatementGenerator = new BlockStatementGeneratorImpl();
         StatementGenerator expressionStatementGenerator = new ExpressionStatementGeneratorImpl();
@@ -29,7 +30,9 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
                     token.getLevel(),
                     selectedTokenList);
             result.setTest(
-                    ((ExpressionStatement) expressionStatementGenerator.generate(testTokenList, new ArrayList<>()))
+                    ((ExpressionStatement) expressionStatementGenerator
+                            .generate(testTokenList, new ArrayList<>())
+                            .orElseThrow(() -> unexpectedEndError(tempTokenList)))
                             .getExpression()
             );
             tempTokenList.addAll(0, selectedTokenList);
@@ -43,7 +46,7 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
                     result.setConsequent(
                             blockStatementGenerator.generate(
                                     conquestTokenList, new ArrayList<>()
-                            )
+                            ).orElse(null)
                     );
                 } else if (token.getValue().equals(";")) {
                     result.setConsequent(
@@ -69,7 +72,7 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
                         result.setAlternate(
                                 blockStatementGenerator.generate(
                                         alternateTokenList, new ArrayList<>()
-                                )
+                                ).orElse(null)
                         );
                     } else if (token.getValue().equals(";")) {
                         result.setAlternate(
@@ -90,7 +93,7 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
             throwUnexpectedEnd(tempTokenList);
         tokenList.clear();
         tokenList.addAll(tempTokenList);
-        return result;
+        return Optional.of(result);
     }
 
 }

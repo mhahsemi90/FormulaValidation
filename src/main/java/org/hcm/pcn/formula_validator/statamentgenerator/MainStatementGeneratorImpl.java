@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @Primary
@@ -186,7 +187,7 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
     }
 
     @Override
-    public Statement generate(List<Token> selectedTokenList, List<Token> tokenList) {
+    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList) {
         StatementGenerator statementGenerator = new ExpressionStatementGeneratorImpl();
         mainBlock:
         {

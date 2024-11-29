@@ -10,11 +10,12 @@ import org.hcm.pcn.formula_validator.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Stack;
 
 public class ExpressionStatementGeneratorImpl implements StatementGenerator {
     @Override
-    public Statement generate(List<Token> selectedTokenList, List<Token> tokenList) {
+    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList) {
         ExpressionStatement result = new ExpressionStatement();
         Expression currentExpression = null;
         Expression lastExpression = null;
@@ -374,7 +375,7 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
         }
         verifyExpression(true, currentExpression, selectedTokenList);
         result.setExpression(currentExpression);
-        return currentExpression != null ? result : null;
+        return currentExpression != null ? Optional.of(result) : Optional.empty();
     }
 
     private Expression getAssignmentExpression(Token currentToken, Expression currentExpression, List<Token> selectedTokenList) {
@@ -403,7 +404,9 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                 rightChildTokenList.add(token);
             }
         }
-        Expression rightChild = ((ExpressionStatement) generate(rightChildTokenList, new ArrayList<>())).getExpression();
+        Expression rightChild = ((ExpressionStatement) generate(rightChildTokenList, new ArrayList<>())
+                .orElseThrow(()->unexpectedEndError(selectedTokenList)))
+                .getExpression();
         assignmentExpression = getOperatorAndTypeOfTwoHandOperatorExpression(currentToken);
         assignmentExpression.setOperator(currentToken.getValue());
         assignmentExpression.setLeftChild(leftChild);
@@ -496,10 +499,14 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                 conditionalExpression.setTest(expression);
             }
             conditionalExpression.setConsequent(
-                    ((ExpressionStatement) generate(consequentTokenList, new ArrayList<>())).getExpression()
+                    ((ExpressionStatement) generate(consequentTokenList, new ArrayList<>())
+                            .orElseThrow(()->unexpectedEndError(selectedTokenList)))
+                            .getExpression()
             );
             conditionalExpression.setAlternate(
-                    ((ExpressionStatement) generate(alternateTokenList, new ArrayList<>())).getExpression()
+                    ((ExpressionStatement) generate(alternateTokenList, new ArrayList<>())
+                            .orElseThrow(()->unexpectedEndError(selectedTokenList)))
+                            .getExpression()
             );
         }
         return conditionalExpression;
@@ -581,7 +588,9 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                     allElementTokenList.add(token1);
             }
             unaryExpression.setArgument(
-                    ((ExpressionStatement) generate(allElementTokenList, new ArrayList<>())).getExpression()
+                    ((ExpressionStatement) generate(allElementTokenList, new ArrayList<>())
+                            .orElseThrow(()->unexpectedEndError(selectedTokenList)))
+                            .getExpression()
             );
         } else {
             throwTokenNotValid(selectedTokenList, token.getValue());
@@ -613,7 +622,9 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
         ArrayExpression arrayExpression = new ArrayExpression();
         for (List<Token> listToken : getSameLevelTokenListSeparateByComma(level, selectedTokenList)) {
             arrayExpression.getElementList().add(
-                    ((ExpressionStatement) generate(listToken, new ArrayList<>())).getExpression()
+                    ((ExpressionStatement) generate(listToken, new ArrayList<>())
+                            .orElseThrow(()->unexpectedEndError(selectedTokenList)))
+                            .getExpression()
             );
         }
         return arrayExpression;
@@ -628,7 +639,9 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                     && listToken.get(1).getValue().equals(":")) {
                 property.setKey(getVariableExpression(selectedTokenList, listToken.remove(0).getValue()));
                 listToken.remove(0);
-                property.setValue(((ExpressionStatement) generate(listToken, new ArrayList<>())).getExpression());
+                property.setValue(((ExpressionStatement) generate(listToken, new ArrayList<>())
+                        .orElseThrow(()->unexpectedEndError(selectedTokenList)))
+                        .getExpression());
                 objectExpression.getPropertyList().add(property);
             } else {
                 this.throwTokenNotValid(selectedTokenList, "{");
@@ -642,7 +655,9 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
         List<Expression> expressionList = new ArrayList<>();
         for (List<Token> listToken : getSameLevelTokenListSeparateByComma(level, selectedTokenList)) {
             expressionList.add(
-                    ((ExpressionStatement) generate(listToken, new ArrayList<>())).getExpression()
+                    ((ExpressionStatement) generate(listToken, new ArrayList<>())
+                            .orElseThrow(()->unexpectedEndError(selectedTokenList)))
+                            .getExpression()
             );
         }
         memberExpression.setObject(objectExpression);
@@ -665,7 +680,9 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
         List<Expression> argumentExpressionList = new ArrayList<>();
         for (List<Token> listToken : getSameLevelTokenListSeparateByComma(level, selectedTokenList)) {
             argumentExpressionList.add(
-                    ((ExpressionStatement) generate(listToken, new ArrayList<>())).getExpression()
+                    ((ExpressionStatement) generate(listToken, new ArrayList<>())
+                            .orElseThrow(()->unexpectedEndError(selectedTokenList)))
+                            .getExpression()
             );
         }
         callExpression.setCallVariableName(objectExpression);

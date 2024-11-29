@@ -11,16 +11,13 @@ import org.hcm.pcn.formula_validator.statamentgenerator.MainStatementGeneratorIm
 import org.hcm.pcn.formula_validator.statement.Statement;
 import org.hcm.pcn.formula_validator.token.Token;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hcm.pcn.formula_validator.token.TokenType.NEW_LINE;
 
 public interface StatementGenerator {
-    Statement generate(List<Token> selectedTokenList, List<Token> tokenList);
+    Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList);
 
     default List<Statement> parsing(String script) {
         return null;
@@ -49,11 +46,11 @@ public interface StatementGenerator {
                 .map(Token::clone)
                 .collect(Collectors.toList());
         try {
-            result = generator.generate(selectedTokenList, tokenList);
+            result = generator.generate(selectedTokenList, tokenList).orElse(null);
         } catch (Exception e) {
             selectedTokenList = selectTokenListToFirstNewLine(tempTokenList, tokenList);
             if (CollectionUtils.isNotEmpty(selectedTokenList)) {
-                result = generator.generate(selectedTokenList, tokenList);
+                result = generator.generate(selectedTokenList, tokenList).orElse(null);
             } else {
                 throw e;
             }
@@ -346,12 +343,18 @@ public interface StatementGenerator {
         return operatorExpression;
     }
 
+    default HandledError tokenNotValidError(List<Token> tokenList, String value) {
+        return new HandledError("Token not valid '" + value + "' line:" + getLineNumber(tokenList));
+    }
     default void throwTokenNotValid(List<Token> tokenList, String value) {
-        throw new HandledError("Token not valid '" + value + "' line:" + getLineNumber(tokenList));
+        throw tokenNotValidError(tokenList,value);
     }
 
+    default HandledError unexpectedEndError(List<Token> tokenList) {
+        return new HandledError("Unexpected end of input line:" + getLineNumber(tokenList));
+    }
     default void throwUnexpectedEnd(List<Token> tokenList) {
-        throw new HandledError("Unexpected end of input line:" + getLineNumber(tokenList));
+        throw unexpectedEndError(tokenList);
     }
 
     default Variable getVariableExpression(List<Token> selectedTokenList, String value) {

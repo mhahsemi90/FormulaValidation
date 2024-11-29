@@ -9,10 +9,11 @@ import org.hcm.pcn.formula_validator.token.Token;
 import org.hcm.pcn.formula_validator.token.TokenType;
 
 import java.util.List;
+import java.util.Optional;
 
 public class LabeledStatementGeneratorImpl implements StatementGenerator {
     @Override
-    public Statement generate(List<Token> selectedTokenList, List<Token> tokenList) {
+    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList) {
         Statement result = new Statement();
         Token firstToken = removeFirstTokenThatNotNewLine(selectedTokenList);
         Token secondToken = removeFirstTokenThatNotNewLine(selectedTokenList);
@@ -23,7 +24,9 @@ public class LabeledStatementGeneratorImpl implements StatementGenerator {
             firstToken = getFirstTokenThatNotNewLine(selectedTokenList);
             if (firstToken.getValue().equals("{")) {
                 StatementGenerator blockStatementGenerator = new BlockStatementGeneratorImpl();
-                Statement blockStatement = blockStatementGenerator.generate(selectedTokenList, tokenList);
+                Statement blockStatement = blockStatementGenerator
+                        .generate(selectedTokenList, tokenList)
+                        .orElseThrow(() -> unexpectedEndError(tokenList));
                 result = new LabeledStatement(variable, blockStatement);
             } else {
                 StatementGenerator statementGenerator = new MainStatementGeneratorImpl();
@@ -33,6 +36,6 @@ public class LabeledStatementGeneratorImpl implements StatementGenerator {
         } else {
             throwTokenNotValid(selectedTokenList, ":");
         }
-        return result;
+        return Optional.of(result);
     }
 }

@@ -13,12 +13,13 @@ import org.hcm.pcn.formula_validator.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hcm.pcn.formula_validator.expression.ExpressionType.ASSIGNMENT_EXPRESSION;
 
 public class VariableDeclarationStatementGeneratorImpl implements StatementGenerator {
     @Override
-    public Statement generate(List<Token> selectedTokenList, List<Token> tokenList) {
+    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList) {
         Token token = removeFirstTokenThatNotNewLine(selectedTokenList);
         VariableDeclarationStatement result = new VariableDeclarationStatement();
         StatementGenerator generator = new ExpressionStatementGeneratorImpl();
@@ -34,7 +35,8 @@ public class VariableDeclarationStatementGeneratorImpl implements StatementGener
         for (List<Token> listToken : listTokens) {
             Expression expression = (
                     (ExpressionStatement) generator
-                            .generate(listToken, new ArrayList<>()))
+                            .generate(listToken, new ArrayList<>())
+                            .orElseThrow(() -> unexpectedEndError(tokenList)))
                     .getExpression();
             if (expression instanceof Variable)
                 result.getDeclaratorExpressionList().add(
@@ -56,6 +58,6 @@ public class VariableDeclarationStatementGeneratorImpl implements StatementGener
             else
                 throwTokenNotValid(selectedTokenList, token.getValue());
         }
-        return result;
+        return Optional.of(result);
     }
 }
