@@ -114,8 +114,19 @@ public interface StatementGenerator {
     default List<Token> selectTokenListToFirstSemicolon(List<Token> tokenList) {
         List<Token> selectedTokenList = new ArrayList<>();
         int size = tokenList.size();
+        int sameLevel = 0;
+        boolean isBrace = false;
         for (int i = 0; i < size; i++) {
-            if (tokenList.get(0).getValue().equals(";")) {
+            if (!isBrace && tokenList.get(0).getValue().equals("{")) {
+                isBrace = true;
+                sameLevel = tokenList.get(0).getLevel();
+            }
+            if (!isBrace && tokenList.get(0).getValue().equals(";")) {
+                selectedTokenList.add(tokenList.remove(0));
+                break;
+            }
+            if (isBrace && tokenList.get(0).getValue().equals("}")
+                    && tokenList.get(0).getLevel().equals(sameLevel)) {
                 selectedTokenList.add(tokenList.remove(0));
                 break;
             }

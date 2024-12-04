@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CallExpression extends Expression {
-    private Expression callVariableName;
+    private Expression callVariable;
     private List<Expression> argumentList;
 
     public CallExpression() {
@@ -12,12 +12,12 @@ public class CallExpression extends Expression {
         setArgumentList(new ArrayList<>());
     }
 
-    public Expression getCallVariableName() {
-        return callVariableName;
+    public Expression getCallVariable() {
+        return callVariable;
     }
 
-    public void setCallVariableName(Expression callVariableName) {
-        this.callVariableName = callVariableName;
+    public void setCallVariable(Expression callVariable) {
+        this.callVariable = callVariable;
     }
 
     public List<Expression> getArgumentList() {

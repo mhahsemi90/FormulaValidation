@@ -20,18 +20,18 @@ public class LabeledStatementGeneratorImpl implements StatementGenerator {
         if (CollectionUtils.isNotEmpty(selectedTokenList) &&
                 firstToken.getTokenType() == TokenType.VARIABLE &&
                 secondToken.getValue().equals(":")) {
-            Variable variable = getVariableExpression(selectedTokenList, firstToken.getValue());
+            String lable = firstToken.getValue();
             firstToken = getFirstTokenThatNotNewLine(selectedTokenList);
             if (firstToken.getValue().equals("{")) {
                 StatementGenerator blockStatementGenerator = new BlockStatementGeneratorImpl();
                 Statement blockStatement = blockStatementGenerator
                         .generate(selectedTokenList, tokenList)
                         .orElseThrow(() -> unexpectedEndError(tokenList));
-                result = new LabeledStatement(variable, blockStatement);
+                result = new LabeledStatement(lable, blockStatement);
             } else {
                 StatementGenerator statementGenerator = new MainStatementGeneratorImpl();
                 Statement statement = statementGenerator.getFirstStatementFromTokenList(selectedTokenList);
-                result = new LabeledStatement(variable, statement);
+                result = new LabeledStatement(lable, statement);
             }
         } else {
             throwTokenNotValid(selectedTokenList, ":");

@@ -1,25 +1,25 @@
 package org.hcm.pcn.formula_validator.expression;
 
 public class VariableDeclaratorExpression extends Expression {
-    private Expression variableName;
+    private Expression variable;
     private Expression initiateValue;
 
     public VariableDeclaratorExpression() {
         super(ExpressionType.VARIABLE_DECLARATOR_EXPRESSION);
     }
 
-    public VariableDeclaratorExpression(Expression variableName, Expression initiateValue) {
+    public VariableDeclaratorExpression(Expression variable, Expression initiateValue) {
         super(ExpressionType.VARIABLE_DECLARATOR_EXPRESSION);
-        this.variableName = variableName;
+        this.variable = variable;
         this.initiateValue = initiateValue;
     }
 
-    public Expression getVariableName() {
-        return variableName;
+    public Expression getVariable() {
+        return variable;
     }
 
-    public void setVariableName(Expression variableName) {
-        this.variableName = variableName;
+    public void setVariable(Expression variable) {
+        this.variable = variable;
     }
 
     public Expression getInitiateValue() {

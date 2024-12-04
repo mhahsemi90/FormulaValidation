@@ -3,10 +3,10 @@ package org.hcm.pcn.formula_validator.statement;
 import org.hcm.pcn.formula_validator.expression.Expression;
 
 public class LabeledStatement extends Statement {
-    private Expression label;
+    private String label;
     private Statement body;
 
-    public LabeledStatement(Expression label, Statement body) {
+    public LabeledStatement(String label, Statement body) {
         super(StatementType.LABEL);
         this.label = label;
         this.body = body;
@@ -16,11 +16,11 @@ public class LabeledStatement extends Statement {
         super(StatementType.LABEL);
     }
 
-    public Expression getLabel() {
+    public String getLabel() {
         return label;
     }
 
-    public void setLabel(Expression label) {
+    public void setLabel(String label) {
         this.label = label;
     }
 
