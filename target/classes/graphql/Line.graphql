@@ -1,0 +1,29 @@
+enum LineType{
+    EXPRESSION,
+    BLOCK,
+    VARIABLE_DECLARATION,
+    IF,
+    LABEL,
+    RETURN,
+    FOR,
+    ELSE,
+    ELSE_IF,
+}
+
+type Line{
+    id: Int
+    parentId: Int
+    row: Int
+    lineLevel: Int
+    blockList: [BlockOutput]
+    lineType: LineType
+}
+
+input LineInput{
+    id: Int
+    parentId: Int
+    row: Int
+    lineLevel: Int
+    blockList: [BlockInput]
+    lineType: LineType
+}

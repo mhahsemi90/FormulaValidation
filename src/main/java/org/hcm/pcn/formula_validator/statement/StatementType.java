@@ -6,6 +6,7 @@ public enum StatementType {
     VARIABLE_DECLARATION,
     IF,
     LABEL,
+    RETURN,
     EMPTY_STATEMENT,
     HANDLED_ERROR,
 }

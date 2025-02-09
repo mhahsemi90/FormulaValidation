@@ -16,10 +16,14 @@ import java.util.stream.Collectors;
 
 import static org.hcm.pcn.formula_validator.token.TokenType.NEW_LINE;
 
-public interface StatementGenerator {
+public interface StatementGenerator extends BaseFormulaConcept {
     Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList);
 
-    default List<Statement> parsing(String script) {
+    default List<Statement> parsingToListOfStatement(String script) {
+        return null;
+    }
+
+    default List<Token> parsingToListOfTokenList(String script) {
         return null;
     }
 
@@ -27,30 +31,31 @@ public interface StatementGenerator {
         List<Statement> allStatementList = new ArrayList<>();
         tokenList = validateAllParenthesisAndBrace(tokenList);
         while (CollectionUtils.isNotEmpty(tokenList)) {
-            allStatementList.add(getStatement(tokenList, new MainStatementGeneratorImpl()));
+            getStatement(tokenList, new MainStatementGeneratorImpl())
+                    .ifPresent(allStatementList::add);
         }
         return allStatementList;
     }
 
-    default Statement getFirstStatementFromTokenList(List<Token> tokenList) {
-        Statement result;
+    default Optional<Statement> getFirstStatementFromTokenList(List<Token> tokenList) {
+        Optional<Statement> result;
         result = getStatement(tokenList, new MainStatementGeneratorImpl());
         return result;
     }
 
-    private Statement getStatement(List<Token> tokenList, StatementGenerator generator) {
-        Statement result;
+    private Optional<Statement> getStatement(List<Token> tokenList, StatementGenerator generator) {
+        Optional<Statement> result;
         List<Token> selectedTokenList = selectTokenListToFirstSemicolon(tokenList);
         List<Token> tempTokenList = selectedTokenList
                 .stream()
                 .map(Token::clone)
                 .collect(Collectors.toList());
         try {
-            result = generator.generate(selectedTokenList, tokenList).orElse(null);
+            result = generator.generate(selectedTokenList, tokenList);
         } catch (Exception e) {
             selectedTokenList = selectTokenListToFirstNewLine(tempTokenList, tokenList);
             if (CollectionUtils.isNotEmpty(selectedTokenList)) {
-                result = generator.generate(selectedTokenList, tokenList).orElse(null);
+                result = generator.generate(selectedTokenList, tokenList);
             } else {
                 throw e;
             }
@@ -59,9 +64,9 @@ public interface StatementGenerator {
     }
 
     default List<Token> validateAllParenthesisAndBrace(List<Token> tokenList) {
-        Stack<String> parenthesisStack = new Stack<>();
-        Stack<String> braceStack = new Stack<>();
-        Stack<String> advancedBraceStack = new Stack<>();
+        Stack<Token> parenthesisStack = new Stack<>();
+        Stack<Token> braceStack = new Stack<>();
+        Stack<Token> advancedBraceStack = new Stack<>();
         List<Token> tempTokenList = tokenList
                 .stream()
                 .map(Token::clone)
@@ -69,46 +74,42 @@ public interface StatementGenerator {
         while (CollectionUtils.isNotEmpty(tokenList)) {
             Token token = tokenList.remove(0);
             if (token.getValue().equals("{"))
-                advancedBraceStack.push("{");
+                advancedBraceStack.push(token);
             if (token.getValue().equals("["))
-                braceStack.push("[");
+                braceStack.push(token);
             if (token.getValue().equals("("))
-                parenthesisStack.push("(");
+                parenthesisStack.push(token);
             if (token.getValue().equals("}")) {
                 if (advancedBraceStack.isEmpty()) {
-                    throwTokenNotValid(tokenList, token.getValue());
+                    throwTokenNotValid(token);
                 }
                 advancedBraceStack.pop();
             }
             if (token.getValue().equals("]")) {
                 if (braceStack.isEmpty()) {
-                    throwTokenNotValid(tokenList, token.getValue());
+                    throwTokenNotValid(token);
                 }
                 braceStack.pop();
             }
             if (token.getValue().equals(")")) {
                 if (parenthesisStack.isEmpty()) {
-                    throwTokenNotValid(tokenList, token.getValue());
+                    throwTokenNotValid(token);
                 }
                 parenthesisStack.pop();
             }
         }
         if (!advancedBraceStack.isEmpty())
-            throwTokenNotValid(tokenList, "{");
+            throwTokenNotValid(advancedBraceStack.pop());
         if (!braceStack.isEmpty())
-            throwTokenNotValid(tokenList, "[");
+            throwTokenNotValid(braceStack.pop());
         if (!parenthesisStack.isEmpty())
-            throwTokenNotValid(tokenList, "(");
+            throwTokenNotValid(parenthesisStack.pop());
         return tempTokenList;
     }
 
 
     default Integer getLineNumber(List<Token> selectedTokenList) {
-        for (Token token : selectedTokenList) {
-            if (token.getTokenType() == NEW_LINE)
-                return Integer.valueOf(token.getValue());
-        }
-        return 1;
+        return CollectionUtils.isNotEmpty(selectedTokenList) ? selectedTokenList.get(0).getLineNumber() : 1;
     }
 
     default List<Token> selectTokenListToFirstSemicolon(List<Token> tokenList) {
@@ -186,6 +187,7 @@ public interface StatementGenerator {
         }
         return token;
     }
+
     default Token removeLastTokenThatNotNewLine(List<Token> selectedTokenList) {
         Token token = null;
         Token newLineToken = null;
@@ -266,70 +268,6 @@ public interface StatementGenerator {
         return result;
     }
 
-    default List<String> getAssignList() {
-        List<String> stringList = new ArrayList<>();
-        stringList.add("=");
-        stringList.add("*=");
-        stringList.add("**=");
-        stringList.add("/=");
-        stringList.add("%=");
-        stringList.add("+=");
-        stringList.add("-=");
-        stringList.add("<<=");
-        stringList.add(">>=");
-        stringList.add(">>>=");
-        stringList.add("&=");
-        stringList.add("^=");
-        stringList.add("|=");
-        return stringList;
-    }
-
-    default List<String> getBinaryList() {
-        List<String> stringList = new ArrayList<>();
-        stringList.add("+");
-        stringList.add("-");
-        stringList.add("*");
-        stringList.add("/");
-        stringList.add("%");
-        stringList.add("<<");
-        stringList.add(">>");
-        stringList.add(">>>");
-        stringList.add(">");
-        stringList.add("<");
-        stringList.add(">=");
-        stringList.add("<=");
-        stringList.add("==");
-        stringList.add("===");
-        stringList.add("!=");
-        stringList.add("!==");
-        stringList.add("&");
-        stringList.add("|");
-        stringList.add("^");
-        return stringList;
-    }
-
-    default List<String> getUpdateUnaryList() {
-        List<String> stringList = new ArrayList<>();
-        stringList.add("--");
-        stringList.add("++");
-        return stringList;
-    }
-
-    default List<String> getUnaryList() {
-        List<String> stringList = new ArrayList<>();
-        stringList.add("-");
-        stringList.add("+");
-        stringList.add("!");
-        return stringList;
-    }
-
-    default List<String> getLogicalList() {
-        List<String> stringList = new ArrayList<>();
-        stringList.add("&&");
-        stringList.add("||");
-        return stringList;
-    }
-
     default TwoHandOperatorExpression getOperatorAndTypeOfTwoHandOperatorExpression(Token token) {
         TwoHandOperatorExpression operatorExpression = new TwoHandOperatorExpression();
         operatorExpression.setOperator(token.getValue());
@@ -337,7 +275,7 @@ public interface StatementGenerator {
             operatorExpression.setType(ExpressionType.PARENTHESIS_EXPRESSION);
         else if (getBinaryList().contains(token.getValue()))
             operatorExpression.setType(ExpressionType.BINARY_EXPRESSION);
-        else if (getAssignList().contains(token.getValue()))
+        else if (getAssignmentOperatorList().contains(token.getValue()))
             operatorExpression.setType(ExpressionType.ASSIGNMENT_EXPRESSION);
         else if (getLogicalList().contains(token.getValue()))
             operatorExpression.setType(ExpressionType.LOGICAL_EXPRESSION);
@@ -354,28 +292,43 @@ public interface StatementGenerator {
         return operatorExpression;
     }
 
-    default HandledError tokenNotValidError(List<Token> tokenList, String value) {
-        return new HandledError("Token not valid '" + value + "' line:" + getLineNumber(tokenList));
+    default HandledError tokenNotValidError(Token token) {
+        return new HandledError("Token not valid '" + token.getValue() + "' line:" + token.getLineNumber());
     }
-    default void throwTokenNotValid(List<Token> tokenList, String value) {
-        throw tokenNotValidError(tokenList,value);
+
+    default void throwTokenNotValid(Token token) {
+        throw tokenNotValidError(token);
+    }
+
+    default HandledError getTokenNotValid(String value, Integer lineNumber) {
+        return tokenNotValidError(new Token(value, lineNumber));
+    }
+    default void throwTokenNotValid(String value, Integer lineNumber) {
+        throw getTokenNotValid(value, lineNumber);
     }
 
     default HandledError unexpectedEndError(List<Token> tokenList) {
         return new HandledError("Unexpected end of input line:" + getLineNumber(tokenList));
     }
-    default void throwUnexpectedEnd(List<Token> tokenList) {
-        throw unexpectedEndError(tokenList);
+
+    default HandledError getUnexpectedEnd(Token token) {
+        if (token != null)
+            return new HandledError("Unexpected end of input line:" + token.getLineNumber());
+        else
+            return new HandledError("Unexpected end of input line:");
+    }
+    default void throwUnexpectedEnd(Token token) {
+        throw getUnexpectedEnd(token);
     }
 
-    default Variable getVariableExpression(List<Token> selectedTokenList, String value) {
+    default Variable getVariableExpression(Token token) {
         boolean result = false;
-        if (StringUtils.isNotBlank(value))
-            result = value.matches("^[a-zA-Z_$]\\S*")
-                    && value.matches("([a-zA-Z_$0-9])\\w*");
+        if (StringUtils.isNotBlank(token.getValue()))
+            result = token.getValue().matches("^[a-zA-Z_$]\\S*")
+                    && token.getValue().matches("([a-zA-Z_$0-9])\\w*");
         if (!result)
-            this.throwTokenNotValid(selectedTokenList, value);
-        return new Variable(value);
+            this.throwTokenNotValid(token);
+        return new Variable(token.getValue());
     }
 
     default List<List<Token>> getSameLevelTokenListSeparateByComma(Integer level, List<Token> selectedTokenList) {

@@ -18,7 +18,7 @@ import java.util.Optional;
 public class MainStatementGeneratorImpl implements StatementGenerator {
 
     @Override
-    public List<Statement> parsing(String script) {
+    public List<Token> parsingToListOfTokenList(String script) {
         List<Character> characterList = new ArrayList<>();
         for (char c : script.toCharArray()) {
             characterList.add(c);
@@ -133,11 +133,11 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
             }
         }
         List<Token> tokenList = new ArrayList<>();
-        List<String> allSeparatorTokenStringList = getAllOperatorAndNotOperatorSeparator();
+        List<String> allSeparatorTokenStringList = getAllOperatorAndNotOperator();
         int lineNumber = 1;
         int level = 0;
         for (String s1 : stringTokenList) {
-            Token token = new Token();
+            Token token = new Token(lineNumber);
             if (getAllKeyword().contains(s1)) {
                 token.setTokenType(TokenType.KEYWORD);
                 token.setValue(s1);
@@ -173,8 +173,15 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
         }
         if (CollectionUtils.isNotEmpty(tokenList)
                 && tokenList.get(tokenList.size() - 1).getTokenType() != TokenType.NEW_LINE)
-            tokenList.add(new Token(TokenType.NEW_LINE, String.valueOf(lineNumber), 0));
-        List<Statement> statementList = getAllStatementFromTokenList(tokenList);
+            tokenList.add(new Token(TokenType.NEW_LINE, String.valueOf(lineNumber), 0, lineNumber));
+        return tokenList;
+    }
+
+    @Override
+    public List<Statement> parsingToListOfStatement(String script) {
+        List<Statement> statementList = getAllStatementFromTokenList(
+                parsingToListOfTokenList(script)
+        );
         if (CollectionUtils.isNotEmpty(statementList) &&
                 statementList.get(statementList.size() - 1) == null)
             statementList.remove(statementList.size() - 1);
@@ -200,169 +207,12 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
                     selectedTokenList.get(0).getValue().equals("if")) {
                 statementGenerator = new IfStatementGeneratorImpl();
             }
+            if (CollectionUtils.isNotEmpty(selectedTokenList) &&
+                    selectedTokenList.get(0).getValue().equals("return")) {
+                statementGenerator = new ReturnStatementGeneratorImpl();
+            }
         }
         return statementGenerator.generate(selectedTokenList, tokenList);
     }
 
-    private List<Character> getAllSeparatorCharacter() {
-        List<Character> characterList = new ArrayList<>();
-        characterList.add('!');
-        characterList.add('\n');
-        characterList.add('&');
-        characterList.add('|');
-        characterList.add('(');
-        characterList.add(')');
-        characterList.add('+');
-        characterList.add('-');
-        characterList.add('*');
-        characterList.add('/');
-        characterList.add(',');
-        characterList.add(':');
-        characterList.add(';');
-        characterList.add('=');
-        characterList.add('>');
-        characterList.add('<');
-        characterList.add('?');
-        characterList.add(' ');
-        characterList.add('{');
-        characterList.add('}');
-        characterList.add('[');
-        characterList.add(']');
-        return characterList;
-    }
-
-    private List<String> getHaveSequenceString() {
-        List<String> haveSequenceStringList = new ArrayList<>();
-        haveSequenceStringList.add("+");
-        haveSequenceStringList.add("-");
-        haveSequenceStringList.add("*");
-        haveSequenceStringList.add("/");
-        haveSequenceStringList.add("%");
-        haveSequenceStringList.add("=");
-        haveSequenceStringList.add("!");
-        haveSequenceStringList.add("&");
-        haveSequenceStringList.add("|");
-        haveSequenceStringList.add(">");
-        haveSequenceStringList.add("<");
-        return haveSequenceStringList;
-    }
-
-    private List<String> getAllOperatorAndNotOperatorSeparator() {
-        List<String> operatorList = new ArrayList<>();
-        operatorList.add("+");
-        operatorList.add("-");
-        operatorList.add("*");
-        operatorList.add("**");
-        operatorList.add("/");
-        operatorList.add("%");
-        operatorList.add("++");
-        operatorList.add("--");
-        operatorList.add("=");
-        operatorList.add("+=");
-        operatorList.add("-=");
-        operatorList.add("*=");
-        operatorList.add("/=");
-        operatorList.add("%=");
-        operatorList.add("**=");
-        operatorList.add("==");
-        operatorList.add("===");
-        operatorList.add("!=");
-        operatorList.add("!==");
-        operatorList.add(">");
-        operatorList.add("<");
-        operatorList.add(">=");
-        operatorList.add("<=");
-        operatorList.add("!");
-        operatorList.add("&&");
-        operatorList.add("||");
-        operatorList.add("&");
-        operatorList.add("|");
-        operatorList.add("~");
-        operatorList.add("^");
-        operatorList.add(">");
-        operatorList.add("<<");
-        operatorList.add(">>");
-        operatorList.add(">>>");
-        operatorList.add("\n");
-        operatorList.add("(");
-        operatorList.add(")");
-        operatorList.add(",");
-        operatorList.add(".");
-        operatorList.add(":");
-        operatorList.add(";");
-        operatorList.add("{");
-        operatorList.add("}");
-        operatorList.add("[");
-        operatorList.add("]");
-        operatorList.add("?");
-        return operatorList;
-    }
-
-    private List<String> getAllKeyword() {
-        List<String> keyWordList = new ArrayList<>();
-        keyWordList.add("arguments");
-        keyWordList.add("await");
-        keyWordList.add("break");
-        keyWordList.add("case");
-        keyWordList.add("catch");
-        keyWordList.add("class");
-        keyWordList.add("const");
-        keyWordList.add("continue");
-        keyWordList.add("debugger");
-        keyWordList.add("default");
-        keyWordList.add("delete");
-        keyWordList.add("do");
-        keyWordList.add("else");
-        keyWordList.add("enum");
-        keyWordList.add("eval");
-        keyWordList.add("export");
-        keyWordList.add("extends");
-        keyWordList.add("finally");
-        keyWordList.add("for");
-        keyWordList.add("function");
-        keyWordList.add("if");
-        keyWordList.add("implements");
-        keyWordList.add("import");
-        keyWordList.add("in");
-        keyWordList.add("instanceof");
-        keyWordList.add("interface");
-        keyWordList.add("let");
-        keyWordList.add("new");
-        keyWordList.add("package");
-        keyWordList.add("private");
-        keyWordList.add("protected");
-        keyWordList.add("public");
-        keyWordList.add("return");
-        keyWordList.add("static");
-        keyWordList.add("super");
-        keyWordList.add("switch");
-        keyWordList.add("this");
-        keyWordList.add("throw");
-        keyWordList.add("try");
-        keyWordList.add("typeof");
-        keyWordList.add("var");
-        keyWordList.add("void");
-        keyWordList.add("while");
-        keyWordList.add("with");
-        keyWordList.add("yield");
-        //keyWordList.add("?");
-        keyWordList.addAll(getAllLiteralKeyword());
-        return keyWordList;
-    }
-
-    private List<String> getAllLiteralKeyword() {
-        List<String> keyWordList = new ArrayList<>();
-        keyWordList.add("false");
-        keyWordList.add("true");
-        keyWordList.add("null");
-        keyWordList.add("undefined");
-        return keyWordList;
-    }
-
-    private List<Character> getNoChar() {
-        List<Character> characterList = new ArrayList<>();
-        characterList.add('\n');
-        characterList.add('\t');
-        return characterList;
-    }
 }

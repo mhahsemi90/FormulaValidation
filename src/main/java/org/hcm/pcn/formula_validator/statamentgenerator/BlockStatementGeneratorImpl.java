@@ -22,7 +22,7 @@ public class BlockStatementGeneratorImpl implements StatementGenerator {
             List<Statement> statementList = generator.getAllStatementFromTokenList(selectedTokenList);
             result = new BlockStatement(statementList);
         } else {
-            this.throwTokenNotValid(selectedTokenList, "{");
+            this.throwTokenNotValid(firstToken);
         }
         return Optional.of(result);
     }

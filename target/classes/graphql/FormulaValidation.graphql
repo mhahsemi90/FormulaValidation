@@ -1,5 +1,12 @@
+type ValidationResult{
+    generatedFormula: [String]
+    validationMessage: String
+}
 type Query {
+    formulaParsing(formula: String): [Line]
+    generateFormula(lineList: [LineInput] ): ValidationResult
     formulaValidation(formula: String): String
+    formulaRewritingBaseOnBasicStructure(lineList: [LineInput]): [Line]
 }
 schema {
     query: Query

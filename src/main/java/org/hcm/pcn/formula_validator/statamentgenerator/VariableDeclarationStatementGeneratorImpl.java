@@ -26,7 +26,7 @@ public class VariableDeclarationStatementGeneratorImpl implements StatementGener
         if (token.getTokenType() == TokenType.KEYWORD && isVariableKeyword(token.getValue())) {
             result.setKind(token.getValue());
         } else {
-            throwTokenNotValid(selectedTokenList, token.getValue());
+            throwTokenNotValid(token);
         }
         List<List<Token>> listTokens = getSameLevelTokenListSeparateByComma(
                 token.getLevel() - 1,
@@ -36,7 +36,7 @@ public class VariableDeclarationStatementGeneratorImpl implements StatementGener
             Expression expression = (
                     (ExpressionStatement) generator
                             .generate(listToken, new ArrayList<>())
-                            .orElseThrow(() -> unexpectedEndError(tokenList)))
+                            .orElseThrow(() -> unexpectedEndError(listToken)))
                     .getExpression();
             if (expression instanceof Variable)
                 result.getDeclaratorExpressionList().add(
@@ -56,7 +56,7 @@ public class VariableDeclarationStatementGeneratorImpl implements StatementGener
                         )
                 );
             else
-                throwTokenNotValid(selectedTokenList, token.getValue());
+                throwTokenNotValid(token);
         }
         return Optional.of(result);
     }

@@ -1,0 +1,44 @@
+enum BlockType{
+    KEYWORD,
+    SEPARATOR,
+    ID,
+    ASSIGNMENT,
+    LITERAL,
+    VARIABLE,
+    LABEL,
+    LABEL_ASSIGN,
+    OPEN_PARENTHESES,
+    CLOSE_PARENTHESES,
+    OPERATOR,
+    FUNCTION,
+}
+interface Block{
+    type: BlockType
+    code: String
+    title: String
+    enTitle: String
+}
+input BlockInput{
+    type: BlockType
+    code: String
+    title: String
+    enTitle: String
+}
+type BlockOutput implements Block{
+    type: BlockType
+    code: String
+    title: String
+    enTitle: String
+}
+type Operator implements Block{
+    type: BlockType
+    code: String
+    title: String
+    enTitle: String
+}
+type Operand implements Block{
+    type: BlockType
+    code: String
+    title: String
+    enTitle: String
+}

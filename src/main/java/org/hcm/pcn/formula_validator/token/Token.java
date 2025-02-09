@@ -4,14 +4,25 @@ public class Token implements Cloneable {
     private TokenType tokenType;
     private String value;
     private Integer level;
+    private Integer lineNumber;
 
     public Token() {
     }
 
-    public Token(TokenType tokenType, String value, Integer level) {
+    public Token(TokenType tokenType, String value, Integer level, Integer lineNumber) {
         this.tokenType = tokenType;
         this.value = value;
         this.level = level;
+        this.lineNumber = lineNumber;
+    }
+
+    public Token(String value, Integer lineNumber) {
+        this.value = value;
+        this.lineNumber = lineNumber;
+    }
+
+    public Token(Integer lineNumber) {
+        this.lineNumber = lineNumber;
     }
 
     public TokenType getTokenType() {
@@ -36,6 +47,14 @@ public class Token implements Cloneable {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public Integer getLineNumber() {
+        return lineNumber;
+    }
+
+    public void setLineNumber(Integer lineNumber) {
+        this.lineNumber = lineNumber;
     }
 
     @Override

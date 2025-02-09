@@ -2,10 +2,7 @@ package org.hcm.pcn.formula_validator.statamentgenerator;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.hcm.pcn.formula_validator.interfaces.StatementGenerator;
-import org.hcm.pcn.formula_validator.statement.EmptyStatement;
-import org.hcm.pcn.formula_validator.statement.ExpressionStatement;
-import org.hcm.pcn.formula_validator.statement.IfStatement;
-import org.hcm.pcn.formula_validator.statement.Statement;
+import org.hcm.pcn.formula_validator.statement.*;
 import org.hcm.pcn.formula_validator.token.Token;
 
 import java.util.ArrayList;
@@ -32,7 +29,7 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
             result.setTest(
                     ((ExpressionStatement) expressionStatementGenerator
                             .generate(testTokenList, new ArrayList<>())
-                            .orElseThrow(() -> unexpectedEndError(tempTokenList)))
+                            .orElseThrow(() -> unexpectedEndError(testTokenList)))
                             .getExpression()
             );
             tempTokenList.addAll(0, selectedTokenList);
@@ -43,11 +40,14 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
                     List<Token> conquestTokenList = getSameLevelTokenListBetweenTwoBrace(
                             token.getLevel(),
                             tempTokenList);
-                    result.setConsequent(
-                            blockStatementGenerator.generate(
-                                    conquestTokenList, new ArrayList<>()
-                            ).orElse(null)
-                    );
+                    blockStatementGenerator.generate(
+                            conquestTokenList, new ArrayList<>()
+                    ).ifPresent(statement -> {
+                        if (((BlockStatement) statement).getBodyList().size() > 1)
+                            result.setConsequent(statement);
+                        else if (((BlockStatement) statement).getBodyList().size() == 1)
+                            result.setConsequent(((BlockStatement) statement).getBodyList().get(0));
+                    });
                 } else if (token.getValue().equals(";")) {
                     result.setConsequent(
                             new EmptyStatement()
@@ -56,6 +56,11 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
                     tempTokenList.add(0, token);
                     result.setConsequent(
                             getFirstStatementFromTokenList(tempTokenList)
+                                    .orElseThrow(() ->
+                                            getTokenNotValid(
+                                                    ")", tempTokenList.get(0).getLineNumber()
+                                            )
+                                    )
                     );
                 }
             }
@@ -82,15 +87,24 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
                         tempTokenList.add(0, token);
                         result.setAlternate(
                                 getFirstStatementFromTokenList(tempTokenList)
+                                        .orElseThrow(() ->
+                                                getUnexpectedEnd(
+                                                        tempTokenList.get(0)
+                                                )
+                                        )
                         );
                     }
                 } else {
-                    throwUnexpectedEnd(tempTokenList);
+                    throwUnexpectedEnd(token);
                 }
+            } else {
+                if (token != null)
+                    tempTokenList.add(0, token);
             }
         }
-        if (result.getTest() == null || result.getConsequent() == null)
-            throwUnexpectedEnd(tempTokenList);
+        if (result.getTest() == null || result.getConsequent() == null) {
+            throwUnexpectedEnd(token);
+        }
         tokenList.clear();
         tokenList.addAll(tempTokenList);
         return Optional.of(result);
