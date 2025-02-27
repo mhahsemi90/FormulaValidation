@@ -55,7 +55,7 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
                 } else {
                     tempTokenList.add(0, token);
                     result.setConsequent(
-                            getFirstStatementFromTokenList(tempTokenList)
+                            getFirstStatementFromTokenList(tempTokenList,false)
                                     .orElseThrow(() ->
                                             getTokenNotValid(
                                                     ")", tempTokenList.get(0).getLineNumber()
@@ -86,7 +86,7 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
                     } else {
                         tempTokenList.add(0, token);
                         result.setAlternate(
-                                getFirstStatementFromTokenList(tempTokenList)
+                                getFirstStatementFromTokenList(tempTokenList,false)
                                         .orElseThrow(() ->
                                                 getUnexpectedEnd(
                                                         tempTokenList.get(0)
@@ -103,6 +103,12 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
             }
         }
         if (result.getTest() == null || result.getConsequent() == null) {
+            if (token != null)
+                throwUnexpectedEnd(token);
+            else if (CollectionUtils.isNotEmpty(tempTokenList))
+                throwUnexpectedEnd(tempTokenList.get(0));
+            else if (CollectionUtils.isNotEmpty(selectedTokenList))
+                throwUnexpectedEnd(selectedTokenList.get(0));
             throwUnexpectedEnd(token);
         }
         tokenList.clear();

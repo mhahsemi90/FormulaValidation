@@ -1,6 +1,7 @@
 package org.hcm.pcn.formula_validator.interfaces;
 
 import org.hcm.pcn.formula_validator.dto.Line;
+import org.hcm.pcn.formula_validator.dto.ReWritingResult;
 import org.hcm.pcn.formula_validator.dto.ValidationResult;
 
 import java.util.List;
@@ -12,5 +13,5 @@ public interface FormulaValidationService {
 
     String formulaValidation(String script);
 
-    List<Line> formulaRewritingBaseOnBasicStructure(List<Line> lineList);
+    ReWritingResult formulaRewritingBaseOnBasicStructure(List<Line> lineList);
 }

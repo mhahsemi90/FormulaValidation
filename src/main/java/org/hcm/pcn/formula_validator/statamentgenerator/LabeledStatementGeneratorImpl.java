@@ -1,7 +1,6 @@
 package org.hcm.pcn.formula_validator.statamentgenerator;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.hcm.pcn.formula_validator.expression.Variable;
 import org.hcm.pcn.formula_validator.interfaces.StatementGenerator;
 import org.hcm.pcn.formula_validator.statement.LabeledStatement;
 import org.hcm.pcn.formula_validator.statement.Statement;
@@ -32,7 +31,7 @@ public class LabeledStatementGeneratorImpl implements StatementGenerator {
                 StatementGenerator statementGenerator = new MainStatementGeneratorImpl();
                 result = new LabeledStatement(
                         label,
-                        statementGenerator.getFirstStatementFromTokenList(selectedTokenList)
+                        statementGenerator.getFirstStatementFromTokenList(selectedTokenList, false)
                                 .orElseThrow(() ->
                                         getUnexpectedEnd(
                                                 secondToken

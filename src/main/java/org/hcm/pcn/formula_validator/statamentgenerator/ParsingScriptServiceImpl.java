@@ -62,7 +62,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
         validationResult.setGeneratedFormula(generatedFormula);
         validationResult.setValidationMessage("OK");
         try {
-            statementGenerator.parsingToListOfStatement(testFormula.toString());
+            statementGenerator.parsingToListOfStatement(testFormula.toString(), false);
         } catch (HandledError handledError) {
             validationResult.setValidationMessage(handledError.getMessage());
         }
@@ -70,16 +70,21 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
     }
 
     @Override
-    public List<Line> formulaRewritingBaseOnBasicStructure(List<Line> lineList) {
-        List<Line> result = new ArrayList<>();
-        ValidationResult  validationResult = generateFormulaFromLineOfBlocksList(lineList);
-        if(validationResult.getValidationMessage().equals("OK")){
+    public ReWritingResult formulaRewritingBaseOnBasicStructure(List<Line> lineList) {
+        ReWritingResult result = new ReWritingResult();
+        ValidationResult validationResult = generateFormulaFromLineOfBlocksList(lineList);
+        if (validationResult.getValidationMessage().equals("OK")) {
             StringBuilder script = new StringBuilder();
             validationResult.getGeneratedFormula()
                     .forEach(script::append);
-            result = generateLineOfBlocksListFromStatementList(
-                    statementGenerator.parsingToListOfStatement(script.toString())
-            );
+            result.setValidationMessage("OK");
+            result.setReWritingLineList(generateLineOfBlocksListFromStatementList(
+                    statementGenerator.parsingToListOfStatement(script.toString(), false)
+            ));
+
+        } else {
+            result.setReWritingLineList(lineList);
+            result.setValidationMessage(validationResult.getValidationMessage());
         }
         return result;
     }
@@ -453,7 +458,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
         Operator operator = allOperatorMap.get(expression.getOperator());
         addExpressionToBlocks(blockList, expression.getLeftChild());
         blockList.add(
-                new Block(BlockType.OPERATOR, operator.getCode(), operator.getTitle(), operator.getEnTitle())
+                new Block(BlockType.ASSIGNMENT_OPERATOR, operator.getCode(), operator.getTitle(), operator.getEnTitle())
         );
         addExpressionToBlocks(blockList, expression.getRightChild());
     }
@@ -481,7 +486,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
                 List<Block> firstBlockList = valueStack.pop();
                 List<Block> result = new ArrayList<>(firstBlockList);
                 result.add(
-                        new Block(BlockType.OPERATOR, operator.getCode(), operator.getTitle(), operator.getEnTitle())
+                        new Block(BlockType.ARITHMETIC_OPERATOR, operator.getCode(), operator.getTitle(), operator.getEnTitle())
                 );
                 result.addAll(secondBlockList);
                 valueStack.push(result);
@@ -497,7 +502,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
     public void addUnaryExpressionToBlocks(List<Block> blockList, OneHandOperatorExpression expression) {
         Operator operator = allOperatorMap.get(expression.getOperator());
         blockList.add(
-                new Block(BlockType.OPERATOR, operator.getCode(), operator.getTitle(), operator.getEnTitle())
+                new Block(BlockType.ARITHMETIC_OPERATOR, operator.getCode(), operator.getTitle(), operator.getEnTitle())
         );
         addExpressionToBlocks(blockList, expression.getArgument());
     }
@@ -517,7 +522,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
             String value = ((Literal) expression.getInitiateValue()).getValue();
             Operator operator = allOperatorMap.get("=");
             blockList.add(
-                    new Block(BlockType.ASSIGNMENT, operator.getCode(), operator.getTitle(), operator.getEnTitle())
+                    new Block(BlockType.ASSIGNMENT_OPERATOR, operator.getCode(), operator.getTitle(), operator.getEnTitle())
             );
             blockList.add(
                     new Block(BlockType.LITERAL, value, value, value)

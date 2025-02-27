@@ -634,20 +634,25 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
 
     private Expression getObjectExpression(Integer level, List<Token> selectedTokenList) {
         ObjectExpression objectExpression = new ObjectExpression();
-        for (List<Token> listToken : getSameLevelTokenListSeparateByComma(level, selectedTokenList)) {
-            PropertyExpression property = new PropertyExpression();
-            if (listToken.size() > 2
-                    && listToken.get(0).getTokenType() == TokenType.VARIABLE
-                    && listToken.get(1).getValue().equals(":")) {
-                property.setKey(getVariableExpression(listToken.remove(0)));
-                listToken.remove(0);
-                property.setValue(((ExpressionStatement) generate(listToken, new ArrayList<>())
-                        .orElseThrow(() -> unexpectedEndError(listToken)))
-                        .getExpression());
-                objectExpression.getPropertyList().add(property);
-            } else {
-                this.throwTokenNotValid("{", getLineNumber(selectedTokenList));
+        List<List<Token>> sameLevelTokenListSeparateByComma = getSameLevelTokenListSeparateByComma(level, selectedTokenList);
+        if (CollectionUtils.isNotEmpty(sameLevelTokenListSeparateByComma)) {
+            for (List<Token> listToken : sameLevelTokenListSeparateByComma) {
+                PropertyExpression property = new PropertyExpression();
+                if (listToken.size() > 2
+                        && listToken.get(0).getTokenType() == TokenType.VARIABLE
+                        && listToken.get(1).getValue().equals(":")) {
+                    property.setKey(getVariableExpression(listToken.remove(0)));
+                    listToken.remove(0);
+                    property.setValue(((ExpressionStatement) generate(listToken, new ArrayList<>())
+                            .orElseThrow(() -> unexpectedEndError(listToken)))
+                            .getExpression());
+                    objectExpression.getPropertyList().add(property);
+                } else {
+                    this.throwTokenNotValid("{", getLineNumber(selectedTokenList));
+                }
             }
+        } else {
+            this.throwTokenNotValid("{", getLineNumber(selectedTokenList));
         }
         return objectExpression;
     }

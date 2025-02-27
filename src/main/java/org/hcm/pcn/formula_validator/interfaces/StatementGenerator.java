@@ -19,7 +19,7 @@ import static org.hcm.pcn.formula_validator.token.TokenType.NEW_LINE;
 public interface StatementGenerator extends BaseFormulaConcept {
     Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList);
 
-    default List<Statement> parsingToListOfStatement(String script) {
+    default List<Statement> parsingToListOfStatement(String script, Boolean blockGeneration) {
         return null;
     }
 
@@ -27,23 +27,23 @@ public interface StatementGenerator extends BaseFormulaConcept {
         return null;
     }
 
-    default List<Statement> getAllStatementFromTokenList(List<Token> tokenList) {
+    default List<Statement> getAllStatementFromTokenList(List<Token> tokenList, Boolean blockGeneration) {
         List<Statement> allStatementList = new ArrayList<>();
         tokenList = validateAllParenthesisAndBrace(tokenList);
         while (CollectionUtils.isNotEmpty(tokenList)) {
-            getStatement(tokenList, new MainStatementGeneratorImpl())
+            getStatement(tokenList, new MainStatementGeneratorImpl(), blockGeneration)
                     .ifPresent(allStatementList::add);
         }
         return allStatementList;
     }
 
-    default Optional<Statement> getFirstStatementFromTokenList(List<Token> tokenList) {
+    default Optional<Statement> getFirstStatementFromTokenList(List<Token> tokenList, Boolean blockGeneration) {
         Optional<Statement> result;
-        result = getStatement(tokenList, new MainStatementGeneratorImpl());
+        result = getStatement(tokenList, new MainStatementGeneratorImpl(), blockGeneration);
         return result;
     }
 
-    private Optional<Statement> getStatement(List<Token> tokenList, StatementGenerator generator) {
+    private Optional<Statement> getStatement(List<Token> tokenList, StatementGenerator generator, Boolean blockGeneration) {
         Optional<Statement> result;
         List<Token> selectedTokenList = selectTokenListToFirstSemicolon(tokenList);
         List<Token> tempTokenList = selectedTokenList
@@ -54,7 +54,7 @@ public interface StatementGenerator extends BaseFormulaConcept {
             result = generator.generate(selectedTokenList, tokenList);
         } catch (Exception e) {
             selectedTokenList = selectTokenListToFirstNewLine(tempTokenList, tokenList);
-            if (CollectionUtils.isNotEmpty(selectedTokenList)) {
+            if (CollectionUtils.isNotEmpty(selectedTokenList) && !blockGeneration) {
                 result = generator.generate(selectedTokenList, tokenList);
             } else {
                 throw e;
@@ -303,6 +303,7 @@ public interface StatementGenerator extends BaseFormulaConcept {
     default HandledError getTokenNotValid(String value, Integer lineNumber) {
         return tokenNotValidError(new Token(value, lineNumber));
     }
+
     default void throwTokenNotValid(String value, Integer lineNumber) {
         throw getTokenNotValid(value, lineNumber);
     }
@@ -317,6 +318,7 @@ public interface StatementGenerator extends BaseFormulaConcept {
         else
             return new HandledError("Unexpected end of input line:");
     }
+
     default void throwUnexpectedEnd(Token token) {
         throw getUnexpectedEnd(token);
     }

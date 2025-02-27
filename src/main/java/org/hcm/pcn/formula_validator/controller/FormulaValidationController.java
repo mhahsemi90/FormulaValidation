@@ -2,6 +2,7 @@ package org.hcm.pcn.formula_validator.controller;
 
 import graphql.GraphQLError;
 import org.hcm.pcn.formula_validator.dto.Line;
+import org.hcm.pcn.formula_validator.dto.ReWritingResult;
 import org.hcm.pcn.formula_validator.dto.ValidationResult;
 import org.hcm.pcn.formula_validator.exception.HandledError;
 import org.hcm.pcn.formula_validator.interfaces.FormulaValidationService;
@@ -40,7 +41,7 @@ public class FormulaValidationController {
     }
 
     @QueryMapping
-    public List<Line> formulaRewritingBaseOnBasicStructure(@Argument List<Line> lineList) {
+    public ReWritingResult formulaRewritingBaseOnBasicStructure(@Argument List<Line> lineList) {
         return formulaValidationService.formulaRewritingBaseOnBasicStructure(lineList);
     }
 

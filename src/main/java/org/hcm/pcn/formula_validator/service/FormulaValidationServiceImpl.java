@@ -1,6 +1,7 @@
 package org.hcm.pcn.formula_validator.service;
 
 import org.hcm.pcn.formula_validator.dto.Line;
+import org.hcm.pcn.formula_validator.dto.ReWritingResult;
 import org.hcm.pcn.formula_validator.dto.ValidationResult;
 import org.hcm.pcn.formula_validator.exception.HandledError;
 import org.hcm.pcn.formula_validator.interfaces.FormulaValidationService;
@@ -27,7 +28,7 @@ public class FormulaValidationServiceImpl implements FormulaValidationService {
     @Override
     public List<Line> parsing(String script) {
         return parsingScriptService.generateLineOfBlocksListFromStatementList(
-                statementGenerator.parsingToListOfStatement(script)
+                statementGenerator.parsingToListOfStatement(script,false)
         );
     }
 
@@ -48,7 +49,7 @@ public class FormulaValidationServiceImpl implements FormulaValidationService {
     }
 
     @Override
-    public List<Line> formulaRewritingBaseOnBasicStructure(List<Line> lineList) {
+    public ReWritingResult formulaRewritingBaseOnBasicStructure(List<Line> lineList) {
         return parsingScriptService.formulaRewritingBaseOnBasicStructure(lineList);
     }
 }

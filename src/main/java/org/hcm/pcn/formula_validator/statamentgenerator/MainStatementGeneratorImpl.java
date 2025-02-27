@@ -178,9 +178,10 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
     }
 
     @Override
-    public List<Statement> parsingToListOfStatement(String script) {
+    public List<Statement> parsingToListOfStatement(String script, Boolean blockGeneration) {
         List<Statement> statementList = getAllStatementFromTokenList(
                 parsingToListOfTokenList(script)
+                , blockGeneration
         );
         if (CollectionUtils.isNotEmpty(statementList) &&
                 statementList.get(statementList.size() - 1) == null)
@@ -189,8 +190,8 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
     }
 
     @Override
-    public List<Statement> getAllStatementFromTokenList(List<Token> tokenList) {
-        return StatementGenerator.super.getAllStatementFromTokenList(tokenList);
+    public List<Statement> getAllStatementFromTokenList(List<Token> tokenList, Boolean blockGeneration) {
+        return StatementGenerator.super.getAllStatementFromTokenList(tokenList, blockGeneration);
     }
 
     @Override
@@ -199,16 +200,16 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
         mainBlock:
         {
             if (CollectionUtils.isNotEmpty(selectedTokenList) &&
-                    isVariableKeyword(selectedTokenList.get(0).getValue())) {
+                    isVariableKeyword(getFirstTokenThatNotNewLine(selectedTokenList).getValue())) {
                 statementGenerator = new VariableDeclarationStatementGeneratorImpl();
                 break mainBlock;
             }
             if (CollectionUtils.isNotEmpty(selectedTokenList) &&
-                    selectedTokenList.get(0).getValue().equals("if")) {
+                    getFirstTokenThatNotNewLine(selectedTokenList).getValue().equals("if")) {
                 statementGenerator = new IfStatementGeneratorImpl();
             }
             if (CollectionUtils.isNotEmpty(selectedTokenList) &&
-                    selectedTokenList.get(0).getValue().equals("return")) {
+                    getFirstTokenThatNotNewLine(selectedTokenList).getValue().equals("return")) {
                 statementGenerator = new ReturnStatementGeneratorImpl();
             }
         }

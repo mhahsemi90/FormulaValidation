@@ -2,11 +2,15 @@ type ValidationResult{
     generatedFormula: [String]
     validationMessage: String
 }
+type ReWritingResult{
+    reWritingLineList: [Line]
+    validationMessage: String
+}
 type Query {
     formulaParsing(formula: String): [Line]
     generateFormula(lineList: [LineInput] ): ValidationResult
     formulaValidation(formula: String): String
-    formulaRewritingBaseOnBasicStructure(lineList: [LineInput]): [Line]
+    formulaRewritingBaseOnBasicStructure(lineList: [LineInput]): ReWritingResult
 }
 schema {
     query: Query

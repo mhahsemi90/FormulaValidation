@@ -17,6 +17,7 @@ public interface BaseFormulaConcept {
         stringList.add("*");
         stringList.add("/");
         stringList.add("%");
+        stringList.add("**");
         stringList.add("<<");
         stringList.add(">>");
         stringList.add(">>>");
@@ -38,7 +39,6 @@ public interface BaseFormulaConcept {
         List<String> stringList = new ArrayList<>();
         stringList.add("--");
         stringList.add("++");
-        stringList.add("**");
         return stringList;
     }
 
@@ -100,7 +100,7 @@ public interface BaseFormulaConcept {
         return haveSequenceStringList;
     }
 
-    default List<String> getArithmeticOperator() {
+    default List<String> getArithmeticOperatorList() {
         List<String> operatorList = new ArrayList<>();
         operatorList.add("+");
         operatorList.add("-");
@@ -131,7 +131,7 @@ public interface BaseFormulaConcept {
         return operatorList;
     }
 
-    default List<String> getComparisonOperator() {
+    default List<String> getComparisonOperatorList() {
         List<String> operatorList = new ArrayList<>();
         operatorList.add("==");
         operatorList.add("===");
@@ -145,7 +145,7 @@ public interface BaseFormulaConcept {
         return operatorList;
     }
 
-    default List<String> getLogicalOperator() {
+    default List<String> getLogicalOperatorList() {
         List<String> operatorList = new ArrayList<>();
         operatorList.add("!");
         operatorList.add("&&");
@@ -154,7 +154,7 @@ public interface BaseFormulaConcept {
         return operatorList;
     }
 
-    default List<String> getBitwiseOperator() {
+    default List<String> getBitwiseOperatorList() {
         List<String> operatorList = new ArrayList<>();
         operatorList.add("&");
         operatorList.add("|");
@@ -169,11 +169,11 @@ public interface BaseFormulaConcept {
 
     default List<String> getAllOperator() {
         List<String> operatorList = new ArrayList<>();
-        operatorList.addAll(getArithmeticOperator());
+        operatorList.addAll(getArithmeticOperatorList());
         operatorList.addAll(getAssignmentOperatorList());
-        operatorList.addAll(getComparisonOperator());
-        operatorList.addAll(getLogicalOperator());
-        operatorList.addAll(getBitwiseOperator());
+        operatorList.addAll(getComparisonOperatorList());
+        operatorList.addAll(getLogicalOperatorList());
+        operatorList.addAll(getBitwiseOperatorList());
         return operatorList;
     }
 
@@ -190,11 +190,11 @@ public interface BaseFormulaConcept {
         operatorList.add("}");
         operatorList.add("[");
         operatorList.add("]");
-        operatorList.addAll(getArithmeticOperator());
+        operatorList.addAll(getArithmeticOperatorList());
         operatorList.addAll(getAssignmentOperatorList());
-        operatorList.addAll(getComparisonOperator());
-        operatorList.addAll(getLogicalOperator());
-        operatorList.addAll(getBitwiseOperator());
+        operatorList.addAll(getComparisonOperatorList());
+        operatorList.addAll(getLogicalOperatorList());
+        operatorList.addAll(getBitwiseOperatorList());
         return operatorList;
     }
 
@@ -267,47 +267,47 @@ public interface BaseFormulaConcept {
 
     default Map<String, Operator> getAllOperatorMap() {
         enum AllOperator {
-            O1(BlockType.OPERATOR, "+", "+", "+"),
-            O2(BlockType.OPERATOR, "-", "-", "-"),
-            O3(BlockType.OPERATOR, "*", "×", "*"),
-            O4(BlockType.OPERATOR, "/", "÷", "/"),
-            O5(BlockType.OPERATOR, "%", "%", "%"),
-            O6(BlockType.OPERATOR, "++", "++", "++"),
-            O7(BlockType.OPERATOR, "--", "--", "--"),
-            O8(BlockType.OPERATOR, "**", "**", "**"),
-            O9(BlockType.OPERATOR, "=", "=", "="),
-            O10(BlockType.OPERATOR, "+=", "+=", "+="),
-            O11(BlockType.OPERATOR, "-=", "-=", "-="),
-            O12(BlockType.OPERATOR, "*=", "*=", "*="),
-            O13(BlockType.OPERATOR, "/=", "/=", "/="),
-            O14(BlockType.OPERATOR, "%=", "%=", "%="),
-            O15(BlockType.OPERATOR, "**=", "**=", "**="),
-            O16(BlockType.OPERATOR, "<<=", "<<=", "<<="),
-            O17(BlockType.OPERATOR, ">>=", ">>=", ">>="),
-            O18(BlockType.OPERATOR, ">>>=", ">>>=", ">>>="),
-            O19(BlockType.OPERATOR, "&=", "&=", "&="),
-            O20(BlockType.OPERATOR, "^=", "^=", "^="),
-            O21(BlockType.OPERATOR, "|=", "|=", "|="),
-            O22(BlockType.OPERATOR, "==", "==", "=="),
-            O23(BlockType.OPERATOR, "===", "===", "==="),
-            O24(BlockType.OPERATOR, "!=", "!=", "!="),
-            O25(BlockType.OPERATOR, "!==", "!==", "!=="),
-            O26(BlockType.OPERATOR, ">", ">", ">"),
-            O27(BlockType.OPERATOR, "<", "<", "<"),
-            O28(BlockType.OPERATOR, ">=", ">=", ">="),
-            O29(BlockType.OPERATOR, "<=", "<=", "<="),
-            O30(BlockType.OPERATOR, "?", "?", "?"),
-            O31(BlockType.OPERATOR, "!", "!", "!"),
-            O32(BlockType.OPERATOR, "&&", "&&", "&&"),
-            O33(BlockType.OPERATOR, "||", "||", "||"),
-            O34(BlockType.OPERATOR, "&", "&", "&"),
-            O35(BlockType.OPERATOR, "|", "|", "|"),
-            O36(BlockType.OPERATOR, "~", "~", "~"),
-            O37(BlockType.OPERATOR, "^", "^", "^"),
-            O38(BlockType.OPERATOR, ">", ">", ">"),
-            O39(BlockType.OPERATOR, "<<", "<<", "<<"),
-            O40(BlockType.OPERATOR, ">>", ">>", ">>"),
-            O41(BlockType.OPERATOR, ">>>", ">>>", ">>>");
+            O1(BlockType.ARITHMETIC_OPERATOR, "+", "+", "+"),
+            O2(BlockType.ARITHMETIC_OPERATOR, "-", "-", "-"),
+            O3(BlockType.ARITHMETIC_OPERATOR, "*", "×", "*"),
+            O4(BlockType.ARITHMETIC_OPERATOR, "/", "÷", "/"),
+            O5(BlockType.ARITHMETIC_OPERATOR, "%", "%", "%"),
+            O6(BlockType.ARITHMETIC_OPERATOR, "++", "++", "++"),
+            O7(BlockType.ARITHMETIC_OPERATOR, "--", "--", "--"),
+            O8(BlockType.ARITHMETIC_OPERATOR, "**", "**", "**"),
+            O9(BlockType.ASSIGNMENT_OPERATOR, "=", "=", "="),
+            O10(BlockType.ASSIGNMENT_OPERATOR, "+=", "+=", "+="),
+            O11(BlockType.ASSIGNMENT_OPERATOR, "-=", "-=", "-="),
+            O12(BlockType.ASSIGNMENT_OPERATOR, "*=", "*=", "*="),
+            O13(BlockType.ASSIGNMENT_OPERATOR, "/=", "/=", "/="),
+            O14(BlockType.ASSIGNMENT_OPERATOR, "%=", "%=", "%="),
+            O15(BlockType.ASSIGNMENT_OPERATOR, "**=", "**=", "**="),
+            O16(BlockType.ASSIGNMENT_OPERATOR, "<<=", "<<=", "<<="),
+            O17(BlockType.ASSIGNMENT_OPERATOR, ">>=", ">>=", ">>="),
+            O18(BlockType.ASSIGNMENT_OPERATOR, ">>>=", ">>>=", ">>>="),
+            O19(BlockType.ASSIGNMENT_OPERATOR, "&=", "&=", "&="),
+            O20(BlockType.ASSIGNMENT_OPERATOR, "^=", "^=", "^="),
+            O21(BlockType.ASSIGNMENT_OPERATOR, "|=", "|=", "|="),
+            O22(BlockType.COMPARISON_OPERATOR, "==", "==", "=="),
+            O23(BlockType.COMPARISON_OPERATOR, "===", "===", "==="),
+            O24(BlockType.COMPARISON_OPERATOR, "!=", "!=", "!="),
+            O25(BlockType.COMPARISON_OPERATOR, "!==", "!==", "!=="),
+            O26(BlockType.COMPARISON_OPERATOR, ">", ">", ">"),
+            O27(BlockType.COMPARISON_OPERATOR, "<", "<", "<"),
+            O28(BlockType.COMPARISON_OPERATOR, ">=", ">=", ">="),
+            O29(BlockType.COMPARISON_OPERATOR, "<=", "<=", "<="),
+            O30(BlockType.COMPARISON_OPERATOR, "?", "?", "?"),
+            O31(BlockType.LOGICAL_OPERATOR, "!", "!", "!"),
+            O32(BlockType.LOGICAL_OPERATOR, "&&", "&&", "&&"),
+            O33(BlockType.LOGICAL_OPERATOR, "||", "||", "||"),
+            O34(BlockType.BITWISE_OPERATOR, "&", "&", "&"),
+            O35(BlockType.BITWISE_OPERATOR, "|", "|", "|"),
+            O36(BlockType.BITWISE_OPERATOR, "~", "~", "~"),
+            O37(BlockType.BITWISE_OPERATOR, "^", "^", "^"),
+            O38(BlockType.BITWISE_OPERATOR, ">", ">", ">"),
+            O39(BlockType.BITWISE_OPERATOR, "<<", "<<", "<<"),
+            O40(BlockType.BITWISE_OPERATOR, ">>", ">>", ">>"),
+            O41(BlockType.BITWISE_OPERATOR, ">>>", ">>>", ">>>");
 
             AllOperator(BlockType type, String code, String title, String enTitle) {
                 this.type = type;

@@ -1,16 +1,18 @@
 package org.hcm.pcn.formula_validator.dto;
 
 public enum BlockType {
+    VARIABLE,
+    LITERAL,
+    ARITHMETIC_OPERATOR,
+    ASSIGNMENT_OPERATOR,
+    COMPARISON_OPERATOR,
+    LOGICAL_OPERATOR,
+    BITWISE_OPERATOR,
     KEYWORD,
     SEPARATOR,
-    ID,
-    ASSIGNMENT,
-    LITERAL,
-    VARIABLE,
     LABEL,
     LABEL_ASSIGN,
     OPEN_PARENTHESES,
     CLOSE_PARENTHESES,
-    OPERATOR,
     FUNCTION,
 }

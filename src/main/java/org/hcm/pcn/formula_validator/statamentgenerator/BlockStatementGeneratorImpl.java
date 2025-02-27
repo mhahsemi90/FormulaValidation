@@ -19,7 +19,7 @@ public class BlockStatementGeneratorImpl implements StatementGenerator {
                 firstToken.getValue().equals("{") &&
                 lastToken.getValue().equals("}")) {
             StatementGenerator generator = new MainStatementGeneratorImpl();
-            List<Statement> statementList = generator.getAllStatementFromTokenList(selectedTokenList);
+            List<Statement> statementList = generator.getAllStatementFromTokenList(selectedTokenList,true);
             result = new BlockStatement(statementList);
         } else {
             this.throwTokenNotValid(firstToken);
