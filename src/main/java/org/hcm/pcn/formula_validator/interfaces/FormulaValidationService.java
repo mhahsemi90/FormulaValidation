@@ -14,4 +14,6 @@ public interface FormulaValidationService {
     String formulaValidation(String script);
 
     ReWritingResult formulaRewritingBaseOnBasicStructure(List<Line> lineList);
+
+
 }

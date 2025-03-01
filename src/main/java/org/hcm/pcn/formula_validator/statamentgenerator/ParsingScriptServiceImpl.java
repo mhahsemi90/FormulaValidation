@@ -7,6 +7,7 @@ import org.hcm.pcn.formula_validator.expression.*;
 import org.hcm.pcn.formula_validator.interfaces.ParsingScriptService;
 import org.hcm.pcn.formula_validator.interfaces.StatementGenerator;
 import org.hcm.pcn.formula_validator.statement.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -14,14 +15,14 @@ import java.util.*;
 @Component
 public class ParsingScriptServiceImpl implements ParsingScriptService {
     private final StatementGenerator statementGenerator;
-    private final Map<String, Operator> allOperatorMap;
-    private final Map<String, Keyword> allKeyword;
-    private Map<String, Operand> allOperandMap;
+    private final Map<String, Block> allOperatorMap;
+    private final Map<String, Block> allKeyword;
+    private Map<String, Block> allOperandMap;
 
     public ParsingScriptServiceImpl(
             StatementGenerator statementGenerator,
-            Map<String, Operator> allOperatorMap,
-            Map<String, Keyword> allKeyword) {
+            @Qualifier("Operator") Map<String, Block> allOperatorMap,
+            @Qualifier("Keyword") Map<String, Block> allKeyword) {
         this.statementGenerator = statementGenerator;
         this.allOperatorMap = allOperatorMap;
         this.allKeyword = allKeyword;
@@ -87,6 +88,29 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
             result.setValidationMessage(validationResult.getValidationMessage());
         }
         return result;
+    }
+
+    @Override
+    public List<Block> loadOperandForTest() {
+        List<Block> blockList = new ArrayList<>();
+        for (GroupClassFroTest groupClassFroTest : GroupClassFroTest.values()) {
+            Block groupBlock = new Block(BlockType.GROUP, groupClassFroTest.name(), groupClassFroTest.getTitle(), groupClassFroTest.getEnTitle());
+            groupBlock.setBlockList(new ArrayList<>());
+            for (OperandClassForTest operandClassForTest : OperandClassForTest.values()) {
+                if (operandClassForTest.getGroupClassFroTest() == groupClassFroTest) {
+                    Block operandBlock = new Block(operandClassForTest.getType(), operandClassForTest.getCode(), operandClassForTest.getTitle(), operandClassForTest.getEnTitle());
+                    groupBlock.getBlockList().add(operandBlock);
+                    operandBlock.setBlockList(new ArrayList<>());
+                    for (SubVariableForTest subVariableForTest : SubVariableForTest.values()) {
+                        if (subVariableForTest.getOperandClassForTest() == operandClassForTest) {
+                            Block subOperand = new Block(subVariableForTest.getType(), subVariableForTest.getCode(), subVariableForTest.getTitle(), subVariableForTest.getEnTitle());
+                            operandBlock.getBlockList().add(subOperand);
+                        }
+                    }
+                }
+            }
+        }
+        return blockList;
     }
 
     private List<String> generateElementListFromLineList(Integer lineLevel, List<Line> lineList) {
@@ -249,21 +273,11 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
         switch (expression.getType()) {
             case VARIABLE_EXPRESSION:
                 Variable variable = (Variable) expression;
-                Operand operand = allOperandMap.get(variable.getIdName());
-                if (operand != null)
-                    blockList.add(
-                            new Block(BlockType.VARIABLE, operand.getCode(), operand.getTitle(), operand.getEnTitle())
-                    );
-                else
-                    blockList.add(
-                            new Block(BlockType.VARIABLE, variable.getIdName(), variable.getIdName(), variable.getIdName())
-                    );
+                blockList.add(BlockType.VARIABLE.getBlock(allOperatorMap, variable.getIdName()));
                 break;
             case LITERAL_EXPRESSION:
                 Literal literal = (Literal) expression;
-                blockList.add(
-                        new Block(BlockType.LITERAL, literal.getValue(), literal.getValue(), literal.getValue())
-                );
+                blockList.add(BlockType.LITERAL.getBlock(literal.getValue()));
                 break;
             case UNARY_EXPRESSION:
                 addUnaryExpressionToBlocks(blockList, (OneHandOperatorExpression) expression);
@@ -385,15 +399,9 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
             Integer[] id,
             Stack<Integer> parentIdStack) {
         List<Block> blockList = new ArrayList<>();
-        Operand operand = allOperandMap.get(labeledStatement.getLabel());
-        Operator operator = allOperatorMap.get(":");
         Integer parentId = !parentIdStack.empty() ? parentIdStack.peek() : null;
-        blockList.add(
-                new Block(BlockType.LABEL, operand.getCode(), operand.getTitle(), operand.getEnTitle())
-        );
-        blockList.add(
-                new Block(BlockType.LABEL_ASSIGN, operator.getCode(), operator.getTitle(), operator.getEnTitle())
-        );
+        blockList.add(BlockType.LABEL.getBlock(allOperandMap, labeledStatement.getLabel()));
+        blockList.add(BlockType.LABEL_ASSIGN.getBlock(allOperatorMap, ":"));
         parentIdStack.push(id[0]);
         lineOfBlocksList.add(
                 new Line(id[0]++, parentId, row[0], lineLevel[0], blockList, LineType.LABEL)
@@ -433,18 +441,12 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
             Integer[] id,
             Stack<Integer> parentIdStack) {
         List<Block> blockList = new ArrayList<>();
-        Keyword keyword = allKeyword.get(variableDeclarationStatement.getKind());
         Integer parentId = !parentIdStack.empty() ? parentIdStack.peek() : null;
-        blockList.add(
-                new Block(BlockType.KEYWORD, keyword.getCode(), keyword.getTitle(), keyword.getEnTitle())
-        );
+        blockList.add(BlockType.KEYWORD.getBlock(allKeyword, variableDeclarationStatement.getKind()));
         boolean firstVariable = true;
         for (Expression expression : variableDeclarationStatement.getDeclaratorExpressionList()) {
             if (!firstVariable) {
-                Operator operator = allOperatorMap.get(",");
-                blockList.add(
-                        new Block(BlockType.SEPARATOR, operator.getCode(), operator.getTitle(), operator.getEnTitle())
-                );
+                blockList.add(BlockType.SEPARATOR.getBlock(allOperatorMap, ","));
             }
             addExpressionToBlocks(blockList, expression);
             firstVariable = false;
@@ -455,11 +457,8 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
     }
 
     public void addAssignmentExpressionToBlocks(List<Block> blockList, TwoHandOperatorExpression expression) {
-        Operator operator = allOperatorMap.get(expression.getOperator());
         addExpressionToBlocks(blockList, expression.getLeftChild());
-        blockList.add(
-                new Block(BlockType.ASSIGNMENT_OPERATOR, operator.getCode(), operator.getTitle(), operator.getEnTitle())
-        );
+        blockList.add(BlockType.ASSIGNMENT_OPERATOR.getBlock(allOperatorMap, expression.getOperator()));
         addExpressionToBlocks(blockList, expression.getRightChild());
     }
 
@@ -481,13 +480,10 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
         for (Expression expression1 : expressionList) {
             if (expression1.getType() == ExpressionType.BINARY_EXPRESSION) {
                 TwoHandOperatorExpression operatorExpression = (TwoHandOperatorExpression) expression1;
-                Operator operator = allOperatorMap.get(operatorExpression.getOperator());
                 List<Block> secondBlockList = valueStack.pop();
                 List<Block> firstBlockList = valueStack.pop();
                 List<Block> result = new ArrayList<>(firstBlockList);
-                result.add(
-                        new Block(BlockType.ARITHMETIC_OPERATOR, operator.getCode(), operator.getTitle(), operator.getEnTitle())
-                );
+                result.add(BlockType.ARITHMETIC_OPERATOR.getBlock(allOperatorMap, operatorExpression.getOperator()));
                 result.addAll(secondBlockList);
                 valueStack.push(result);
             } else {
@@ -500,33 +496,17 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
     }
 
     public void addUnaryExpressionToBlocks(List<Block> blockList, OneHandOperatorExpression expression) {
-        Operator operator = allOperatorMap.get(expression.getOperator());
-        blockList.add(
-                new Block(BlockType.ARITHMETIC_OPERATOR, operator.getCode(), operator.getTitle(), operator.getEnTitle())
-        );
+        blockList.add(BlockType.ARITHMETIC_OPERATOR.getBlock(allOperatorMap, expression.getOperator()));
         addExpressionToBlocks(blockList, expression.getArgument());
     }
 
     public void addVariableExpressionToBlocks(List<Block> blockList, VariableDeclaratorExpression expression) {
         String idName = ((Variable) expression.getVariable()).getIdName();
-        Operand operand = allOperandMap.get(idName);
-        if (operand != null)
-            blockList.add(
-                    new Block(BlockType.VARIABLE, operand.getCode(), operand.getTitle(), operand.getEnTitle())
-            );
-        else
-            blockList.add(
-                    new Block(BlockType.VARIABLE, idName, idName, idName)
-            );
+        blockList.add(BlockType.VARIABLE.getBlock(allOperandMap, idName));
         if (expression.getInitiateValue() != null) {
             String value = ((Literal) expression.getInitiateValue()).getValue();
-            Operator operator = allOperatorMap.get("=");
-            blockList.add(
-                    new Block(BlockType.ASSIGNMENT_OPERATOR, operator.getCode(), operator.getTitle(), operator.getEnTitle())
-            );
-            blockList.add(
-                    new Block(BlockType.LITERAL, value, value, value)
-            );
+            blockList.add(BlockType.ASSIGNMENT_OPERATOR.getBlock(allOperatorMap, "="));
+            blockList.add(BlockType.LITERAL.getBlock(value));
         }
     }
 

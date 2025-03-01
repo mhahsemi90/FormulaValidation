@@ -1,10 +1,13 @@
 package org.hcm.pcn.formula_validator.dto;
 
+import java.util.List;
+
 public class Block {
     private BlockType type;
     private String code;
     private String title;
     private String enTitle;
+    private List<Block> blockList;
 
     public Block() {
     }
@@ -46,5 +49,13 @@ public class Block {
 
     public void setEnTitle(String enTitle) {
         this.enTitle = enTitle;
+    }
+
+    public List<Block> getBlockList() {
+        return blockList;
+    }
+
+    public void setBlockList(List<Block> blockList) {
+        this.blockList = blockList;
     }
 }

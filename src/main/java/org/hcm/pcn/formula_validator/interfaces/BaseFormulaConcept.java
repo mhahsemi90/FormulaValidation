@@ -1,8 +1,7 @@
 package org.hcm.pcn.formula_validator.interfaces;
 
+import org.hcm.pcn.formula_validator.dto.Block;
 import org.hcm.pcn.formula_validator.dto.BlockType;
-import org.hcm.pcn.formula_validator.dto.Keyword;
-import org.hcm.pcn.formula_validator.dto.Operator;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -265,7 +264,7 @@ public interface BaseFormulaConcept {
         return characterList;
     }
 
-    default Map<String, Operator> getAllOperatorMap() {
+    default Map<String, Block> getAllOperatorMap() {
         enum AllOperator {
             O1(BlockType.ARITHMETIC_OPERATOR, "+", "+", "+"),
             O2(BlockType.ARITHMETIC_OPERATOR, "-", "-", "-"),
@@ -337,9 +336,9 @@ public interface BaseFormulaConcept {
                 return enTitle;
             }
         }
-        Map<String, Operator> operatorMap = new LinkedHashMap<>();
+        Map<String, Block> operatorMap = new LinkedHashMap<>();
         for (AllOperator value : AllOperator.values()) {
-            Operator operator = new Operator();
+            Block operator = new Block();
             operator.setType(value.getType());
             operator.setCode(value.getCode());
             operator.setTitle(value.getTitle());
@@ -350,7 +349,7 @@ public interface BaseFormulaConcept {
     }
 
 
-    default Map<String, Keyword> getAllKeywordMap() {
+    default Map<String, Block> getAllKeywordMap() {
         enum AllKeyword {
             K0(BlockType.KEYWORD, "arguments", "متغییرها", "arguments"),
             K1(BlockType.KEYWORD, "await", "در انتظار", "await"),
@@ -426,9 +425,9 @@ public interface BaseFormulaConcept {
                 return enTitle;
             }
         }
-        Map<String, Keyword> keywordMap = new LinkedHashMap<>();
+        Map<String, Block> keywordMap = new LinkedHashMap<>();
         for (AllKeyword value : AllKeyword.values()) {
-            Keyword keyword = new Keyword();
+            Block keyword = new Block();
             keyword.setType(value.getType());
             keyword.setCode(value.getCode());
             keyword.setTitle(value.getTitle());
@@ -436,7 +435,6 @@ public interface BaseFormulaConcept {
             keywordMap.put(keyword.getCode(), keyword);
         }
         return keywordMap;
-
     }
 }
 
