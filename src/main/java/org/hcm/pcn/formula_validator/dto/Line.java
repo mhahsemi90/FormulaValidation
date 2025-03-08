@@ -1,5 +1,7 @@
 package org.hcm.pcn.formula_validator.dto;
 
+import org.hcm.pcn.formula_validator.enums.LineType;
+
 import java.util.List;
 
 public class Line {

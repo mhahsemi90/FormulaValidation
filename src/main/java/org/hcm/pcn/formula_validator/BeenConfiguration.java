@@ -1,7 +1,7 @@
 package org.hcm.pcn.formula_validator;
 
 import org.hcm.pcn.formula_validator.dto.Block;
-import org.hcm.pcn.formula_validator.interfaces.StatementGenerator;
+import org.hcm.pcn.formula_validator.service.interfaces.StatementGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -15,7 +15,7 @@ type Line{
     parentId: Int
     row: Int
     lineLevel: Int
-    blockList: [BlockOutput]
+    blockList: [Block]
     lineType: LineType
 }
 
@@ -25,5 +25,7 @@ input LineInput{
     row: Int
     lineLevel: Int
     blockList: [BlockInput]
+    assignmentOperator:BlockInput
+    resultVar:BlockInput
     lineType: LineType
 }

@@ -1,5 +1,8 @@
 enum BlockType{
     VARIABLE,
+    STRING_VARIABLE,
+    NUMBER_VARIABLE,
+    OBJECT,
     LITERAL,
     ARITHMETIC_OPERATOR,
     ASSIGNMENT_OPERATOR,
@@ -13,34 +16,19 @@ enum BlockType{
     OPEN_PARENTHESES,
     CLOSE_PARENTHESES,
     FUNCTION,
+    GROUP,
 }
-interface Block{
+type Block{
     type: BlockType
     code: String
     title: String
     enTitle: String
+    blockList: [Block]
 }
 input BlockInput{
     type: BlockType
     code: String
     title: String
     enTitle: String
-}
-type BlockOutput implements Block{
-    type: BlockType
-    code: String
-    title: String
-    enTitle: String
-}
-type Operator implements Block{
-    type: BlockType
-    code: String
-    title: String
-    enTitle: String
-}
-type Operand implements Block{
-    type: BlockType
-    code: String
-    title: String
-    enTitle: String
+    blockList: [BlockInput]
 }

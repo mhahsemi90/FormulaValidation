@@ -1,5 +1,7 @@
 package org.hcm.pcn.formula_validator.dto;
 
+import org.hcm.pcn.formula_validator.enums.BlockType;
+
 import java.util.List;
 
 public class Block {

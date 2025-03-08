@@ -11,6 +11,7 @@ type Query {
     generateFormula(lineList: [LineInput] ): ValidationResult
     formulaValidation(formula: String): String
     formulaRewritingBaseOnBasicStructure(lineList: [LineInput]): ReWritingResult
+    loadOperandForTest: [Block]
 }
 schema {
     query: Query

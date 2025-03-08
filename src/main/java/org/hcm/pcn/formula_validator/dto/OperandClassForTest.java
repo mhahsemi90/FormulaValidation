@@ -1,5 +1,7 @@
 package org.hcm.pcn.formula_validator.dto;
 
+import org.hcm.pcn.formula_validator.enums.BlockType;
+
 public enum OperandClassForTest {
     O0(GroupClassFroTest.PERSONNEL_INFO, BlockType.VARIABLE, "childCount", "تعداد فرزند", "Children Count"),
     O1(GroupClassFroTest.PERSONNEL_INFO, BlockType.VARIABLE, "educationCount", "تعداد دوره آموزشی", "Education Count"),
