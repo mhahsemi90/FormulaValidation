@@ -1,6 +1,6 @@
 package org.hcm.pcn.formula_validator.service.interfaces;
 
-import org.hcm.pcn.formula_validator.dto.Block;
+import org.hcm.pcn.formula_validator.dto.BlockDto;
 import org.hcm.pcn.formula_validator.enums.BlockType;
 
 import java.util.ArrayList;
@@ -264,7 +264,7 @@ public interface BaseFormulaConcept {
         return characterList;
     }
 
-    default Map<String, Block> getAllOperatorMap() {
+    default Map<String, BlockDto> getAllOperatorMap() {
         enum AllOperator {
             O1(BlockType.ARITHMETIC_OPERATOR, "+", "+", "+"),
             O2(BlockType.ARITHMETIC_OPERATOR, "-", "-", "-"),
@@ -336,9 +336,9 @@ public interface BaseFormulaConcept {
                 return enTitle;
             }
         }
-        Map<String, Block> operatorMap = new LinkedHashMap<>();
+        Map<String, BlockDto> operatorMap = new LinkedHashMap<>();
         for (AllOperator value : AllOperator.values()) {
-            Block operator = new Block();
+            BlockDto operator = new BlockDto();
             operator.setType(value.getType());
             operator.setCode(value.getCode());
             operator.setTitle(value.getTitle());
@@ -349,7 +349,7 @@ public interface BaseFormulaConcept {
     }
 
 
-    default Map<String, Block> getAllKeywordMap() {
+    default Map<String, BlockDto> getAllKeywordMap() {
         enum AllKeyword {
             K0(BlockType.KEYWORD, "arguments", "متغییرها", "arguments"),
             K1(BlockType.KEYWORD, "await", "در انتظار", "await"),
@@ -425,9 +425,9 @@ public interface BaseFormulaConcept {
                 return enTitle;
             }
         }
-        Map<String, Block> keywordMap = new LinkedHashMap<>();
+        Map<String, BlockDto> keywordMap = new LinkedHashMap<>();
         for (AllKeyword value : AllKeyword.values()) {
-            Block keyword = new Block();
+            BlockDto keyword = new BlockDto();
             keyword.setType(value.getType());
             keyword.setCode(value.getCode());
             keyword.setTitle(value.getTitle());

@@ -1,0 +1,12 @@
+type Product{
+    id:ID
+    code:String
+    title:String
+    enTitle:String
+    blockList:[Block]
+}
+input ProductInput{
+    code:String
+    title:String
+    enTitle:String
+}

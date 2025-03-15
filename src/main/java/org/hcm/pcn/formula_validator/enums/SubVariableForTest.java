@@ -1,6 +1,4 @@
-package org.hcm.pcn.formula_validator.dto;
-
-import org.hcm.pcn.formula_validator.enums.BlockType;
+package org.hcm.pcn.formula_validator.enums;
 
 public enum SubVariableForTest {
     S01(OperandClassForTest.O25, BlockType.LABEL, "firstValue", "مقدار اول", "First Value"),

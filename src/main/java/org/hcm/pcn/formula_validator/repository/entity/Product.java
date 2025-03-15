@@ -31,14 +31,24 @@ public class Product {
     )
     private Long id;
     @Column(
-            name = "productName",
+            name = "code",
             nullable = false
     )
-    private String productName;
+    private String code;
+    @Column(
+            name = "title",
+            nullable = false
+    )
+    private String title;
+    @Column(
+            name = "enTitle",
+            nullable = false
+    )
+    private String enTitle;
     @OneToMany(mappedBy = "product")
     private List<Block> blockList = new ArrayList<>();
 
-    public Product(String productName) {
-        this.productName = productName;
+    public Product(String code) {
+        this.code = code;
     }
 }

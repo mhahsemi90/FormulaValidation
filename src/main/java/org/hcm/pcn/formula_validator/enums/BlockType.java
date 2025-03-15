@@ -1,6 +1,6 @@
 package org.hcm.pcn.formula_validator.enums;
 
-import org.hcm.pcn.formula_validator.dto.Block;
+import org.hcm.pcn.formula_validator.dto.BlockDto;
 
 import java.util.Map;
 
@@ -24,17 +24,17 @@ public enum BlockType {
     FUNCTION,
     GROUP;
 
-    public Block getBlock(Map<String, Block> blockPool, String identifier) {
+    public BlockDto getBlock(Map<String, BlockDto> blockPool, String identifier) {
         return blockPool.get(identifier) != null ?
                 blockPool.get(identifier) :
-                new Block(this, identifier, identifier, identifier);
+                new BlockDto(this, identifier, identifier, identifier);
     }
 
-    public Block getBlock(String identifier) {
-        return new Block(this, identifier, identifier, identifier);
+    public BlockDto getBlock(String identifier) {
+        return new BlockDto(this, identifier, identifier, identifier);
     }
 
-    public Block getBlock() {
-        return new Block();
+    public BlockDto getBlock() {
+        return new BlockDto();
     }
 }

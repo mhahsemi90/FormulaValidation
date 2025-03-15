@@ -1,6 +1,6 @@
 package org.hcm.pcn.formula_validator;
 
-import org.hcm.pcn.formula_validator.dto.Block;
+import org.hcm.pcn.formula_validator.dto.BlockDto;
 import org.hcm.pcn.formula_validator.service.interfaces.StatementGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,12 +16,12 @@ public class BeenConfiguration {
     }
 
     @Bean(name = "Operator")
-    public Map<String, Block> getAllOperatorMap() {
+    public Map<String, BlockDto> getAllOperatorMap() {
         return statementGenerator.getAllOperatorMap();
     }
 
     @Bean(name = "Keyword")
-    public Map<String, Block> allKeyword() {
+    public Map<String, BlockDto> allKeyword() {
         return statementGenerator.getAllKeywordMap();
     }
 }

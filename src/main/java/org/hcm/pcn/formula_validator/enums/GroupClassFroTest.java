@@ -1,4 +1,4 @@
-package org.hcm.pcn.formula_validator.dto;
+package org.hcm.pcn.formula_validator.enums;
 
 public enum GroupClassFroTest {
     PERSONNEL_INFO("Personnel Info", "اطلاعات پرسنلی"),

@@ -1,0 +1,15 @@
+type LocalVariable{
+    id:ID
+    code:String
+    title:String
+    enTitle:String
+    type:BlockType
+    result:Block
+}
+type Formula{
+    id:ID
+    formula:String
+    version:Int
+    createdAt:Int
+    localVariableList:[LocalVariable]
+}

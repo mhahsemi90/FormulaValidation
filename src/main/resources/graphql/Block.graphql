@@ -19,10 +19,13 @@ enum BlockType{
     GROUP,
 }
 type Block{
-    type: BlockType
+    id:ID
     code: String
     title: String
     enTitle: String
+    type: BlockType
+    result: Block
+    formula: Formula
     blockList: [Block]
 }
 input BlockInput{

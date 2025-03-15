@@ -1,6 +1,6 @@
 package org.hcm.pcn.formula_validator.service.interfaces;
 
-import org.hcm.pcn.formula_validator.dto.Block;
+import org.hcm.pcn.formula_validator.dto.BlockDto;
 import org.hcm.pcn.formula_validator.dto.Line;
 import org.hcm.pcn.formula_validator.dto.ReWritingResult;
 import org.hcm.pcn.formula_validator.dto.ValidationResult;
@@ -16,5 +16,5 @@ public interface FormulaValidationService {
 
     ReWritingResult formulaRewritingBaseOnBasicStructure(List<Line> lineList);
 
-    List<Block> loadOperandForTest();
+    List<BlockDto> loadOperandForTest();
 }

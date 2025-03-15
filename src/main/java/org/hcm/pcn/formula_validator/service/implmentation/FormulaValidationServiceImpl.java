@@ -1,6 +1,6 @@
 package org.hcm.pcn.formula_validator.service.implmentation;
 
-import org.hcm.pcn.formula_validator.dto.Block;
+import org.hcm.pcn.formula_validator.dto.BlockDto;
 import org.hcm.pcn.formula_validator.dto.Line;
 import org.hcm.pcn.formula_validator.dto.ReWritingResult;
 import org.hcm.pcn.formula_validator.dto.ValidationResult;
@@ -54,7 +54,7 @@ public class FormulaValidationServiceImpl implements FormulaValidationService {
     }
 
     @Override
-    public List<Block> loadOperandForTest() {
+    public List<BlockDto> loadOperandForTest() {
         return parsingScriptService.loadOperandForTest();
     }
 }

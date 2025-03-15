@@ -1,15 +1,13 @@
 package org.hcm.pcn.formula_validator.controller;
 
 import graphql.GraphQLError;
-import org.hcm.pcn.formula_validator.dto.Block;
-import org.hcm.pcn.formula_validator.dto.Line;
-import org.hcm.pcn.formula_validator.dto.ReWritingResult;
-import org.hcm.pcn.formula_validator.dto.ValidationResult;
+import org.hcm.pcn.formula_validator.dto.*;
 import org.hcm.pcn.formula_validator.exception.HandledError;
 import org.hcm.pcn.formula_validator.service.interfaces.FormulaValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.GraphQlExceptionHandler;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.execution.ErrorType;
 import org.springframework.stereotype.Controller;
@@ -47,9 +45,10 @@ public class FormulaValidationController {
     }
 
     @QueryMapping
-    public List<Block> loadOperandForTest() {
+    public List<BlockDto> loadOperandForTest() {
         return formulaValidationService.loadOperandForTest();
     }
+
 
     @GraphQlExceptionHandler(HandledError.class)
     public GraphQLError handelParsingError(Exception e) {

@@ -57,12 +57,6 @@ public class Block {
             foreignKey = @ForeignKey(name = "block_to_block_id_fk")
     )
     private Block result;
-    @OneToMany(mappedBy = "result", cascade = CascadeType.PERSIST)
-    private List<Block> parentResultList;
-    @OneToMany(mappedBy = "parentBlock", cascade = CascadeType.PERSIST)
-    private List<ChildBlock> blockList = new ArrayList<>();
-    @OneToMany(mappedBy = "childBlock", cascade = CascadeType.PERSIST)
-    private List<ChildBlock> childToParent;
     @ManyToOne
     @JoinColumn(
             name = "product_id",
@@ -73,6 +67,14 @@ public class Block {
     private Product product;
     @OneToOne(mappedBy = "block", cascade = CascadeType.PERSIST)
     private Formula formula;
+    @OneToMany(mappedBy = "result", cascade = CascadeType.PERSIST)
+    private List<Block> parentResultList = new ArrayList<>();
+    @OneToMany(mappedBy = "result", cascade = CascadeType.PERSIST)
+    private List<LocalVariable> parentLocalVariableList = new ArrayList<>();
+    @OneToMany(mappedBy = "parentBlock", cascade = CascadeType.PERSIST)
+    private List<ChildBlock> blockList = new ArrayList<>();
+    @OneToMany(mappedBy = "childBlock", cascade = CascadeType.PERSIST)
+    private List<ChildBlock> childToParent = new ArrayList<>();
 
     public Block(String code, String title, String enTitle, BlockType type) {
         this.code = code;
