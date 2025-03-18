@@ -90,16 +90,16 @@
             <artifactId>spring-webflux</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java</artifactId>
-            <version>21.0</version> <!-- آخرین نسخه پایدار -->
+            <version>21.0</version> &lt;!&ndash; آخرین نسخه پایدار &ndash;&gt;
         </dependency>
         <dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java-extended-scalars</artifactId>
-            <version>21.0</version> <!-- آخرین نسخه پایدار -->
-        </dependency>
+            <version>21.0</version> &lt;!&ndash; آخرین نسخه پایدار &ndash;&gt;
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.graphql</groupId>
             <artifactId>spring-graphql-test</artifactId>

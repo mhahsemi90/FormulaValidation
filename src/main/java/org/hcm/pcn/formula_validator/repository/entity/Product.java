@@ -32,7 +32,8 @@ public class Product {
     private Long id;
     @Column(
             name = "code",
-            nullable = false
+            nullable = false,
+            unique = true
     )
     private String code;
     @Column(
@@ -48,7 +49,9 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Block> blockList = new ArrayList<>();
 
-    public Product(String code) {
+    public Product(String code, String title, String enTitle) {
         this.code = code;
+        this.title = title;
+        this.enTitle = enTitle;
     }
 }

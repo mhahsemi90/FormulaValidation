@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,6 +15,6 @@ public class FormulaDto {
     private Long id;
     private String formula;
     private Long version;
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
     private List<LocalVariableDto> localVariableList;
 }

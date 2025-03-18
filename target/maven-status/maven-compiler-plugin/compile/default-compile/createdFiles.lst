@@ -1,6 +1,9 @@
+org\hcm\pcn\formula_validator\service\scalar\TimeStampScalar.class
 org\hcm\pcn\formula_validator\enums\LineType.class
+org\hcm\pcn\formula_validator\controller\ProductManagementController.class
 org\hcm\pcn\formula_validator\enums\SubVariableForTest.class
 org\hcm\pcn\formula_validator\dto\ProductDto.class
+org\hcm\pcn\formula_validator\service\implmentation\ProductManagementServiceImpl.class
 org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\BlockStatementGeneratorImpl.class
 org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\ExpressionStatementGeneratorImpl$1.class
 org\hcm\pcn\formula_validator\FormulaValidatorApplication.class
@@ -8,12 +11,12 @@ org\hcm\pcn\formula_validator\service\statement\LabeledStatement.class
 org\hcm\pcn\formula_validator\service\token\Token.class
 org\hcm\pcn\formula_validator\dto\BlockDto.class
 org\hcm\pcn\formula_validator\service\interfaces\ParsingScriptService.class
-org\hcm\pcn\formula_validator\service\implmentation\AddProductAndBlockImpl.class
 org\hcm\pcn\formula_validator\dto\FormulaDto.class
 org\hcm\pcn\formula_validator\enums\OperandClassForTest.class
 org\hcm\pcn\formula_validator\dto\LocalVariableDto.class
 org\hcm\pcn\formula_validator\service\expression\ArrayExpression.class
 org\hcm\pcn\formula_validator\service\expression\Literal.class
+org\hcm\pcn\formula_validator\service\mapper\ProductMapperImpl.class
 org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\IfStatementGeneratorImpl.class
 org\hcm\pcn\formula_validator\repository\entity\Block.class
 org\hcm\pcn\formula_validator\service\token\TokenType.class
@@ -26,6 +29,7 @@ org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\Expressio
 org\hcm\pcn\formula_validator\service\interfaces\BaseFormulaConcept.class
 org\hcm\pcn\formula_validator\testRec.class
 org\hcm\pcn\formula_validator\controller\FormulaValidationController.class
+org\hcm\pcn\formula_validator\service\mapper\ProductMapper.class
 org\hcm\pcn\formula_validator\service\expression\Expression.class
 org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\VariableDeclarationStatementGeneratorImpl.class
 org\hcm\pcn\formula_validator\service\statement\VariableDeclarationStatement.class
@@ -35,6 +39,8 @@ org\hcm\pcn\formula_validator\service\expression\MemberExpression.class
 org\hcm\pcn\formula_validator\service\expression\OperatorExpression.class
 org\hcm\pcn\formula_validator\service\expression\ObjectExpression.class
 org\hcm\pcn\formula_validator\service\expression\OneHandOperatorExpression.class
+org\hcm\pcn\formula_validator\dto\LineDto.class
+org\hcm\pcn\formula_validator\service\interfaces\ProductManagementService.class
 org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\ReturnStatementGeneratorImpl.class
 org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\MainStatementGeneratorImpl.class
 org\hcm\pcn\formula_validator\dto\ValidationResult.class
@@ -52,8 +58,6 @@ org\hcm\pcn\formula_validator\repository\service\BlockRepository.class
 org\hcm\pcn\formula_validator\service\statement\Statement.class
 org\hcm\pcn\formula_validator\enums\GroupClassFroTest.class
 org\hcm\pcn\formula_validator\enums\StatementType.class
-org\hcm\pcn\formula_validator\service\interfaces\AddProductAndBlock.class
-org\hcm\pcn\formula_validator\dto\Line.class
 org\hcm\pcn\formula_validator\service\implmentation\FormulaValidationServiceImpl.class
 org\hcm\pcn\formula_validator\service\expression\TwoHandOperatorExpression.class
 org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\LabeledStatementGeneratorImpl.class

@@ -2,8 +2,8 @@ enum BlockType{
     VARIABLE,
     STRING_VARIABLE,
     NUMBER_VARIABLE,
-    OBJECT,
     LITERAL,
+    OBJECT,
     ARITHMETIC_OPERATOR,
     ASSIGNMENT_OPERATOR,
     COMPARISON_OPERATOR,
@@ -29,9 +29,11 @@ type Block{
     blockList: [Block]
 }
 input BlockInput{
-    type: BlockType
     code: String
     title: String
     enTitle: String
+    type: BlockType
+    result: BlockInput
+    formula: FormulaInput
     blockList: [BlockInput]
 }

@@ -1,11 +1,11 @@
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\enums\LineType.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\enums\StatementType.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\SequenceExpression.java
+G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\interfaces\ProductManagementService.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\token\Token.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\statement\IfStatement.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\repository\service\ProductRepository.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\testRec.java
-G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\dto\Line.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\interfaces\FormulaValidationService.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\controller\FormulaValidationController.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\ConditionalExpression.java
@@ -25,6 +25,7 @@ G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\en
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\VariableDeclaratorExpression.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\Expression.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\statement\BlockStatement.java
+G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\dto\LineDto.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\enums\ExpressionType.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\ParsingScriptServiceImpl.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\TwoHandOperatorExpression.java
@@ -32,7 +33,6 @@ G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\se
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\ExpressionStatementGeneratorImpl.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\interfaces\StatementGenerator.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\dto\BlockDto.java
-G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\interfaces\AddProductAndBlock.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\statement\LabeledStatement.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\OneHandOperatorExpression.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\VariableDeclarationStatementGeneratorImpl.java
@@ -43,13 +43,13 @@ G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\re
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\exception\HandledError.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\repository\entity\Formula.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\LabeledStatementGeneratorImpl.java
+G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\controller\ProductManagementController.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\interfaces\ParsingScriptService.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\BeenConfiguration.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\ArrayExpression.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\MainStatementGeneratorImpl.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\interfaces\BaseFormulaConcept.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\statement\EmptyStatement.java
-G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\AddProductAndBlockImpl.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\enums\GroupClassFroTest.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\MemberExpression.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\BlockStatementGeneratorImpl.java
@@ -57,9 +57,12 @@ G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\en
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\repository\entity\Block.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\statement\ReturnStatement.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\statement\Statement.java
+G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\ProductManagementServiceImpl.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\ReturnStatementGeneratorImpl.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\dto\ProductDto.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\FormulaValidatorApplication.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\FormulaValidationServiceImpl.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\ObjectExpression.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\dto\ReWritingResult.java
+G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\mapper\ProductMapper.java
+G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\scalar\TimeStampScalar.java

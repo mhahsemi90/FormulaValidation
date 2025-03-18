@@ -10,22 +10,24 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Line {
+public class LineDto {
     private Integer id;
     private Integer parentId;
     private Integer row;
     private Integer lineLevel;
+    private BlockDto assignmentOperator;
+    private BlockDto resultVar;
     private List<BlockDto> blockList;
     private LineType lineType;
 
-    public Line(Integer row, Integer lineLevel, List<BlockDto> blockList, LineType lineType) {
+    public LineDto(Integer row, Integer lineLevel, List<BlockDto> blockList, LineType lineType) {
         this.row = row;
         this.lineLevel = lineLevel;
         this.blockList = blockList;
         this.lineType = lineType;
     }
 
-    public Line(Integer id, Integer parentId, Integer row, Integer lineLevel, List<BlockDto> blockList, LineType lineType) {
+    public LineDto(Integer id, Integer parentId, Integer row, Integer lineLevel, List<BlockDto> blockList, LineType lineType) {
         this.id = id;
         this.parentId = parentId;
         this.row = row;

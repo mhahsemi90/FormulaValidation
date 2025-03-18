@@ -7,7 +7,6 @@ import org.hcm.pcn.formula_validator.service.interfaces.FormulaValidationService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.GraphQlExceptionHandler;
-import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.execution.ErrorType;
 import org.springframework.stereotype.Controller;
@@ -25,13 +24,13 @@ public class FormulaValidationController {
     }
 
     @QueryMapping
-    public List<Line> formulaParsing(@Argument String formula) {
+    public List<LineDto> formulaParsing(@Argument String formula) {
         return formulaValidationService.parsing(formula);
     }
 
     @QueryMapping
-    public ValidationResult generateFormula(@Argument List<Line> lineList) {
-        return formulaValidationService.generateFormula(lineList);
+    public ValidationResult generateFormula(@Argument List<LineDto> lineDtoList) {
+        return formulaValidationService.generateFormula(lineDtoList);
     }
 
     @QueryMapping
@@ -40,8 +39,8 @@ public class FormulaValidationController {
     }
 
     @QueryMapping
-    public ReWritingResult formulaRewritingBaseOnBasicStructure(@Argument List<Line> lineList) {
-        return formulaValidationService.formulaRewritingBaseOnBasicStructure(lineList);
+    public ReWritingResult formulaRewritingBaseOnBasicStructure(@Argument List<LineDto> lineDtoList) {
+        return formulaValidationService.formulaRewritingBaseOnBasicStructure(lineDtoList);
     }
 
     @QueryMapping

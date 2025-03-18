@@ -10,6 +10,17 @@ type Formula{
     id:ID
     formula:String
     version:Int
-    createdAt:Int
+    createdAt:TimeStamp
     localVariableList:[LocalVariable]
+}
+input LocalVariableInput{
+    code:String
+    title:String
+    enTitle:String
+    type:BlockType
+    result:BlockInput
+}
+input FormulaInput{
+    formula:String
+    localVariableList:[LocalVariableInput]
 }

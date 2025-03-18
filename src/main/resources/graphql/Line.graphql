@@ -1,10 +1,11 @@
 enum LineType{
     EXPRESSION,
+    RETURN,
+    CHANGE_VALUE,
     BLOCK,
     VARIABLE_DECLARATION,
     IF,
     LABEL,
-    RETURN,
     FOR,
     ELSE,
     ELSE_IF,
@@ -15,6 +16,8 @@ type Line{
     parentId: Int
     row: Int
     lineLevel: Int
+    assignmentOperator: Block
+    resultVar: Block
     blockList: [Block]
     lineType: LineType
 }
@@ -24,8 +27,8 @@ input LineInput{
     parentId: Int
     row: Int
     lineLevel: Int
-    blockList: [BlockInput]
     assignmentOperator:BlockInput
     resultVar:BlockInput
+    blockList: [BlockInput]
     lineType: LineType
 }

@@ -31,23 +31,23 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
     }
 
     @Override
-    public List<Line> generateLineOfBlocksListFromStatementList(List<Statement> statementList) {
-        List<Line> lineOfBlocksList = new ArrayList<>();
+    public List<LineDto> generateLineOfBlocksListFromStatementList(List<Statement> statementList) {
+        List<LineDto> lineDtoOfBlocksList = new ArrayList<>();
         Integer[] row = {0};
         Integer[] lineLevel = {0};
         Integer[] id = {0};
         Stack<Integer> parentIdStack = new Stack<>();
         statementList.forEach(statement -> {
-            addStatementToLineOfBlocksList(lineOfBlocksList, statement, row, lineLevel, id, parentIdStack);
+            addStatementToLineOfBlocksList(lineDtoOfBlocksList, statement, row, lineLevel, id, parentIdStack);
             row[0]++;
         });
-        return lineOfBlocksList;
+        return lineDtoOfBlocksList;
     }
 
     @Override
-    public ValidationResult generateFormulaFromLineOfBlocksList(List<Line> lineList) {
+    public ValidationResult generateFormulaFromLineOfBlocksList(List<LineDto> lineDtoList) {
         ValidationResult validationResult = new ValidationResult();
-        List<String> elementListFromLineList = generateElementListFromLineList(0, lineList);
+        List<String> elementListFromLineList = generateElementListFromLineList(0, lineDtoList);
         List<String> generatedFormula = new ArrayList<>();
         StringBuilder testFormula = new StringBuilder();
         StringBuilder line = new StringBuilder();
@@ -72,9 +72,9 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
     }
 
     @Override
-    public ReWritingResult formulaRewritingBaseOnBasicStructure(List<Line> lineList) {
+    public ReWritingResult formulaRewritingBaseOnBasicStructure(List<LineDto> lineDtoList) {
         ReWritingResult result = new ReWritingResult();
-        ValidationResult validationResult = generateFormulaFromLineOfBlocksList(lineList);
+        ValidationResult validationResult = generateFormulaFromLineOfBlocksList(lineDtoList);
         if (validationResult.getValidationMessage().equals("OK")) {
             StringBuilder script = new StringBuilder();
             validationResult.getGeneratedFormula()
@@ -85,7 +85,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
             ));
 
         } else {
-            result.setReWritingLineList(lineList);
+            result.setReWritingLineList(lineDtoList);
             result.setValidationMessage(validationResult.getValidationMessage());
         }
         return result;
@@ -116,19 +116,19 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
         return blockDtoList;
     }
 
-    private List<String> generateElementListFromLineList(Integer lineLevel, List<Line> lineList) {
+    private List<String> generateElementListFromLineList(Integer lineLevel, List<LineDto> lineDtoList) {
         Stack<String> elementListFromLineList = new Stack<>();
-        LineType innerLevel = CollectionUtils.isNotEmpty(lineList) ? lineList.get(0).getLineType() : null;
-        while (CollectionUtils.isNotEmpty(lineList)) {
-            LineType type = lineList.get(0).getLineType();
-            if (lineList.get(0).getLineLevel().equals(lineLevel)) {
+        LineType innerLevel = CollectionUtils.isNotEmpty(lineDtoList) ? lineDtoList.get(0).getLineType() : null;
+        while (CollectionUtils.isNotEmpty(lineDtoList)) {
+            LineType type = lineDtoList.get(0).getLineType();
+            if (lineDtoList.get(0).getLineLevel().equals(lineLevel)) {
                 if (elementListFromLineList.size() > 0
                         && (type == LineType.ELSE ||
                         type == LineType.ELSE_IF)) {
                     elementListFromLineList.pop();
                     elementListFromLineList.push(" ");
                 }
-                elementListFromLineList.addAll(generateScriptLine(lineList.remove(0)));
+                elementListFromLineList.addAll(generateScriptLine(lineDtoList.remove(0)));
                 if (type == LineType.EXPRESSION ||
                         type == LineType.RETURN ||
                         type == LineType.VARIABLE_DECLARATION)
@@ -144,7 +144,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
                 }
                 elementListFromLineList.push(" {");
                 elementListFromLineList.push("\n");
-                elementListFromLineList.addAll(generateElementListFromLineList(newLineLevel, getSameLevel(lineList, lineLevel)));
+                elementListFromLineList.addAll(generateElementListFromLineList(newLineLevel, getSameLevel(lineDtoList, lineLevel)));
                 for (int j = 0; j < lineLevel; j++) {
                     elementListFromLineList.push("\t");
                 }
@@ -155,58 +155,58 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
         return elementListFromLineList;
     }
 
-    private List<Line> getSameLevel(List<Line> lineList, Integer lineLevel) {
-        List<Line> newLineOfBlocks = new ArrayList<>();
-        while (CollectionUtils.isNotEmpty(lineList) && lineList.get(0).getLineLevel() > lineLevel) {
-            newLineOfBlocks.add(lineList.remove(0));
+    private List<LineDto> getSameLevel(List<LineDto> lineDtoList, Integer lineLevel) {
+        List<LineDto> newLineOfBlockDtos = new ArrayList<>();
+        while (CollectionUtils.isNotEmpty(lineDtoList) && lineDtoList.get(0).getLineLevel() > lineLevel) {
+            newLineOfBlockDtos.add(lineDtoList.remove(0));
         }
-        return newLineOfBlocks;
+        return newLineOfBlockDtos;
     }
 
-    private List<String> generateScriptLine(Line line) {
+    private List<String> generateScriptLine(LineDto lineDto) {
         Stack<String> finalElementList = new Stack<>();
-        if (line.getLineType() != LineType.ELSE &&
-                line.getLineType() != LineType.ELSE_IF) {
-            for (int j = 0; j < line.getLineLevel(); j++) {
+        if (lineDto.getLineType() != LineType.ELSE &&
+                lineDto.getLineType() != LineType.ELSE_IF) {
+            for (int j = 0; j < lineDto.getLineLevel(); j++) {
                 finalElementList.push("\t");
             }
         }
-        if (line.getLineType() == LineType.ELSE) {
+        if (lineDto.getLineType() == LineType.ELSE) {
             finalElementList.push("else");
         }
-        if (line.getLineType() == LineType.IF) {
+        if (lineDto.getLineType() == LineType.IF) {
             finalElementList.push("if(");
         }
-        if (line.getLineType() == LineType.ELSE_IF) {
+        if (lineDto.getLineType() == LineType.ELSE_IF) {
             finalElementList.push("else if(");
         }
-        if (line.getLineType() == LineType.FOR) {
+        if (lineDto.getLineType() == LineType.FOR) {
             finalElementList.push("for(");
         }
-        if (line.getLineType() == LineType.RETURN) {
+        if (lineDto.getLineType() == LineType.RETURN) {
             finalElementList.push("return ");
         }
-        if (CollectionUtils.isNotEmpty(line.getBlockList())) {
-            line.getBlockList().forEach(block -> {
+        if (CollectionUtils.isNotEmpty(lineDto.getBlockList())) {
+            lineDto.getBlockList().forEach(block -> {
                 finalElementList.push(block.getCode());
                 finalElementList.push(" ");
             });
             finalElementList.pop();
         }
-        if (line.getLineType() == LineType.IF ||
-                line.getLineType() == LineType.ELSE_IF ||
-                line.getLineType() == LineType.FOR) {
+        if (lineDto.getLineType() == LineType.IF ||
+                lineDto.getLineType() == LineType.ELSE_IF ||
+                lineDto.getLineType() == LineType.FOR) {
             finalElementList.push(")");
         }
-        if (line.getLineType() == LineType.EXPRESSION ||
-                line.getLineType() == LineType.RETURN ||
-                line.getLineType() == LineType.VARIABLE_DECLARATION)
+        if (lineDto.getLineType() == LineType.EXPRESSION ||
+                lineDto.getLineType() == LineType.RETURN ||
+                lineDto.getLineType() == LineType.VARIABLE_DECLARATION)
             finalElementList.push(";");
         return finalElementList;
     }
 
     public void addStatementToLineOfBlocksList(
-            List<Line> lineOfBlocksList,
+            List<LineDto> lineDtoOfBlocksList,
             Statement statement,
             Integer[] row,
             Integer[] lineLevel,
@@ -214,7 +214,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
             Stack<Integer> parentIdStack) {
         switch (statement.getType()) {
             case EXPRESSION -> addExpressionStatementToLineOfBlocksList(
-                    lineOfBlocksList,
+                    lineDtoOfBlocksList,
                     (ExpressionStatement) statement,
                     row,
                     lineLevel,
@@ -224,7 +224,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
             case BLOCK -> {
                 lineLevel[0]++;
                 addBlockStatementToLineOfBlocksList(
-                        lineOfBlocksList,
+                        lineDtoOfBlocksList,
                         (BlockStatement) statement,
                         row,
                         lineLevel,
@@ -235,7 +235,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
                 row[0]--;
             }
             case VARIABLE_DECLARATION -> addVariableDeclarationStatementToLineOfBlocksList(
-                    lineOfBlocksList,
+                    lineDtoOfBlocksList,
                     (VariableDeclarationStatement) statement,
                     row,
                     lineLevel,
@@ -243,7 +243,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
                     parentIdStack
             );
             case IF -> addIfStatementToLineOfBlocksList(
-                    lineOfBlocksList,
+                    lineDtoOfBlocksList,
                     (IfStatement) statement,
                     row,
                     lineLevel,
@@ -251,7 +251,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
                     parentIdStack
             );
             case LABEL -> addLabelStatementToLineOfBlocksList(
-                    lineOfBlocksList,
+                    lineDtoOfBlocksList,
                     (LabeledStatement) statement,
                     row,
                     lineLevel,
@@ -259,7 +259,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
                     parentIdStack
             );
             case RETURN -> addReturnStatementToLineOfBlocksList(
-                    lineOfBlocksList,
+                    lineDtoOfBlocksList,
                     (ReturnStatement) statement,
                     row,
                     lineLevel,
@@ -308,7 +308,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
     }
 
     public void addExpressionStatementToLineOfBlocksList(
-            List<Line> lineOfBlocksList,
+            List<LineDto> lineDtoOfBlocksList,
             ExpressionStatement expressionStatement,
             Integer[] row,
             Integer[] lineLevel,
@@ -317,26 +317,26 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
         List<BlockDto> blockDtoList = new ArrayList<>();
         Integer parentId = !parentIdStack.empty() ? parentIdStack.peek() : null;
         addExpressionToBlocks(blockDtoList, expressionStatement.getExpression());
-        lineOfBlocksList.add(
-                new Line(id[0]++, parentId, row[0], lineLevel[0], blockDtoList, LineType.EXPRESSION)
+        lineDtoOfBlocksList.add(
+                new LineDto(id[0]++, parentId, row[0], lineLevel[0], blockDtoList, LineType.EXPRESSION)
         );
     }
 
     public void addBlockStatementToLineOfBlocksList(
-            List<Line> lineOfBlocksList,
+            List<LineDto> lineDtoOfBlocksList,
             BlockStatement blockStatement,
             Integer[] row,
             Integer[] lineLevel,
             Integer[] id,
             Stack<Integer> parentIdStack) {
         blockStatement.getBodyList().forEach(statement -> {
-            addStatementToLineOfBlocksList(lineOfBlocksList, statement, row, lineLevel, id, parentIdStack);
+            addStatementToLineOfBlocksList(lineDtoOfBlocksList, statement, row, lineLevel, id, parentIdStack);
             row[0]++;
         });
     }
 
     public void addIfStatementToLineOfBlocksList(
-            List<Line> lineOfBlocksList,
+            List<LineDto> lineDtoOfBlocksList,
             IfStatement ifStatement,
             Integer[] row,
             Integer[] lineLevel,
@@ -347,25 +347,25 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
         Integer parentId = !parentIdStack.empty() ? parentIdStack.peek() : null;
         if (ifStatement.getTest() != null)
             addExpressionToBlocks(blockDtoList, ifStatement.getTest());
-        if (CollectionUtils.isNotEmpty(lineOfBlocksList) &&
-                lineOfBlocksList.get(lineOfBlocksList.size() - 1).getLineType() == LineType.ELSE) {
+        if (CollectionUtils.isNotEmpty(lineDtoOfBlocksList) &&
+                lineDtoOfBlocksList.get(lineDtoOfBlocksList.size() - 1).getLineType() == LineType.ELSE) {
             parentIdStack.push(parentIdStack.peek());
-            lineOfBlocksList.get(lineOfBlocksList.size() - 1).setLineType(LineType.ELSE_IF);
-            lineOfBlocksList.get(lineOfBlocksList.size() - 1).setBlockList(blockDtoList);
+            lineDtoOfBlocksList.get(lineDtoOfBlocksList.size() - 1).setLineType(LineType.ELSE_IF);
+            lineDtoOfBlocksList.get(lineDtoOfBlocksList.size() - 1).setBlockList(blockDtoList);
             row[0]--;
         } else {
             parentIdStack.push(id[0]);
-            lineOfBlocksList.add(
-                    new Line(id[0]++, parentId, row[0], lineLevel[0], blockDtoList, type)
+            lineDtoOfBlocksList.add(
+                    new LineDto(id[0]++, parentId, row[0], lineLevel[0], blockDtoList, type)
             );
         }
         if (ifStatement.getConsequent() != null) {
             row[0]++;
             if (ifStatement.getConsequent().getType() == StatementType.BLOCK) {
-                addStatementToLineOfBlocksList(lineOfBlocksList, ifStatement.getConsequent(), row, lineLevel, id, parentIdStack);
+                addStatementToLineOfBlocksList(lineDtoOfBlocksList, ifStatement.getConsequent(), row, lineLevel, id, parentIdStack);
             } else {
                 lineLevel[0]++;
-                addStatementToLineOfBlocksList(lineOfBlocksList, ifStatement.getConsequent(), row, lineLevel, id, parentIdStack);
+                addStatementToLineOfBlocksList(lineDtoOfBlocksList, ifStatement.getConsequent(), row, lineLevel, id, parentIdStack);
                 lineLevel[0]--;
             }
         }
@@ -374,16 +374,16 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
             List<BlockDto> alternateBlockListDto = new ArrayList<>();
             parentId = !parentIdStack.empty() ? parentIdStack.peek() : null;
             parentIdStack.push(id[0]);
-            lineOfBlocksList.add(
-                    new Line(id[0]++, parentId, row[0], lineLevel[0], alternateBlockListDto, LineType.ELSE)
+            lineDtoOfBlocksList.add(
+                    new LineDto(id[0]++, parentId, row[0], lineLevel[0], alternateBlockListDto, LineType.ELSE)
             );
             row[0]++;
             switch (ifStatement.getAlternate().getType()) {
                 case BLOCK, IF ->
-                        addStatementToLineOfBlocksList(lineOfBlocksList, ifStatement.getAlternate(), row, lineLevel, id, parentIdStack);
+                        addStatementToLineOfBlocksList(lineDtoOfBlocksList, ifStatement.getAlternate(), row, lineLevel, id, parentIdStack);
                 default -> {
                     lineLevel[0]++;
-                    addStatementToLineOfBlocksList(lineOfBlocksList, ifStatement.getAlternate(), row, lineLevel, id, parentIdStack);
+                    addStatementToLineOfBlocksList(lineDtoOfBlocksList, ifStatement.getAlternate(), row, lineLevel, id, parentIdStack);
                     lineLevel[0]--;
                 }
             }
@@ -393,7 +393,7 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
     }
 
     public void addLabelStatementToLineOfBlocksList(
-            List<Line> lineOfBlocksList,
+            List<LineDto> lineDtoOfBlocksList,
             LabeledStatement labeledStatement,
             Integer[] row,
             Integer[] lineLevel,
@@ -404,22 +404,22 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
         blockDtoList.add(BlockType.LABEL.getBlock(allOperandMap, labeledStatement.getLabel()));
         blockDtoList.add(BlockType.LABEL_ASSIGN.getBlock(allOperatorMap, ":"));
         parentIdStack.push(id[0]);
-        lineOfBlocksList.add(
-                new Line(id[0]++, parentId, row[0], lineLevel[0], blockDtoList, LineType.LABEL)
+        lineDtoOfBlocksList.add(
+                new LineDto(id[0]++, parentId, row[0], lineLevel[0], blockDtoList, LineType.LABEL)
         );
         row[0]++;
         if (labeledStatement.getBody().getType() == StatementType.BLOCK) {
-            addStatementToLineOfBlocksList(lineOfBlocksList, labeledStatement.getBody(), row, lineLevel, id, parentIdStack);
+            addStatementToLineOfBlocksList(lineDtoOfBlocksList, labeledStatement.getBody(), row, lineLevel, id, parentIdStack);
         } else {
             lineLevel[0]++;
-            addStatementToLineOfBlocksList(lineOfBlocksList, labeledStatement.getBody(), row, lineLevel, id, parentIdStack);
+            addStatementToLineOfBlocksList(lineDtoOfBlocksList, labeledStatement.getBody(), row, lineLevel, id, parentIdStack);
             lineLevel[0]--;
         }
         parentIdStack.pop();
     }
 
     public void addReturnStatementToLineOfBlocksList(
-            List<Line> lineOfBlocksList,
+            List<LineDto> lineDtoOfBlocksList,
             ReturnStatement returnStatement,
             Integer[] row,
             Integer[] lineLevel,
@@ -429,13 +429,13 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
         Integer parentId = !parentIdStack.empty() ? parentIdStack.peek() : null;
         if (returnStatement.getArgument() != null)
             addExpressionToBlocks(blockDtoList, returnStatement.getArgument());
-        lineOfBlocksList.add(
-                new Line(id[0]++, parentId, row[0], lineLevel[0], blockDtoList, LineType.RETURN)
+        lineDtoOfBlocksList.add(
+                new LineDto(id[0]++, parentId, row[0], lineLevel[0], blockDtoList, LineType.RETURN)
         );
     }
 
     public void addVariableDeclarationStatementToLineOfBlocksList(
-            List<Line> lineOfBlocksList,
+            List<LineDto> lineDtoOfBlocksList,
             VariableDeclarationStatement variableDeclarationStatement,
             Integer[] row,
             Integer[] lineLevel,
@@ -452,8 +452,8 @@ public class ParsingScriptServiceImpl implements ParsingScriptService {
             addExpressionToBlocks(blockDtoList, expression);
             firstVariable = false;
         }
-        lineOfBlocksList.add(
-                new Line(id[0]++, parentId, row[0], lineLevel[0], blockDtoList, LineType.VARIABLE_DECLARATION)
+        lineDtoOfBlocksList.add(
+                new LineDto(id[0]++, parentId, row[0], lineLevel[0], blockDtoList, LineType.VARIABLE_DECLARATION)
         );
     }
 
