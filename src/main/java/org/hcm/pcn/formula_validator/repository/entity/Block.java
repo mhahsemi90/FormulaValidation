@@ -68,13 +68,13 @@ public class Block {
     @OneToOne(mappedBy = "block", cascade = CascadeType.PERSIST)
     private Formula formula;
     @OneToMany(mappedBy = "result", cascade = CascadeType.PERSIST)
-    private List<Block> parentResultList = new ArrayList<>();
+    private List<Block> parentResultList = new ArrayList<>();//ignore on dto
     @OneToMany(mappedBy = "result", cascade = CascadeType.PERSIST)
-    private List<LocalVariable> parentLocalVariableList = new ArrayList<>();
+    private List<LocalVariable> parentResultLocalVariableList = new ArrayList<>();//ignore on dto
     @OneToMany(mappedBy = "parentBlock", cascade = CascadeType.PERSIST)
     private List<ChildBlock> blockList = new ArrayList<>();
     @OneToMany(mappedBy = "childBlock", cascade = CascadeType.PERSIST)
-    private List<ChildBlock> childToParent = new ArrayList<>();
+    private List<ChildBlock> childToParent = new ArrayList<>();//ignore on dto
 
     public Block(String code, String title, String enTitle, BlockType type) {
         this.code = code;

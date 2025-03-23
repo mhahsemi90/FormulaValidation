@@ -9,6 +9,7 @@ G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\te
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\interfaces\FormulaValidationService.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\controller\FormulaValidationController.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\ConditionalExpression.java
+G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\mapper\BlockMapper.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\enums\SubVariableForTest.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\Variable.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\repository\entity\LocalVariable.java

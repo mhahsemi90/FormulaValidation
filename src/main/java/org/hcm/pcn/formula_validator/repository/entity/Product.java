@@ -46,8 +46,6 @@ public class Product {
             nullable = false
     )
     private String enTitle;
-    @OneToMany(mappedBy = "product")
-    private List<Block> blockList = new ArrayList<>();
 
     public Product(String code, String title, String enTitle) {
         this.code = code;

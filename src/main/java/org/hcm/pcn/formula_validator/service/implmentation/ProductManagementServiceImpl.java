@@ -1,5 +1,6 @@
 package org.hcm.pcn.formula_validator.service.implmentation;
 
+import org.hcm.pcn.formula_validator.dto.BlockDto;
 import org.hcm.pcn.formula_validator.dto.ProductDto;
 import org.hcm.pcn.formula_validator.exception.HandledError;
 import org.hcm.pcn.formula_validator.repository.entity.Product;
@@ -26,7 +27,7 @@ public class ProductManagementServiceImpl implements ProductManagementService {
 
     @Override
     public List<ProductDto> getAllProduct() {
-        return productMapper.productListToProductDtoListWithoutBlockList(
+        return productMapper.productListToProductDtoList(
                 productRepository.findAll()
         );
     }
@@ -63,5 +64,10 @@ public class ProductManagementServiceImpl implements ProductManagementService {
             throw new HandledError("Persist Product Has Error: " + productDto.getCode());
         }
         return true;
+    }
+
+    @Override
+    public List<BlockDto> getAllGroup(String productCode) {
+        return null;
     }
 }

@@ -14,5 +14,4 @@ public class ProductDto {
     private String code;
     private String title;
     private String enTitle;
-    private List<BlockDto> blockList;
 }

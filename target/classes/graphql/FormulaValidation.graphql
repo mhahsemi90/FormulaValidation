@@ -14,6 +14,7 @@ type Query {
     formulaRewritingBaseOnBasicStructure(lineList: [LineInput]): ReWritingResult
     loadOperandForTest: [Block]
     getAllProduct:[Product]
+    getAllGroup(productCode: String!):[Block]
 }
 type Mutation {
     editProduct(product: ProductInput!): Boolean

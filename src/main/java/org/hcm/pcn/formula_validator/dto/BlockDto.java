@@ -17,6 +17,7 @@ public class BlockDto {
     private String enTitle;
     private BlockType type;
     private BlockDto result;
+    private String productCode;
     private FormulaDto formula;
     private List<BlockDto> blockList;
 

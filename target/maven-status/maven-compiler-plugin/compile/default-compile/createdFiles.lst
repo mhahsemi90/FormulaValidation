@@ -33,6 +33,7 @@ org\hcm\pcn\formula_validator\service\mapper\ProductMapper.class
 org\hcm\pcn\formula_validator\service\expression\Expression.class
 org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\VariableDeclarationStatementGeneratorImpl.class
 org\hcm\pcn\formula_validator\service\statement\VariableDeclarationStatement.class
+org\hcm\pcn\formula_validator\service\mapper\BlockMapper.class
 org\hcm\pcn\formula_validator\repository\entity\ChildBlock.class
 org\hcm\pcn\formula_validator\service\expression\CallExpression.class
 org\hcm\pcn\formula_validator\service\expression\MemberExpression.class
@@ -64,6 +65,7 @@ org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\LabeledSt
 org\hcm\pcn\formula_validator\repository\service\ProductRepository.class
 org\hcm\pcn\formula_validator\dto\ReWritingResult.class
 org\hcm\pcn\formula_validator\service\implmentation\ParsingScriptServiceImpl.class
+org\hcm\pcn\formula_validator\service\mapper\BlockMapperImpl.class
 org\hcm\pcn\formula_validator\service\statement\EmptyStatement.class
 org\hcm\pcn\formula_validator\service\implmentation\ParsingScriptServiceImpl$1.class
 org\hcm\pcn\formula_validator\service\interfaces\BaseFormulaConcept$1AllOperator.class

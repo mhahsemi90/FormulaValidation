@@ -18,7 +18,6 @@ public class FormulaValidationController {
 
     private final FormulaValidationService formulaValidationService;
 
-    @Autowired
     public FormulaValidationController(FormulaValidationService formulaValidationService) {
         this.formulaValidationService = formulaValidationService;
     }
@@ -29,8 +28,8 @@ public class FormulaValidationController {
     }
 
     @QueryMapping
-    public ValidationResult generateFormula(@Argument List<LineDto> lineDtoList) {
-        return formulaValidationService.generateFormula(lineDtoList);
+    public ValidationResult generateFormula(@Argument List<LineDto> lineList) {
+        return formulaValidationService.generateFormula(lineList);
     }
 
     @QueryMapping
@@ -39,8 +38,8 @@ public class FormulaValidationController {
     }
 
     @QueryMapping
-    public ReWritingResult formulaRewritingBaseOnBasicStructure(@Argument List<LineDto> lineDtoList) {
-        return formulaValidationService.formulaRewritingBaseOnBasicStructure(lineDtoList);
+    public ReWritingResult formulaRewritingBaseOnBasicStructure(@Argument List<LineDto> lineList) {
+        return formulaValidationService.formulaRewritingBaseOnBasicStructure(lineList);
     }
 
     @QueryMapping

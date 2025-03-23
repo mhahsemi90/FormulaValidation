@@ -25,6 +25,7 @@ type Block{
     enTitle: String
     type: BlockType
     result: Block
+    productCode: String
     formula: Formula
     blockList: [Block]
 }
@@ -34,6 +35,7 @@ input BlockInput{
     enTitle: String
     type: BlockType
     result: BlockInput
+    productCode: String
     formula: FormulaInput
     blockList: [BlockInput]
 }

@@ -1,6 +1,7 @@
 package org.hcm.pcn.formula_validator.controller;
 
 import graphql.GraphQLError;
+import org.hcm.pcn.formula_validator.dto.BlockDto;
 import org.hcm.pcn.formula_validator.dto.ProductDto;
 import org.hcm.pcn.formula_validator.exception.HandledError;
 import org.hcm.pcn.formula_validator.service.interfaces.ProductManagementService;
@@ -35,7 +36,10 @@ public class ProductManagementController {
     Boolean addProduct(@Argument ProductDto product) {
         return productManagementService.addProduct(product);
     }
-
+    @QueryMapping
+    List<BlockDto> getAllGroup(@Argument String productCode) {
+        return productManagementService.getAllGroup(productCode);
+    }
     @GraphQlExceptionHandler(HandledError.class)
     public GraphQLError handelParsingError(Exception e) {
         return GraphQLError.newError()
