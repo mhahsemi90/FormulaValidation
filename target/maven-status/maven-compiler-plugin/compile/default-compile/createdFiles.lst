@@ -10,9 +10,11 @@ org\hcm\pcn\formula_validator\FormulaValidatorApplication.class
 org\hcm\pcn\formula_validator\service\statement\LabeledStatement.class
 org\hcm\pcn\formula_validator\service\token\Token.class
 org\hcm\pcn\formula_validator\dto\BlockDto.class
+org\hcm\pcn\formula_validator\controller\BlockManagementController.class
 org\hcm\pcn\formula_validator\service\interfaces\ParsingScriptService.class
 org\hcm\pcn\formula_validator\dto\FormulaDto.class
 org\hcm\pcn\formula_validator\enums\OperandClassForTest.class
+org\hcm\pcn\formula_validator\service\implmentation\BlockManagementServiceImpl.class
 org\hcm\pcn\formula_validator\dto\LocalVariableDto.class
 org\hcm\pcn\formula_validator\service\expression\ArrayExpression.class
 org\hcm\pcn\formula_validator\service\expression\Literal.class
@@ -27,6 +29,7 @@ org\hcm\pcn\formula_validator\enums\BlockType.class
 org\hcm\pcn\formula_validator\repository\entity\Product.class
 org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\ExpressionStatementGeneratorImpl.class
 org\hcm\pcn\formula_validator\service\interfaces\BaseFormulaConcept.class
+org\hcm\pcn\formula_validator\enums\HandleExceptionMessage.class
 org\hcm\pcn\formula_validator\testRec.class
 org\hcm\pcn\formula_validator\controller\FormulaValidationController.class
 org\hcm\pcn\formula_validator\service\mapper\ProductMapper.class
@@ -60,9 +63,11 @@ org\hcm\pcn\formula_validator\service\statement\Statement.class
 org\hcm\pcn\formula_validator\enums\GroupClassFroTest.class
 org\hcm\pcn\formula_validator\enums\StatementType.class
 org\hcm\pcn\formula_validator\service\implmentation\FormulaValidationServiceImpl.class
+org\hcm\pcn\formula_validator\repository\service\ChildBlockRepository.class
 org\hcm\pcn\formula_validator\service\expression\TwoHandOperatorExpression.class
 org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\LabeledStatementGeneratorImpl.class
 org\hcm\pcn\formula_validator\repository\service\ProductRepository.class
+org\hcm\pcn\formula_validator\service\interfaces\BlockManagementService.class
 org\hcm\pcn\formula_validator\dto\ReWritingResult.class
 org\hcm\pcn\formula_validator\service\implmentation\ParsingScriptServiceImpl.class
 org\hcm\pcn\formula_validator\service\mapper\BlockMapperImpl.class

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hcm.pcn.formula_validator.enums.FormulaMode;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.data.annotation.CreatedDate;
@@ -46,6 +47,10 @@ public class Formula {
             nullable = false
     )
     private String formula;
+    @Enumerated(
+            EnumType.STRING
+    )
+    private FormulaMode mode;
     @OneToOne
     @JoinColumn(
             name = "block_id",

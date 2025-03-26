@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class BlockStatementGeneratorImpl implements StatementGenerator {
     @Override
-    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList) {
+    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList, String lang) {
         Statement result = new Statement();
         Token firstToken = removeFirstTokenThatNotNewLine(selectedTokenList);
         Token lastToken = removeLastTokenThatNotNewLine(selectedTokenList);
@@ -19,10 +19,10 @@ public class BlockStatementGeneratorImpl implements StatementGenerator {
                 firstToken.getValue().equals("{") &&
                 lastToken.getValue().equals("}")) {
             StatementGenerator generator = new MainStatementGeneratorImpl();
-            List<Statement> statementList = generator.getAllStatementFromTokenList(selectedTokenList, true);
+            List<Statement> statementList = generator.getAllStatementFromTokenList(selectedTokenList, true, lang);
             result = new BlockStatement(statementList);
         } else {
-            this.throwTokenNotValid(firstToken);
+            this.throwTokenNotValid(firstToken, lang);
         }
         return Optional.of(result);
     }

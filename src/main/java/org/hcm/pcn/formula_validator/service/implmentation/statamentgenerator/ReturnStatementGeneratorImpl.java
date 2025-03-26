@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class ReturnStatementGeneratorImpl implements StatementGenerator {
     @Override
-    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList) {
+    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList, String lang) {
         ReturnStatement result = new ReturnStatement();
         StatementGenerator expressionStatementGenerator = new ExpressionStatementGeneratorImpl();
         Token token = removeFirstTokenThatNotNewLine(selectedTokenList);
@@ -21,8 +21,8 @@ public class ReturnStatementGeneratorImpl implements StatementGenerator {
                 token.getValue().equals("return")) {
             result.setArgument(
                     ((ExpressionStatement) expressionStatementGenerator
-                            .generate(selectedTokenList, new ArrayList<>())
-                            .orElseThrow(() -> unexpectedEndError(selectedTokenList)))
+                            .generate(selectedTokenList, new ArrayList<>(), lang)
+                            .orElseThrow(() -> unexpectedEndError(selectedTokenList, lang)))
                             .getExpression()
             );
         }

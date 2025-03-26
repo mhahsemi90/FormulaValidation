@@ -18,14 +18,14 @@ import java.util.Optional;
 
 public class VariableDeclarationStatementGeneratorImpl implements StatementGenerator {
     @Override
-    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList) {
+    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList, String lang) {
         Token token = removeFirstTokenThatNotNewLine(selectedTokenList);
         VariableDeclarationStatement result = new VariableDeclarationStatement();
         StatementGenerator generator = new ExpressionStatementGeneratorImpl();
         if (token.getTokenType() == TokenType.KEYWORD && isVariableKeyword(token.getValue())) {
             result.setKind(token.getValue());
         } else {
-            throwTokenNotValid(token);
+            throwTokenNotValid(token, lang);
         }
         List<List<Token>> listTokens = getSameLevelTokenListSeparateByComma(
                 token.getLevel() - 1,
@@ -34,8 +34,8 @@ public class VariableDeclarationStatementGeneratorImpl implements StatementGener
         for (List<Token> listToken : listTokens) {
             Expression expression = (
                     (ExpressionStatement) generator
-                            .generate(listToken, new ArrayList<>())
-                            .orElseThrow(() -> unexpectedEndError(listToken)))
+                            .generate(listToken, new ArrayList<>(), lang)
+                            .orElseThrow(() -> unexpectedEndError(listToken, lang)))
                     .getExpression();
             if (expression instanceof Variable)
                 result.getDeclaratorExpressionList().add(
@@ -55,7 +55,7 @@ public class VariableDeclarationStatementGeneratorImpl implements StatementGener
                         )
                 );
             else
-                throwTokenNotValid(token);
+                throwTokenNotValid(token, lang);
         }
         return Optional.of(result);
     }

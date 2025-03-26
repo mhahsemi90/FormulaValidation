@@ -16,7 +16,7 @@ import java.util.Stack;
 
 public class ExpressionStatementGeneratorImpl implements StatementGenerator {
     @Override
-    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList) {
+    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList, String lang) {
         ExpressionStatement result = new ExpressionStatement();
         Expression currentExpression = null;
         Expression lastExpression = null;
@@ -29,7 +29,7 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
             if (token.getValue().equals("]")
                     || token.getValue().equals(",")
                     || token.getValue().equals("}")) {
-                throwTokenNotValid(token);
+                throwTokenNotValid(token, lang);
                 break;
             } else if (token.getTokenType() == TokenType.PUNCTUATOR &&
                     currentExpression == null) {
@@ -42,10 +42,11 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                         return statementGenerator.generate(
                                 selectedTokenList
                                 , tokenList
+                                , lang
                         );
                     }
                     case "[" -> {
-                        lastExpression = getArrayExpression(token.getLevel(), selectedTokenList);
+                        lastExpression = getArrayExpression(token.getLevel(), selectedTokenList, lang);
                         currentExpression = lastExpression;
                     }
                     case "(" -> {
@@ -54,14 +55,14 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                     }
                     case "++", "--" -> {
                         Token nextToken = removeFirstTokenThatNotNewLine(selectedTokenList);
-                        lastExpression = getUpdateExpression(token, nextToken);
+                        lastExpression = getUpdateExpression(token, nextToken, lang);
                         currentExpression = lastExpression;
                     }
                     case "!", "+", "-" -> {
-                        lastExpression = getUnaryExpression(token, selectedTokenList);
+                        lastExpression = getUnaryExpression(token, selectedTokenList, lang);
                         currentExpression = lastExpression;
                     }
-                    default -> throwTokenNotValid(token);
+                    default -> throwTokenNotValid(token, lang);
                 }
             } else if (token.getTokenType() == TokenType.PUNCTUATOR &&
                     currentExpression != null &&
@@ -69,12 +70,12 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                 if (token.getValue().equals("[")) {
                     switch (lastExpression.getType()) {
                         case BINARY_EXPRESSION, LOGICAL_EXPRESSION, PARENTHESIS_EXPRESSION -> {
-                            lastExpression = getArrayExpression(token.getLevel(), selectedTokenList);
+                            lastExpression = getArrayExpression(token.getLevel(), selectedTokenList, lang);
                             if (!setInAvailableChild(
                                     (TwoHandOperatorExpression) currentExpression,
                                     lastExpression
                             )) {
-                                throwTokenNotValid(token);
+                                throwTokenNotValid(token, lang);
                             }
                         }
                         case ARRAY_EXPRESSION, CALL_EXPRESSION, LITERAL_EXPRESSION
@@ -82,33 +83,33 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                             if (currentExpression == lastExpression) {
                                 lastExpression = replaceNewExpressionToCurrentExpression(
                                         lastExpression,
-                                        getMemberExpression(token.getLevel(), lastExpression, selectedTokenList)
+                                        getMemberExpression(token.getLevel(), lastExpression, selectedTokenList, lang)
                                 );
                                 currentExpression = lastExpression;
                             } else {
                                 lastExpression = replaceNewExpressionToCurrentExpression(
                                         lastExpression,
-                                        getMemberExpression(token.getLevel(), lastExpression, selectedTokenList)
+                                        getMemberExpression(token.getLevel(), lastExpression, selectedTokenList, lang)
                                 );
                             }
                         }
                         case UNARY_EXPRESSION, UPDATE_EXPRESSION -> {
                             OneHandOperatorExpression operatorExpression = (OneHandOperatorExpression) lastExpression;
                             operatorExpression.setArgument(
-                                    getMemberExpression(token.getLevel(), operatorExpression.getArgument(), selectedTokenList)
+                                    getMemberExpression(token.getLevel(), operatorExpression.getArgument(), selectedTokenList, lang)
                             );
                         }
-                        default -> throwTokenNotValid(token);
+                        default -> throwTokenNotValid(token, lang);
                     }
                 } else if (token.getValue().equals("{")) {
                     switch (lastExpression.getType()) {
                         case BINARY_EXPRESSION, LOGICAL_EXPRESSION, PARENTHESIS_EXPRESSION -> {
-                            lastExpression = getObjectExpression(token.getLevel(), selectedTokenList);
+                            lastExpression = getObjectExpression(token.getLevel(), selectedTokenList, lang);
                             if (!this.setInAvailableChild(
                                     (TwoHandOperatorExpression) currentExpression,
                                     lastExpression)
                             ) {
-                                this.throwTokenNotValid(token);
+                                this.throwTokenNotValid(token, lang);
                             }
                         }
                         case UNARY_EXPRESSION -> {
@@ -116,12 +117,12 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                             if (operatorExpression.getArgument() == null ||
                                     operatorExpression.getArgument().getType() == ExpressionType.UNARY_EXPRESSION)
                                 operatorExpression.setArgument(
-                                        getObjectExpression(token.getLevel(), selectedTokenList)
+                                        getObjectExpression(token.getLevel(), selectedTokenList, lang)
                                 );
                             else
-                                this.throwTokenNotValid(token);
+                                this.throwTokenNotValid(token, lang);
                         }
-                        default -> this.throwTokenNotValid(token);
+                        default -> this.throwTokenNotValid(token, lang);
                     }
                 } else if (token.getValue().equals(":")) {
                     if (lastExpression.getType() == ExpressionType.VARIABLE_EXPRESSION &&
@@ -138,17 +139,17 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                                 tokenList.addAll(0, selectedTokenList);
                                 sameLevelTokenBetweenTwoBrace.add(0, token);
                                 sameLevelTokenBetweenTwoBrace.add(0, new Token(TokenType.VARIABLE, variable.getIdName(), 0, token.getLineNumber()));
-                                return labeledStatementGenerator.generate(sameLevelTokenBetweenTwoBrace, tokenList);
+                                return labeledStatementGenerator.generate(sameLevelTokenBetweenTwoBrace, tokenList, lang);
                             } else {
                                 selectedTokenList.add(0, token);
                                 selectedTokenList.add(0, new Token(TokenType.VARIABLE, variable.getIdName(), 0, token.getLineNumber()));
-                                return labeledStatementGenerator.generate(selectedTokenList, tokenList);
+                                return labeledStatementGenerator.generate(selectedTokenList, tokenList, lang);
                             }
                         } else {
-                            throwTokenNotValid(token);
+                            throwTokenNotValid(token, lang);
                         }
                     } else {
-                        throwTokenNotValid(token);
+                        throwTokenNotValid(token, lang);
                     }
                 } else if (token.getValue().equals("(")) {
                     switch (lastExpression.getType()) {
@@ -158,7 +159,7 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                                     (TwoHandOperatorExpression) currentExpression,
                                     lastExpression
                             )) {
-                                throwTokenNotValid(token);
+                                throwTokenNotValid(token, lang);
                             }
                             currentExpression = lastExpression;
                         }
@@ -166,15 +167,15 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                                 LITERAL_EXPRESSION, MEMBER_EXPRESSION,
                                 VARIABLE_EXPRESSION -> lastExpression = replaceNewExpressionToCurrentExpression(
                                 lastExpression,
-                                getCallExpression(token.getLevel(), lastExpression, selectedTokenList)
+                                getCallExpression(token.getLevel(), lastExpression, selectedTokenList, lang)
                         );
                         case UNARY_EXPRESSION, UPDATE_EXPRESSION -> {
                             OneHandOperatorExpression operatorExpression = (OneHandOperatorExpression) lastExpression;
                             operatorExpression.setArgument(
-                                    getCallExpression(token.getLevel(), operatorExpression.getArgument(), selectedTokenList)
+                                    getCallExpression(token.getLevel(), operatorExpression.getArgument(), selectedTokenList, lang)
                             );
                         }
-                        default -> throwTokenNotValid(token);
+                        default -> throwTokenNotValid(token, lang);
                     }
                 } else if (token.getValue().equals(")")) {
                     switch (currentExpression.getType()) {
@@ -182,7 +183,7 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                             TwoHandOperatorExpression operatorExpression = (TwoHandOperatorExpression) currentExpression;
                             if (operatorExpression.getLeftChild() == null
                                     || operatorExpression.getRightChild() == null) {
-                                throwTokenNotValid(token);
+                                throwTokenNotValid(token, lang);
                             }
                             if (operatorExpression.getParent() != null) {
                                 currentExpression = operatorExpression.getParent();
@@ -191,11 +192,11 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                         case PARENTHESIS_EXPRESSION -> {
                             Expression expression = removeParenthesis((TwoHandOperatorExpression) currentExpression);
                             if (expression == null)
-                                throwTokenNotValid(token);
+                                throwTokenNotValid(token, lang);
                             else
                                 currentExpression = expression;
                         }
-                        default -> throwTokenNotValid(token);
+                        default -> throwTokenNotValid(token, lang);
                     }
                 } else if (token.getValue().equals("?")) {
                     switch (currentExpression.getType()) {
@@ -206,7 +207,8 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                             ConditionalExpression conditionalExpression = creatConditionExpression(
                                     token.getLevel(),
                                     currentExpression,
-                                    selectedTokenList
+                                    selectedTokenList,
+                                    lang
                             );
                             if (conditionalExpression != null) {
                                 lastExpression = conditionalExpression;
@@ -215,29 +217,29 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                                 else
                                     currentExpression = lastExpression;
                             } else {
-                                throwTokenNotValid(token);
+                                throwTokenNotValid(token, lang);
                             }
                         }
-                        default -> throwTokenNotValid(token);
+                        default -> throwTokenNotValid(token, lang);
                     }
                 } else if (updateUnaryList.contains(token.getValue())) {
                     switch (lastExpression.getType()) {
                         case BINARY_EXPRESSION, LOGICAL_EXPRESSION, PARENTHESIS_EXPRESSION -> {
                             Token nextToken = removeFirstTokenThatNotNewLine(selectedTokenList);
                             if (nextToken.getTokenType() == TokenType.VARIABLE) {
-                                lastExpression = getUpdateExpression(token, nextToken);
+                                lastExpression = getUpdateExpression(token, nextToken, lang);
                                 if (!setInAvailableChild(
                                         (TwoHandOperatorExpression) currentExpression,
                                         lastExpression)) {
-                                    throwTokenNotValid(token);
+                                    throwTokenNotValid(token, lang);
                                 }
                             } else {
-                                throwTokenNotValid(token);
+                                throwTokenNotValid(token, lang);
                             }
                         }
                         case MEMBER_EXPRESSION, VARIABLE_EXPRESSION, UNARY_EXPRESSION ->
                                 lastExpression = getUpdateExpression(token, lastExpression);
-                        default -> throwTokenNotValid(token);
+                        default -> throwTokenNotValid(token, lang);
                     }
                 } else if (binaryList.contains(token.getValue()) ||
                         logicalList.contains(token.getValue())) {
@@ -259,14 +261,14 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                                 currentExpression = lastExpression;
                             } else {
                                 if (getUnaryList().contains(token.getValue())) {
-                                    lastExpression = getUnaryExpression(token, selectedTokenList);
+                                    lastExpression = getUnaryExpression(token, selectedTokenList, lang);
                                     if (!setInAvailableChild(
                                             (TwoHandOperatorExpression) currentExpression,
                                             lastExpression)) {
-                                        throwTokenNotValid(token);
+                                        throwTokenNotValid(token, lang);
                                     }
                                 } else {
-                                    throwTokenNotValid(token);
+                                    throwTokenNotValid(token, lang);
                                 }
                             }
                         }
@@ -274,14 +276,14 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                             TwoHandOperatorExpression operatorExpression1 = (TwoHandOperatorExpression) currentExpression;
                             if (operatorExpression1.getLeftChild() == null) {
                                 if (getUnaryList().contains(token.getValue())) {
-                                    lastExpression = getUnaryExpression(token, selectedTokenList);
+                                    lastExpression = getUnaryExpression(token, selectedTokenList, lang);
                                     if (!setInAvailableChild(
                                             (TwoHandOperatorExpression) currentExpression,
                                             lastExpression)) {
-                                        throwTokenNotValid(token);
+                                        throwTokenNotValid(token, lang);
                                     }
                                 } else {
-                                    throwTokenNotValid(token);
+                                    throwTokenNotValid(token, lang);
                                 }
                             } else if (operatorExpression1.getRightChild() == null) {
                                 lastExpression = replaceCurrentTokenToCurrentExpressionAndSetLeftChild(
@@ -289,7 +291,7 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                                         token);
                                 currentExpression = lastExpression;
                             } else {
-                                throwTokenNotValid(token);
+                                throwTokenNotValid(token, lang);
                             }
                         }
                         case ARRAY_EXPRESSION, CALL_EXPRESSION,
@@ -301,7 +303,7 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                                     token);
                             currentExpression = lastExpression;
                         }
-                        default -> throwTokenNotValid(token);
+                        default -> throwTokenNotValid(token, lang);
                     }
                 } else if (assignList.contains(token.getValue())) {
                     switch (currentExpression.getType()) {
@@ -315,40 +317,42 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                                     lastExpression = getAssignmentExpression(
                                             token,
                                             operatorExpression,
-                                            selectedTokenList);
+                                            selectedTokenList,
+                                            lang);
                                     currentExpression = lastExpression;
                                 } else {
-                                    throwTokenNotValid(token);
+                                    throwTokenNotValid(token, lang);
                                 }
                             } else {
-                                throwTokenNotValid(token);
+                                throwTokenNotValid(token, lang);
                             }
                         }
                         case ARRAY_EXPRESSION, MEMBER_EXPRESSION, VARIABLE_EXPRESSION -> {
                             lastExpression = getAssignmentExpression(
                                     token,
                                     currentExpression,
-                                    selectedTokenList);
+                                    selectedTokenList
+                                    , lang);
                             currentExpression = lastExpression;
                         }
-                        default -> throwTokenNotValid(token);
+                        default -> throwTokenNotValid(token, lang);
                     }
                 }
             } else if (token.getTokenType() == TokenType.VARIABLE) {
                 if (currentExpression == null) {
-                    lastExpression = getVariableExpression(token);
+                    lastExpression = getVariableExpression(token, lang);
                     currentExpression = lastExpression;
                 } else {
                     switch (currentExpression.getType()) {
                         case BINARY_EXPRESSION, LOGICAL_EXPRESSION, PARENTHESIS_EXPRESSION -> {
-                            lastExpression = getVariableExpression(token);
+                            lastExpression = getVariableExpression(token, lang);
                             if (!setInAvailableChild(
                                     (TwoHandOperatorExpression) currentExpression,
                                     lastExpression)) {
-                                throwTokenNotValid(token);
+                                throwTokenNotValid(token, lang);
                             }
                         }
-                        default -> throwTokenNotValid(token);
+                        default -> throwTokenNotValid(token, lang);
                     }
                 }
             } else if (token.getTokenType() == TokenType.LITERAL) {
@@ -362,17 +366,17 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                             if (!setInAvailableChild(
                                     (TwoHandOperatorExpression) currentExpression,
                                     lastExpression)) {
-                                throwTokenNotValid(token);
+                                throwTokenNotValid(token, lang);
                             }
                         }
-                        default -> throwTokenNotValid(token);
+                        default -> throwTokenNotValid(token, lang);
                     }
                 }
             } else if (token.getTokenType() != TokenType.NEW_LINE) {
-                throwTokenNotValid(token);
+                throwTokenNotValid(token, lang);
             }
         }
-        verifyExpression(true, currentExpression, tokenList);
+        verifyExpression(true, currentExpression, tokenList, lang);
         if (currentExpression != null)
             while (currentExpression.getParent() != null)
                 currentExpression = currentExpression.getParent();
@@ -380,7 +384,7 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
         return currentExpression != null ? Optional.of(result) : Optional.empty();
     }
 
-    private Expression getAssignmentExpression(Token currentToken, Expression currentExpression, List<Token> selectedTokenList) {
+    private Expression getAssignmentExpression(Token currentToken, Expression currentExpression, List<Token> selectedTokenList, String lang) {
         TwoHandOperatorExpression assignmentExpression;
         Expression leftChild;
         if (currentExpression.getType() == ExpressionType.PARENTHESIS_EXPRESSION)
@@ -395,7 +399,7 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
             if (allIsVariable)
                 leftChild.setType(ExpressionType.ARRAY_PATTERN_EXPRESSION);
             else
-                throwTokenNotValid(currentToken);
+                throwTokenNotValid(currentToken, lang);
         }
         List<Token> rightChildTokenList = new ArrayList<>();
         while (CollectionUtils.isNotEmpty(selectedTokenList)) {
@@ -406,8 +410,8 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                 rightChildTokenList.add(token);
             }
         }
-        Expression rightChild = ((ExpressionStatement) generate(rightChildTokenList, new ArrayList<>())
-                .orElseThrow(() -> unexpectedEndError(rightChildTokenList)))
+        Expression rightChild = ((ExpressionStatement) generate(rightChildTokenList, new ArrayList<>(), lang)
+                .orElseThrow(() -> unexpectedEndError(rightChildTokenList, lang)))
                 .getExpression();
         assignmentExpression = getOperatorAndTypeOfTwoHandOperatorExpression(currentToken);
         assignmentExpression.setOperator(currentToken.getValue());
@@ -465,7 +469,7 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
         return operatorExpression;
     }
 
-    private ConditionalExpression creatConditionExpression(Integer level, Expression expression, List<Token> selectedTokenList) {
+    private ConditionalExpression creatConditionExpression(Integer level, Expression expression, List<Token> selectedTokenList, String lang) {
         ConditionalExpression conditionalExpression = null;
         List<Token> consequentTokenList = new ArrayList<>();
         List<Token> alternateTokenList = new ArrayList<>();
@@ -505,13 +509,13 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                 conditionalExpression.setTest(expression);
             }
             conditionalExpression.setConsequent(
-                    ((ExpressionStatement) generate(consequentTokenList, new ArrayList<>())
-                            .orElseThrow(() -> unexpectedEndError(consequentTokenList)))
+                    ((ExpressionStatement) generate(consequentTokenList, new ArrayList<>(), lang)
+                            .orElseThrow(() -> unexpectedEndError(consequentTokenList, lang)))
                             .getExpression()
             );
             conditionalExpression.setAlternate(
-                    ((ExpressionStatement) generate(alternateTokenList, new ArrayList<>())
-                            .orElseThrow(() -> unexpectedEndError(alternateTokenList)))
+                    ((ExpressionStatement) generate(alternateTokenList, new ArrayList<>(), lang)
+                            .orElseThrow(() -> unexpectedEndError(alternateTokenList, lang)))
                             .getExpression()
             );
         }
@@ -539,16 +543,16 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
         return result;
     }
 
-    private void verifyExpression(Boolean first, Expression currentExpression, List<Token> tokenList) {
+    private void verifyExpression(Boolean first, Expression currentExpression, List<Token> tokenList, String lang) {
         if (currentExpression != null && currentExpression.getType() == ExpressionType.PARENTHESIS_EXPRESSION) {
             if (currentExpression.getParent() != null || !first)
-                throwTokenNotValid("(", getLineNumber(tokenList));
+                throwTokenNotValid("(", getLineNumber(tokenList), lang);
         } else if (currentExpression instanceof TwoHandOperatorExpression operatorExpression) {
             if (operatorExpression.getLeftChild() == null
                     || operatorExpression.getRightChild() == null) {
-                throwTokenNotValid(operatorExpression.getOperator(), getLineNumber(tokenList));
+                throwTokenNotValid(operatorExpression.getOperator(), getLineNumber(tokenList), lang);
             } else if (operatorExpression.getParent() != null) {
-                verifyExpression(false, operatorExpression.getParent(), tokenList);
+                verifyExpression(false, operatorExpression.getParent(), tokenList, lang);
             }
         }
     }
@@ -567,20 +571,20 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
         return result;
     }
 
-    private Expression getUnaryExpression(Token token, List<Token> selectedTokenList) {
+    private Expression getUnaryExpression(Token token, List<Token> selectedTokenList, String lang) {
         OneHandOperatorExpression unaryExpression = getOperatorAndTypeOfOneHandOperatorExpression(token);
         Token nextToken = removeFirstTokenThatNotNewLine(selectedTokenList);
         if (nextToken.getTokenType() == TokenType.PUNCTUATOR
                 && getUnaryList().contains(nextToken.getValue())) {
-            unaryExpression.setArgument(getUnaryExpression(nextToken, selectedTokenList));
+            unaryExpression.setArgument(getUnaryExpression(nextToken, selectedTokenList, lang));
         } else if (nextToken.getTokenType() == TokenType.VARIABLE) {
-            unaryExpression.setArgument(getVariableExpression(nextToken));
+            unaryExpression.setArgument(getVariableExpression(nextToken, lang));
         } else if (nextToken.getTokenType() == TokenType.LITERAL) {
             unaryExpression.setArgument(new Literal(nextToken.getValue()));
         } else if (nextToken.getValue().equals("[")) {
-            unaryExpression.setArgument(getArrayExpression(nextToken.getLevel(), selectedTokenList));
+            unaryExpression.setArgument(getArrayExpression(nextToken.getLevel(), selectedTokenList, lang));
         } else if (nextToken.getValue().equals("{")) {
-            unaryExpression.setArgument(getObjectExpression(nextToken.getLevel(), selectedTokenList));
+            unaryExpression.setArgument(getObjectExpression(nextToken.getLevel(), selectedTokenList, lang));
         } else if (nextToken.getValue().equals("(")) {
             List<Token> allElementTokenList = new ArrayList<>();
             while (CollectionUtils.isNotEmpty(selectedTokenList)) {
@@ -591,23 +595,23 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                     allElementTokenList.add(token1);
             }
             unaryExpression.setArgument(
-                    ((ExpressionStatement) generate(allElementTokenList, new ArrayList<>())
-                            .orElseThrow(() -> unexpectedEndError(allElementTokenList)))
+                    ((ExpressionStatement) generate(allElementTokenList, new ArrayList<>(), lang)
+                            .orElseThrow(() -> unexpectedEndError(allElementTokenList, lang)))
                             .getExpression()
             );
         } else {
-            throwTokenNotValid(token);
+            throwTokenNotValid(token, lang);
         }
         return unaryExpression;
     }
 
-    private Expression getUpdateExpression(Token token, Token nextToken) {
+    private Expression getUpdateExpression(Token token, Token nextToken, String lang) {
         OneHandOperatorExpression updateExpression = getOperatorAndTypeOfOneHandOperatorExpression(token);
         if (nextToken.getTokenType() == TokenType.VARIABLE) {
-            updateExpression.setArgument(getVariableExpression(nextToken));
+            updateExpression.setArgument(getVariableExpression(nextToken, lang));
             updateExpression.setOperator(token.getValue());
         } else {
-            throwTokenNotValid(token);
+            throwTokenNotValid(token, lang);
         }
         return updateExpression;
     }
@@ -621,19 +625,19 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
         return updateExpression;
     }
 
-    private Expression getArrayExpression(Integer level, List<Token> selectedTokenList) {
+    private Expression getArrayExpression(Integer level, List<Token> selectedTokenList, String lang) {
         ArrayExpression arrayExpression = new ArrayExpression();
         for (List<Token> listToken : getSameLevelTokenListSeparateByComma(level, selectedTokenList)) {
             arrayExpression.getElementList().add(
-                    ((ExpressionStatement) generate(listToken, new ArrayList<>())
-                            .orElseThrow(() -> unexpectedEndError(listToken)))
+                    ((ExpressionStatement) generate(listToken, new ArrayList<>(), lang)
+                            .orElseThrow(() -> unexpectedEndError(listToken, lang)))
                             .getExpression()
             );
         }
         return arrayExpression;
     }
 
-    private Expression getObjectExpression(Integer level, List<Token> selectedTokenList) {
+    private Expression getObjectExpression(Integer level, List<Token> selectedTokenList, String lang) {
         ObjectExpression objectExpression = new ObjectExpression();
         List<List<Token>> sameLevelTokenListSeparateByComma = getSameLevelTokenListSeparateByComma(level, selectedTokenList);
         if (CollectionUtils.isNotEmpty(sameLevelTokenListSeparateByComma)) {
@@ -642,35 +646,35 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
                 if (listToken.size() > 2
                         && listToken.get(0).getTokenType() == TokenType.VARIABLE
                         && listToken.get(1).getValue().equals(":")) {
-                    property.setKey(getVariableExpression(listToken.remove(0)));
+                    property.setKey(getVariableExpression(listToken.remove(0), lang));
                     listToken.remove(0);
-                    property.setValue(((ExpressionStatement) generate(listToken, new ArrayList<>())
-                            .orElseThrow(() -> unexpectedEndError(listToken)))
+                    property.setValue(((ExpressionStatement) generate(listToken, new ArrayList<>(), lang)
+                            .orElseThrow(() -> unexpectedEndError(listToken, lang)))
                             .getExpression());
                     objectExpression.getPropertyList().add(property);
                 } else {
-                    this.throwTokenNotValid("{", getLineNumber(selectedTokenList));
+                    this.throwTokenNotValid("{", getLineNumber(selectedTokenList), lang);
                 }
             }
         } else {
-            this.throwTokenNotValid("{", getLineNumber(selectedTokenList));
+            this.throwTokenNotValid("{", getLineNumber(selectedTokenList), lang);
         }
         return objectExpression;
     }
 
-    private Expression getMemberExpression(Integer level, Expression objectExpression, List<Token> selectedTokenList) {
+    private Expression getMemberExpression(Integer level, Expression objectExpression, List<Token> selectedTokenList, String lang) {
         MemberExpression memberExpression = new MemberExpression();
         List<Expression> expressionList = new ArrayList<>();
         for (List<Token> listToken : getSameLevelTokenListSeparateByComma(level, selectedTokenList)) {
             expressionList.add(
-                    ((ExpressionStatement) generate(listToken, new ArrayList<>())
-                            .orElseThrow(() -> unexpectedEndError(listToken)))
+                    ((ExpressionStatement) generate(listToken, new ArrayList<>(), lang)
+                            .orElseThrow(() -> unexpectedEndError(listToken, lang)))
                             .getExpression()
             );
         }
         memberExpression.setObject(objectExpression);
         if (expressionList.size() == 0) {
-            throwTokenNotValid("[", getLineNumber(selectedTokenList));
+            throwTokenNotValid("[", getLineNumber(selectedTokenList), lang);
         } else if (expressionList.size() == 1) {
             memberExpression.setProperty(expressionList.get(0));
         } else {
@@ -683,13 +687,13 @@ public class ExpressionStatementGeneratorImpl implements StatementGenerator {
         return memberExpression;
     }
 
-    private Expression getCallExpression(Integer level, Expression objectExpression, List<Token> selectedTokenList) {
+    private Expression getCallExpression(Integer level, Expression objectExpression, List<Token> selectedTokenList, String lang) {
         CallExpression callExpression = new CallExpression();
         List<Expression> argumentExpressionList = new ArrayList<>();
         for (List<Token> listToken : getSameLevelTokenListSeparateByComma(level, selectedTokenList)) {
             argumentExpressionList.add(
-                    ((ExpressionStatement) generate(listToken, new ArrayList<>())
-                            .orElseThrow(() -> unexpectedEndError(listToken)))
+                    ((ExpressionStatement) generate(listToken, new ArrayList<>(), lang)
+                            .orElseThrow(() -> unexpectedEndError(listToken, lang)))
                             .getExpression()
             );
         }

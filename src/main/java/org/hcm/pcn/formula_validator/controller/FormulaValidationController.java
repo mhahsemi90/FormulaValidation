@@ -1,14 +1,11 @@
 package org.hcm.pcn.formula_validator.controller;
 
-import graphql.GraphQLError;
-import org.hcm.pcn.formula_validator.dto.*;
-import org.hcm.pcn.formula_validator.exception.HandledError;
+import org.hcm.pcn.formula_validator.dto.LineDto;
+import org.hcm.pcn.formula_validator.dto.ReWritingResult;
+import org.hcm.pcn.formula_validator.dto.ValidationResult;
 import org.hcm.pcn.formula_validator.service.interfaces.FormulaValidationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.GraphQlExceptionHandler;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.graphql.execution.ErrorType;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -23,36 +20,22 @@ public class FormulaValidationController {
     }
 
     @QueryMapping
-    public List<LineDto> formulaParsing(@Argument String formula) {
-        return formulaValidationService.parsing(formula);
+    public List<LineDto> formulaParsing(@Argument String productCode, @Argument String formula, @Argument String lang) {
+        return formulaValidationService.parsing(productCode, formula, lang);
     }
 
     @QueryMapping
-    public ValidationResult generateFormula(@Argument List<LineDto> lineList) {
-        return formulaValidationService.generateFormula(lineList);
+    public ValidationResult generateFormula(@Argument List<LineDto> lineList, @Argument String lang) {
+        return formulaValidationService.generateFormula(lineList, lang);
     }
 
     @QueryMapping
-    public String formulaValidation(@Argument String formula) {
-        return formulaValidationService.formulaValidation(formula);
+    public String formulaValidation(@Argument String productCode, @Argument String formula, @Argument String lang) {
+        return formulaValidationService.formulaValidation(productCode, formula, lang);
     }
 
     @QueryMapping
-    public ReWritingResult formulaRewritingBaseOnBasicStructure(@Argument List<LineDto> lineList) {
-        return formulaValidationService.formulaRewritingBaseOnBasicStructure(lineList);
-    }
-
-    @QueryMapping
-    public List<BlockDto> loadOperandForTest() {
-        return formulaValidationService.loadOperandForTest();
-    }
-
-
-    @GraphQlExceptionHandler(HandledError.class)
-    public GraphQLError handelParsingError(Exception e) {
-        return GraphQLError.newError()
-                .errorType(ErrorType.BAD_REQUEST)
-                .message(e.getMessage())
-                .build();
+    public ReWritingResult formulaRewritingBaseOnBasicStructure(@Argument List<LineDto> lineList, @Argument String lang) {
+        return formulaValidationService.formulaRewritingBaseOnBasicStructure(lineList, lang);
     }
 }

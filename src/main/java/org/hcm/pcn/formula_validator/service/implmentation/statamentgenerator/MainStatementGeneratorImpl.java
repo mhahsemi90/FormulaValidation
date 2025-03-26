@@ -178,10 +178,11 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
     }
 
     @Override
-    public List<Statement> parsingToListOfStatement(String script, Boolean blockGeneration) {
+    public List<Statement> parsingToListOfStatement(String script, Boolean blockGeneration, String lang) {
         List<Statement> statementList = getAllStatementFromTokenList(
                 parsingToListOfTokenList(script)
                 , blockGeneration
+                , lang
         );
         if (CollectionUtils.isNotEmpty(statementList) &&
                 statementList.get(statementList.size() - 1) == null)
@@ -190,12 +191,12 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
     }
 
     @Override
-    public List<Statement> getAllStatementFromTokenList(List<Token> tokenList, Boolean blockGeneration) {
-        return StatementGenerator.super.getAllStatementFromTokenList(tokenList, blockGeneration);
+    public List<Statement> getAllStatementFromTokenList(List<Token> tokenList, Boolean blockGeneration, String lang) {
+        return StatementGenerator.super.getAllStatementFromTokenList(tokenList, blockGeneration, lang);
     }
 
     @Override
-    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList) {
+    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList, String lang) {
         StatementGenerator statementGenerator = new ExpressionStatementGeneratorImpl();
         mainBlock:
         {
@@ -213,7 +214,7 @@ public class MainStatementGeneratorImpl implements StatementGenerator {
                 statementGenerator = new ReturnStatementGeneratorImpl();
             }
         }
-        return statementGenerator.generate(selectedTokenList, tokenList);
+        return statementGenerator.generate(selectedTokenList, tokenList, lang);
     }
 
 }

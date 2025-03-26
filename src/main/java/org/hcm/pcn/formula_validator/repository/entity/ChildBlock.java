@@ -1,14 +1,12 @@
 package org.hcm.pcn.formula_validator.repository.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 
 @Table(name = "childBlock")
@@ -45,4 +43,9 @@ public class ChildBlock {
             foreignKey = @ForeignKey(name = "child_block_to_block_id_fk")
     )
     private Block childBlock;
+
+    public ChildBlock(Block parentBlock, Block childBlock) {
+        this.parentBlock = parentBlock;
+        this.childBlock = childBlock;
+    }
 }

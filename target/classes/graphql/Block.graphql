@@ -1,9 +1,13 @@
 enum BlockType{
-    VARIABLE,
-    STRING_VARIABLE,
-    NUMBER_VARIABLE,
+    GROUP,
     LITERAL,
+    STRING_LITERAL,
+    NUMBER_LITERAL,
     OBJECT,
+    LIST,
+    FUNCTION,
+    ARGUMENT,
+    VARIABLE,
     ARITHMETIC_OPERATOR,
     ASSIGNMENT_OPERATOR,
     COMPARISON_OPERATOR,
@@ -15,8 +19,6 @@ enum BlockType{
     LABEL_ASSIGN,
     OPEN_PARENTHESES,
     CLOSE_PARENTHESES,
-    FUNCTION,
-    GROUP,
 }
 type Block{
     id:ID
@@ -26,6 +28,7 @@ type Block{
     type: BlockType
     result: Block
     productCode: String
+    group: String
     formula: Formula
     blockList: [Block]
 }
@@ -36,6 +39,7 @@ input BlockInput{
     type: BlockType
     result: BlockInput
     productCode: String
+    group: String
     formula: FormulaInput
     blockList: [BlockInput]
 }

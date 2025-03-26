@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hcm.pcn.formula_validator.enums.BlockType;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 
 @Table(name = "block")
 @Entity(name = "Block")
@@ -76,10 +78,11 @@ public class Block {
     @OneToMany(mappedBy = "childBlock", cascade = CascadeType.PERSIST)
     private List<ChildBlock> childToParent = new ArrayList<>();//ignore on dto
 
-    public Block(String code, String title, String enTitle, BlockType type) {
+    public Block(String code, String title, String enTitle, BlockType type, Product product) {
         this.code = code;
         this.title = title;
         this.enTitle = enTitle;
         this.type = type;
+        this.product = product;
     }
 }

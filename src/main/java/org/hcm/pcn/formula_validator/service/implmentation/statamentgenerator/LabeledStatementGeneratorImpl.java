@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class LabeledStatementGeneratorImpl implements StatementGenerator {
     @Override
-    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList) {
+    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList, String lang) {
         Statement result = new Statement();
         Token firstToken = removeFirstTokenThatNotNewLine(selectedTokenList);
         Token secondToken = removeFirstTokenThatNotNewLine(selectedTokenList);
@@ -24,23 +24,24 @@ public class LabeledStatementGeneratorImpl implements StatementGenerator {
             if (firstToken.getValue().equals("{")) {
                 StatementGenerator blockStatementGenerator = new BlockStatementGeneratorImpl();
                 Statement blockStatement = blockStatementGenerator
-                        .generate(selectedTokenList, tokenList)
-                        .orElseThrow(() -> unexpectedEndError(selectedTokenList));
+                        .generate(selectedTokenList, tokenList, lang)
+                        .orElseThrow(() -> unexpectedEndError(selectedTokenList, lang));
                 result = new LabeledStatement(label, blockStatement);
             } else {
                 StatementGenerator statementGenerator = new MainStatementGeneratorImpl();
                 result = new LabeledStatement(
                         label,
-                        statementGenerator.getFirstStatementFromTokenList(selectedTokenList, false)
+                        statementGenerator.getFirstStatementFromTokenList(selectedTokenList, false, lang)
                                 .orElseThrow(() ->
                                         getUnexpectedEnd(
                                                 secondToken
+                                                , lang
                                         )
                                 )
                 );
             }
         } else {
-            throwTokenNotValid(secondToken);
+            throwTokenNotValid(secondToken, lang);
         }
         return Optional.of(result);
     }

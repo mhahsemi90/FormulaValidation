@@ -8,17 +8,21 @@ type ReWritingResult{
     validationMessage: String
 }
 type Query {
-    formulaParsing(formula: String): [Line]
-    generateFormula(lineList: [LineInput] ): ValidationResult
-    formulaValidation(formula: String): String
-    formulaRewritingBaseOnBasicStructure(lineList: [LineInput]): ReWritingResult
-    loadOperandForTest: [Block]
-    getAllProduct:[Product]
-    getAllGroup(productCode: String!):[Block]
+    formulaParsing(productCode: String,formula: String, lang:String): [Line]
+    generateFormula(lineList: [LineInput], lang:String): ValidationResult
+    formulaValidation(productCode: String,formula: String, lang:String): String
+    formulaRewritingBaseOnBasicStructure(lineList: [LineInput], lang:String): ReWritingResult
+    getAllProduct(lang:String):[Product]
+    getAllBlockForFormula(productCode: String!, blockType: BlockType, lang:String):String
+    getAllBlockList(productCode: String!, blockType: BlockType, lang:String):[Block]
 }
 type Mutation {
-    editProduct(product: ProductInput!): Boolean
-    addProduct(product: ProductInput!): Boolean
+    addProduct(product: ProductInput!, lang:String): Boolean
+    editProduct(product: ProductInput!, lang:String): Boolean
+    addBlock(block: BlockInput!, lang:String): Boolean
+    editBlock(block: BlockInput!, lang:String): Boolean
+    addBlockToList(parentCode: String! ,childCode: [String]!, lang:String): Boolean
+    deleteBlockFromList(parentCode: String! ,childCode: [String]!, lang:String): Boolean
 }
 schema {
     query: Query

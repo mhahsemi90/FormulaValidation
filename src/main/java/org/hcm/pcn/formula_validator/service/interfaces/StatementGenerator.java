@@ -2,6 +2,7 @@ package org.hcm.pcn.formula_validator.service.interfaces;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hcm.pcn.formula_validator.enums.ExceptionMessage;
 import org.hcm.pcn.formula_validator.enums.ExpressionType;
 import org.hcm.pcn.formula_validator.exception.HandledError;
 import org.hcm.pcn.formula_validator.service.expression.OneHandOperatorExpression;
@@ -17,9 +18,9 @@ import java.util.stream.Collectors;
 import static org.hcm.pcn.formula_validator.service.token.TokenType.NEW_LINE;
 
 public interface StatementGenerator extends BaseFormulaConcept {
-    Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList);
+    Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList, String lang);
 
-    default List<Statement> parsingToListOfStatement(String script, Boolean blockGeneration) {
+    default List<Statement> parsingToListOfStatement(String script, Boolean blockGeneration, String lang) {
         return null;
     }
 
@@ -27,23 +28,23 @@ public interface StatementGenerator extends BaseFormulaConcept {
         return null;
     }
 
-    default List<Statement> getAllStatementFromTokenList(List<Token> tokenList, Boolean blockGeneration) {
+    default List<Statement> getAllStatementFromTokenList(List<Token> tokenList, Boolean blockGeneration, String lang) {
         List<Statement> allStatementList = new ArrayList<>();
-        tokenList = validateAllParenthesisAndBrace(tokenList);
+        tokenList = validateAllParenthesisAndBrace(tokenList, lang);
         while (CollectionUtils.isNotEmpty(tokenList)) {
-            getStatement(tokenList, new MainStatementGeneratorImpl(), blockGeneration)
+            getStatement(tokenList, new MainStatementGeneratorImpl(), blockGeneration, lang)
                     .ifPresent(allStatementList::add);
         }
         return allStatementList;
     }
 
-    default Optional<Statement> getFirstStatementFromTokenList(List<Token> tokenList, Boolean blockGeneration) {
+    default Optional<Statement> getFirstStatementFromTokenList(List<Token> tokenList, Boolean blockGeneration, String lang) {
         Optional<Statement> result;
-        result = getStatement(tokenList, new MainStatementGeneratorImpl(), blockGeneration);
+        result = getStatement(tokenList, new MainStatementGeneratorImpl(), blockGeneration, lang);
         return result;
     }
 
-    private Optional<Statement> getStatement(List<Token> tokenList, StatementGenerator generator, Boolean blockGeneration) {
+    private Optional<Statement> getStatement(List<Token> tokenList, StatementGenerator generator, Boolean blockGeneration, String lang) {
         Optional<Statement> result;
         List<Token> selectedTokenList = selectTokenListToFirstSemicolon(tokenList);
         List<Token> tempTokenList = selectedTokenList
@@ -51,11 +52,11 @@ public interface StatementGenerator extends BaseFormulaConcept {
                 .map(Token::clone)
                 .collect(Collectors.toList());
         try {
-            result = generator.generate(selectedTokenList, tokenList);
+            result = generator.generate(selectedTokenList, tokenList, lang);
         } catch (Exception e) {
             selectedTokenList = selectTokenListToFirstNewLine(tempTokenList, tokenList);
             if (CollectionUtils.isNotEmpty(selectedTokenList) && !blockGeneration) {
-                result = generator.generate(selectedTokenList, tokenList);
+                result = generator.generate(selectedTokenList, tokenList, lang);
             } else {
                 throw e;
             }
@@ -63,7 +64,7 @@ public interface StatementGenerator extends BaseFormulaConcept {
         return result;
     }
 
-    default List<Token> validateAllParenthesisAndBrace(List<Token> tokenList) {
+    default List<Token> validateAllParenthesisAndBrace(List<Token> tokenList, String lang) {
         Stack<Token> parenthesisStack = new Stack<>();
         Stack<Token> braceStack = new Stack<>();
         Stack<Token> advancedBraceStack = new Stack<>();
@@ -81,29 +82,29 @@ public interface StatementGenerator extends BaseFormulaConcept {
                 parenthesisStack.push(token);
             if (token.getValue().equals("}")) {
                 if (advancedBraceStack.isEmpty()) {
-                    throwTokenNotValid(token);
+                    throwTokenNotValid(token, lang);
                 }
                 advancedBraceStack.pop();
             }
             if (token.getValue().equals("]")) {
                 if (braceStack.isEmpty()) {
-                    throwTokenNotValid(token);
+                    throwTokenNotValid(token, lang);
                 }
                 braceStack.pop();
             }
             if (token.getValue().equals(")")) {
                 if (parenthesisStack.isEmpty()) {
-                    throwTokenNotValid(token);
+                    throwTokenNotValid(token, lang);
                 }
                 parenthesisStack.pop();
             }
         }
         if (!advancedBraceStack.isEmpty())
-            throwTokenNotValid(advancedBraceStack.pop());
+            throwTokenNotValid(advancedBraceStack.pop(), lang);
         if (!braceStack.isEmpty())
-            throwTokenNotValid(braceStack.pop());
+            throwTokenNotValid(braceStack.pop(), lang);
         if (!parenthesisStack.isEmpty())
-            throwTokenNotValid(parenthesisStack.pop());
+            throwTokenNotValid(parenthesisStack.pop(), lang);
         return tempTokenList;
     }
 
@@ -292,44 +293,44 @@ public interface StatementGenerator extends BaseFormulaConcept {
         return operatorExpression;
     }
 
-    default HandledError tokenNotValidError(Token token) {
-        return new HandledError("Token not valid '" + token.getValue() + "' line:" + token.getLineNumber());
+    default HandledError tokenNotValidError(Token token, String lang) {
+        return ExceptionMessage.TOKEN_NOT_VALID_IN_LINE.getExceptionWithParam(lang, token.getValue(), token.getLineNumber());
     }
 
-    default void throwTokenNotValid(Token token) {
-        throw tokenNotValidError(token);
+    default void throwTokenNotValid(Token token, String lang) {
+        throw tokenNotValidError(token, lang);
     }
 
-    default HandledError getTokenNotValid(String value, Integer lineNumber) {
-        return tokenNotValidError(new Token(value, lineNumber));
+    default HandledError getTokenNotValid(String value, Integer lineNumber, String lang) {
+        return tokenNotValidError(new Token(value, lineNumber), lang);
     }
 
-    default void throwTokenNotValid(String value, Integer lineNumber) {
-        throw getTokenNotValid(value, lineNumber);
+    default void throwTokenNotValid(String value, Integer lineNumber, String lang) {
+        throw getTokenNotValid(value, lineNumber, lang);
     }
 
-    default HandledError unexpectedEndError(List<Token> tokenList) {
-        return new HandledError("Unexpected end of input line:" + getLineNumber(tokenList));
+    default HandledError unexpectedEndError(List<Token> tokenList, String lang) {
+        return ExceptionMessage.UNEXPECTED_END_OF_INPUT_LINE.getExceptionWithParam(lang, getLineNumber(tokenList));
     }
 
-    default HandledError getUnexpectedEnd(Token token) {
+    default HandledError getUnexpectedEnd(Token token, String lang) {
         if (token != null)
-            return new HandledError("Unexpected end of input line:" + token.getLineNumber());
+            return ExceptionMessage.UNEXPECTED_END_OF_INPUT_LINE.getExceptionWithParam(lang, token.getLineNumber());
         else
-            return new HandledError("Unexpected end of input line:");
+            return ExceptionMessage.UNEXPECTED_END_OF_INPUT_LINE.getException(lang);
     }
 
-    default void throwUnexpectedEnd(Token token) {
-        throw getUnexpectedEnd(token);
+    default void throwUnexpectedEnd(Token token, String lang) {
+        throw getUnexpectedEnd(token, lang);
     }
 
-    default Variable getVariableExpression(Token token) {
+    default Variable getVariableExpression(Token token, String lang) {
         boolean result = false;
         if (StringUtils.isNotBlank(token.getValue()))
             result = token.getValue().matches("^[a-zA-Z_$]\\S*")
                     && token.getValue().matches("([a-zA-Z_$0-9])\\w*");
         if (!result)
-            this.throwTokenNotValid(token);
+            this.throwTokenNotValid(token, lang);
         return new Variable(token.getValue());
     }
 

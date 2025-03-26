@@ -1,5 +1,6 @@
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\enums\LineType.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\enums\StatementType.java
+G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\enums\HandleExceptionMessage.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\SequenceExpression.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\interfaces\ProductManagementService.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\token\Token.java
@@ -8,6 +9,7 @@ G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\re
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\testRec.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\interfaces\FormulaValidationService.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\controller\FormulaValidationController.java
+G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\repository\service\ChildBlockRepository.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\ConditionalExpression.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\mapper\BlockMapper.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\enums\SubVariableForTest.java
@@ -51,6 +53,7 @@ G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\se
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\MainStatementGeneratorImpl.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\interfaces\BaseFormulaConcept.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\statement\EmptyStatement.java
+G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\controller\BlockManagementController.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\enums\GroupClassFroTest.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\MemberExpression.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\statamentgenerator\BlockStatementGeneratorImpl.java
@@ -63,7 +66,9 @@ G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\se
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\dto\ProductDto.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\FormulaValidatorApplication.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\FormulaValidationServiceImpl.java
+G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\implmentation\BlockManagementServiceImpl.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\expression\ObjectExpression.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\dto\ReWritingResult.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\mapper\ProductMapper.java
+G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\interfaces\BlockManagementService.java
 G:\AlphaProject\FormulaValidation\src\main\java\org\hcm\pcn\formula_validator\service\scalar\TimeStampScalar.java

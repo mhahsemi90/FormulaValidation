@@ -6,10 +6,11 @@ import java.util.Map;
 
 public enum BlockType {
     VARIABLE,
-    STRING_VARIABLE,
-    NUMBER_VARIABLE,
+    STRING_LITERAL,
+    NUMBER_LITERAL,
     OBJECT,
     LITERAL,
+    LIST,
     ARITHMETIC_OPERATOR,
     ASSIGNMENT_OPERATOR,
     COMPARISON_OPERATOR,
@@ -22,6 +23,7 @@ public enum BlockType {
     OPEN_PARENTHESES,
     CLOSE_PARENTHESES,
     FUNCTION,
+    ARGUMENT,
     GROUP;
 
     public BlockDto getBlock(Map<String, BlockDto> blockPool, String identifier) {

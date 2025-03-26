@@ -8,13 +8,11 @@ import org.hcm.pcn.formula_validator.dto.ValidationResult;
 import java.util.List;
 
 public interface FormulaValidationService {
-    List<LineDto> parsing(String script);
+    List<LineDto> parsing(String productCode,String script,String lang);
 
-    ValidationResult generateFormula(List<LineDto> lineDtoList);
+    ValidationResult generateFormula(List<LineDto> lineDtoList,String lang);
 
-    String formulaValidation(String script);
+    String formulaValidation(String productCode,String script,String lang);
 
-    ReWritingResult formulaRewritingBaseOnBasicStructure(List<LineDto> lineDtoList);
-
-    List<BlockDto> loadOperandForTest();
+    ReWritingResult formulaRewritingBaseOnBasicStructure(List<LineDto> lineDtoList,String lang);
 }

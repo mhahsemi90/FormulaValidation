@@ -12,18 +12,19 @@ import org.hcm.pcn.formula_validator.repository.entity.Formula;
 import org.hcm.pcn.formula_validator.repository.entity.LocalVariable;
 import org.hcm.pcn.formula_validator.repository.entity.Product;
 import org.hcm.pcn.formula_validator.repository.service.ProductRepository;
+import org.hcm.pcn.formula_validator.service.interfaces.BlockManagementService;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-03-23T08:58:47+0330",
+    date = "2025-03-26T08:10:42+0330",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
 public class BlockMapperImpl implements BlockMapper {
 
     @Override
-    public BlockDto blockToBlockDtoMapper(Block block) {
+    public BlockDto blockToBlockDtoMapper(Block block, BlockManagementService blockManagementService) {
         if ( block == null ) {
             return null;
         }
@@ -31,27 +32,29 @@ public class BlockMapperImpl implements BlockMapper {
         BlockDto blockDto = new BlockDto();
 
         blockDto.setProductCode( blockProductCode( block ) );
+        blockDto.setBlockList( creatBlockListFromChildBlockList( block.getBlockList(), blockManagementService ) );
         blockDto.setId( block.getId() );
         blockDto.setCode( block.getCode() );
         blockDto.setTitle( block.getTitle() );
         blockDto.setEnTitle( block.getEnTitle() );
         blockDto.setType( block.getType() );
-        blockDto.setResult( blockToBlockDto( block.getResult() ) );
-        blockDto.setFormula( formulaToFormulaDto( block.getFormula() ) );
-        blockDto.setBlockList( childBlockListToBlockDtoList( block.getBlockList() ) );
+        blockDto.setResult( blockToBlockDto( block.getResult(), blockManagementService ) );
+        blockDto.setFormula( formulaToFormulaDto( block.getFormula(), blockManagementService ) );
+
+        getGroupCode( block, blockDto, blockManagementService );
 
         return blockDto;
     }
 
     @Override
-    public List<BlockDto> blockListToBlockDtoListMapper(List<Block> blockList) {
+    public List<BlockDto> blockListToBlockDtoListMapper(List<Block> blockList, BlockManagementService blockManagementService) {
         if ( blockList == null ) {
             return null;
         }
 
         List<BlockDto> list = new ArrayList<BlockDto>( blockList.size() );
         for ( Block block : blockList ) {
-            list.add( blockToBlockDtoMapper( block ) );
+            list.add( blockToBlockDtoMapper( block, blockManagementService ) );
         }
 
         return list;
@@ -108,7 +111,7 @@ public class BlockMapperImpl implements BlockMapper {
         return code;
     }
 
-    protected LocalVariableDto localVariableToLocalVariableDto(LocalVariable localVariable) {
+    protected LocalVariableDto localVariableToLocalVariableDto(LocalVariable localVariable, BlockManagementService blockManagementService) {
         if ( localVariable == null ) {
             return null;
         }
@@ -120,25 +123,25 @@ public class BlockMapperImpl implements BlockMapper {
         localVariableDto.setTitle( localVariable.getTitle() );
         localVariableDto.setEnTitle( localVariable.getEnTitle() );
         localVariableDto.setType( localVariable.getType() );
-        localVariableDto.setResult( blockToBlockDto( localVariable.getResult() ) );
+        localVariableDto.setResult( blockToBlockDto( localVariable.getResult(), blockManagementService ) );
 
         return localVariableDto;
     }
 
-    protected List<LocalVariableDto> localVariableListToLocalVariableDtoList(List<LocalVariable> list) {
+    protected List<LocalVariableDto> localVariableListToLocalVariableDtoList(List<LocalVariable> list, BlockManagementService blockManagementService) {
         if ( list == null ) {
             return null;
         }
 
         List<LocalVariableDto> list1 = new ArrayList<LocalVariableDto>( list.size() );
         for ( LocalVariable localVariable : list ) {
-            list1.add( localVariableToLocalVariableDto( localVariable ) );
+            list1.add( localVariableToLocalVariableDto( localVariable, blockManagementService ) );
         }
 
         return list1;
     }
 
-    protected FormulaDto formulaToFormulaDto(Formula formula) {
+    protected FormulaDto formulaToFormulaDto(Formula formula, BlockManagementService blockManagementService) {
         if ( formula == null ) {
             return null;
         }
@@ -149,12 +152,12 @@ public class BlockMapperImpl implements BlockMapper {
         formulaDto.setFormula( formula.getFormula() );
         formulaDto.setVersion( formula.getVersion() );
         formulaDto.setCreatedAt( formula.getCreatedAt() );
-        formulaDto.setLocalVariableList( localVariableListToLocalVariableDtoList( formula.getLocalVariableList() ) );
+        formulaDto.setLocalVariableList( localVariableListToLocalVariableDtoList( formula.getLocalVariableList(), blockManagementService ) );
 
         return formulaDto;
     }
 
-    protected BlockDto childBlockToBlockDto(ChildBlock childBlock) {
+    protected BlockDto childBlockToBlockDto(ChildBlock childBlock, BlockManagementService blockManagementService) {
         if ( childBlock == null ) {
             return null;
         }
@@ -166,20 +169,20 @@ public class BlockMapperImpl implements BlockMapper {
         return blockDto;
     }
 
-    protected List<BlockDto> childBlockListToBlockDtoList(List<ChildBlock> list) {
+    protected List<BlockDto> childBlockListToBlockDtoList(List<ChildBlock> list, BlockManagementService blockManagementService) {
         if ( list == null ) {
             return null;
         }
 
         List<BlockDto> list1 = new ArrayList<BlockDto>( list.size() );
         for ( ChildBlock childBlock : list ) {
-            list1.add( childBlockToBlockDto( childBlock ) );
+            list1.add( childBlockToBlockDto( childBlock, blockManagementService ) );
         }
 
         return list1;
     }
 
-    protected BlockDto blockToBlockDto(Block block) {
+    protected BlockDto blockToBlockDto(Block block, BlockManagementService blockManagementService) {
         if ( block == null ) {
             return null;
         }
@@ -191,9 +194,11 @@ public class BlockMapperImpl implements BlockMapper {
         blockDto.setTitle( block.getTitle() );
         blockDto.setEnTitle( block.getEnTitle() );
         blockDto.setType( block.getType() );
-        blockDto.setResult( blockToBlockDto( block.getResult() ) );
-        blockDto.setFormula( formulaToFormulaDto( block.getFormula() ) );
-        blockDto.setBlockList( childBlockListToBlockDtoList( block.getBlockList() ) );
+        blockDto.setResult( blockToBlockDto( block.getResult(), blockManagementService ) );
+        blockDto.setFormula( formulaToFormulaDto( block.getFormula(), blockManagementService ) );
+        blockDto.setBlockList( childBlockListToBlockDtoList( block.getBlockList(), blockManagementService ) );
+
+        getGroupCode( block, blockDto, blockManagementService );
 
         return blockDto;
     }

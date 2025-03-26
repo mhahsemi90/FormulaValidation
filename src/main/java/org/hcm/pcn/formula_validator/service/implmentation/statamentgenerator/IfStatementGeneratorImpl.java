@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class IfStatementGeneratorImpl implements StatementGenerator {
     @Override
-    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList) {
+    public Optional<Statement> generate(List<Token> selectedTokenList, List<Token> tokenList, String lang) {
         IfStatement result = new IfStatement();
         StatementGenerator blockStatementGenerator = new BlockStatementGeneratorImpl();
         StatementGenerator expressionStatementGenerator = new ExpressionStatementGeneratorImpl();
@@ -28,8 +28,8 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
                     selectedTokenList);
             result.setTest(
                     ((ExpressionStatement) expressionStatementGenerator
-                            .generate(testTokenList, new ArrayList<>())
-                            .orElseThrow(() -> unexpectedEndError(testTokenList)))
+                            .generate(testTokenList, new ArrayList<>(), lang)
+                            .orElseThrow(() -> unexpectedEndError(testTokenList, lang)))
                             .getExpression()
             );
             tempTokenList.addAll(0, selectedTokenList);
@@ -41,7 +41,7 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
                             token.getLevel(),
                             tempTokenList);
                     blockStatementGenerator.generate(
-                            conquestTokenList, new ArrayList<>()
+                            conquestTokenList, new ArrayList<>(), lang
                     ).ifPresent(statement -> {
                         if (((BlockStatement) statement).getBodyList().size() > 1)
                             result.setConsequent(statement);
@@ -55,10 +55,10 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
                 } else {
                     tempTokenList.add(0, token);
                     result.setConsequent(
-                            getFirstStatementFromTokenList(tempTokenList, false)
+                            getFirstStatementFromTokenList(tempTokenList, false, lang)
                                     .orElseThrow(() ->
                                             getTokenNotValid(
-                                                    ")", tempTokenList.get(0).getLineNumber()
+                                                    ")", tempTokenList.get(0).getLineNumber(), lang
                                             )
                                     )
                     );
@@ -76,7 +76,7 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
                                 tempTokenList);
                         result.setAlternate(
                                 blockStatementGenerator.generate(
-                                        alternateTokenList, new ArrayList<>()
+                                        alternateTokenList, new ArrayList<>(), lang
                                 ).orElse(null)
                         );
                     } else if (token.getValue().equals(";")) {
@@ -86,16 +86,17 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
                     } else {
                         tempTokenList.add(0, token);
                         result.setAlternate(
-                                getFirstStatementFromTokenList(tempTokenList, false)
+                                getFirstStatementFromTokenList(tempTokenList, false, lang)
                                         .orElseThrow(() ->
                                                 getUnexpectedEnd(
                                                         tempTokenList.get(0)
+                                                        , lang
                                                 )
                                         )
                         );
                     }
                 } else {
-                    throwUnexpectedEnd(token);
+                    throwUnexpectedEnd(token, lang);
                 }
             } else {
                 if (token != null)
@@ -104,12 +105,12 @@ public class IfStatementGeneratorImpl implements StatementGenerator {
         }
         if (result.getTest() == null || result.getConsequent() == null) {
             if (token != null)
-                throwUnexpectedEnd(token);
+                throwUnexpectedEnd(token, lang);
             else if (CollectionUtils.isNotEmpty(tempTokenList))
-                throwUnexpectedEnd(tempTokenList.get(0));
+                throwUnexpectedEnd(tempTokenList.get(0), lang);
             else if (CollectionUtils.isNotEmpty(selectedTokenList))
-                throwUnexpectedEnd(selectedTokenList.get(0));
-            throwUnexpectedEnd(token);
+                throwUnexpectedEnd(selectedTokenList.get(0), lang);
+            throwUnexpectedEnd(token, lang);
         }
         tokenList.clear();
         tokenList.addAll(tempTokenList);

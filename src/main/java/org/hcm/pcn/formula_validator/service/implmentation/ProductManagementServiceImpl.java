@@ -1,8 +1,7 @@
 package org.hcm.pcn.formula_validator.service.implmentation;
 
-import org.hcm.pcn.formula_validator.dto.BlockDto;
 import org.hcm.pcn.formula_validator.dto.ProductDto;
-import org.hcm.pcn.formula_validator.exception.HandledError;
+import org.hcm.pcn.formula_validator.enums.ExceptionMessage;
 import org.hcm.pcn.formula_validator.repository.entity.Product;
 import org.hcm.pcn.formula_validator.repository.service.ProductRepository;
 import org.hcm.pcn.formula_validator.service.interfaces.ProductManagementService;
@@ -26,7 +25,7 @@ public class ProductManagementServiceImpl implements ProductManagementService {
     }
 
     @Override
-    public List<ProductDto> getAllProduct() {
+    public List<ProductDto> getAllProduct(String lang) {
         return productMapper.productListToProductDtoList(
                 productRepository.findAll()
         );
@@ -34,25 +33,25 @@ public class ProductManagementServiceImpl implements ProductManagementService {
 
     @Override
     @Transactional
-    public Boolean editProduct(ProductDto productDto) {
+    public Boolean editProduct(ProductDto productDto, String lang) {
         Product dbProduct = productRepository
                 .streamByCode(productDto.getCode())
                 .findFirst()
-                .orElseThrow(() -> new HandledError("Code Is Not Valid"));
+                .orElseThrow(() -> ExceptionMessage.PRODUCT_CODE_IS_NOT_VALID.getExceptionWithParam(lang, productDto.getCode()));
         dbProduct.setTitle(productDto.getTitle());
         dbProduct.setEnTitle(productDto.getEnTitle());
         try {
             productRepository.save(dbProduct);
         } catch (Exception e) {
-            throw new HandledError("Edit Product Has Error: " + productDto.getCode());
+            ExceptionMessage.EDIT_PRODUCT_HAS_ERROR.throwExceptionWithParam(lang, dbProduct, e.getMessage());
         }
         return true;
     }
 
     @Override
-    public Boolean addProduct(ProductDto productDto) {
+    public Boolean addProduct(ProductDto productDto, String lang) {
         if (productRepository.existsByCode(productDto.getCode()))
-            throw new HandledError("Code Is Duplicate");
+            ExceptionMessage.CODE_IS_DUPLICATE.throwException(lang);
         Product product = new Product(
                 productDto.getCode(),
                 productDto.getTitle(),
@@ -61,13 +60,10 @@ public class ProductManagementServiceImpl implements ProductManagementService {
         try {
             productRepository.save(product);
         } catch (Exception e) {
-            throw new HandledError("Persist Product Has Error: " + productDto.getCode());
+            ExceptionMessage.PERSIST_PRODUCT_HAS_ERROR.throwExceptionWithParam(lang, product, e.getMessage());
         }
         return true;
     }
 
-    @Override
-    public List<BlockDto> getAllGroup(String productCode) {
-        return null;
-    }
+
 }
